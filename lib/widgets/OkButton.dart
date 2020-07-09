@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SignUpButton extends StatefulWidget {
+class OkButton extends StatefulWidget {
   @override
-  _SignUpButtonState createState() => _SignUpButtonState();
+  _OkButtonState createState() => _OkButtonState();
 }
 
-class _SignUpButtonState extends State<SignUpButton> {
+class _OkButtonState extends State<OkButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,8 +31,8 @@ class _SignUpButtonState extends State<SignUpButton> {
         ),
         child: FlatButton(
           onPressed:(){
-             Navigator.pop(context);
-              },
+            Navigator.pop(context);
+           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

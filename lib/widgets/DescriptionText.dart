@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
-class TextNewUser extends StatefulWidget {
-  @override
-  _TextNewUserState createState() => _TextNewUserState();
-}
-
-class _TextNewUserState extends State<TextNewUser> {
+class DescriptionText extends StatelessWidget {
+  var text;
+  DescriptionText(this.text);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,7 +17,7 @@ class _TextNewUserState extends State<TextNewUser> {
               ),
             Center(
               child: Text(
-                'We can start something new',
+                '$text',
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.white,
