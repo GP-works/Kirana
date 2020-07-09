@@ -6,11 +6,13 @@ import 'edititems.dart';
 import 'orders.dart';
 import 'register.dart';
 import 'items.dart';
+import 'package:kirana/widgets/button_widget.dart';
 
 class HomeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
             appBar: AppBar(
               title: Text('Home page'),
@@ -30,21 +32,4 @@ class HomeApp extends StatelessWidget {
   }
 }
 
-class button extends StatelessWidget {
-  var widget;
-  button(this.widget, {Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child:  Center( child:RaisedButton(
-      color: Colors.red,
-      child: Text("$widget"),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => widget),
-        );
-      },
-    )));
-  }
-}
+
