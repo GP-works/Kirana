@@ -1,0 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
+
+class EmailField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return
+      Padding(
+        padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/10, 20, MediaQuery.of(context).size.width/10, 5),
+        child: TextFormField(
+          validator: (value) {
+            if (!EmailValidator.validate(value)) {
+              return "please enter valid email";
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              contentPadding: EdgeInsets.fromLTRB(10, 10, 5, 0),
+              labelText: "Email",
+              suffix: Text('*'),
+              suffixStyle: TextStyle(color: Colors.red)),
+        ));
+  }
+}

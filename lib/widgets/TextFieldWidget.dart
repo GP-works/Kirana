@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {
   var name;
+
   TextFieldWidget(this.name);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,14 +17,10 @@ class TextFieldWidget extends StatelessWidget {
             color: Colors.white,
           ),
           decoration: InputDecoration(
-            border: InputBorder.none,
-            fillColor: Colors.lightBlueAccent,
-            labelText: '$name',
-            labelStyle: TextStyle(
-              color: Colors.white70,
-              fontSize: 20
-            )
-          ),
+              border: InputBorder.none,
+              fillColor: Colors.lightBlueAccent,
+              labelText: '$name',
+              labelStyle: TextStyle(color: Colors.white70, fontSize: 20)),
         ),
       ),
     );

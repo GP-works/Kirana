@@ -6,11 +6,12 @@ import 'package:kirana/widgets/OkButton.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
 
 class SignInPage extends StatelessWidget {
-  final name='signin';
+  final name = 'signin';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body :Container(
+      body: Container(
         child: ListView(
           children: <Widget>[
             Column(
@@ -35,10 +36,7 @@ class SignInPage extends StatelessWidget {
               end: Alignment.bottomLeft,
               colors: [Colors.blueGrey, Colors.lightBlueAccent]),
         ),
-        ),
+      ),
     );
   }
 }
-
-
-

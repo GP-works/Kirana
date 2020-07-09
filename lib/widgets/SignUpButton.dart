@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class OkButton extends StatefulWidget {
+class SignUpButton extends StatefulWidget {
   @override
-  _OkButtonState createState() => _OkButtonState();
+  _SignUpButtonState createState() => _SignUpButtonState();
 }
 
-class _OkButtonState extends State<OkButton> {
+class _SignUpButtonState extends State<SignUpButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
