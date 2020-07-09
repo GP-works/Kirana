@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/widgets/VerticalText.dart';
-import 'package:kirana/widgets/TextLogin.dart';
-import 'package:kirana/widgets/EmailInput.dart';
-import 'package:kirana/widgets/PasswordInput.dart';
+import 'package:kirana/widgets/DescriptionText.dart';
 import 'package:kirana/widgets/RedirectSignUp.dart';
-import 'package:kirana/widgets/SignInButton.dart';
+import 'package:kirana/widgets/OkButton.dart';
+import 'package:kirana/widgets/TextFieldWidget.dart';
 
 class SignInPage extends StatelessWidget {
   final name = 'signin';
@@ -18,11 +17,14 @@ class SignInPage extends StatelessWidget {
             Column(
               children: <Widget>[
                 Row(
-                  children: <Widget>[VerticalText(), TextLogin()],
+                  children: <Widget>[
+                    VerticalText('Sign In'),
+                    DescriptionText('A World of possibility in an app')
+                  ],
                 ),
-                InputEmail(),
-                PasswordInput(),
-                SigninButton(),
+                TextFieldWidget('Email'),
+                TextFieldWidget('Password'),
+                OkButton(),
                 RedirectSignUp()
               ],
             )

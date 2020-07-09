@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kirana/widgets/VerticalTextSignUp.dart';
-import 'package:kirana/widgets/TextNewUser.dart';
-import 'package:kirana/widgets/NewName.dart';
-import 'package:kirana/widgets/NewEmail.dart';
-import 'package:kirana/widgets/PasswordInput.dart';
-import 'package:kirana/widgets/SignUpButton.dart';
+import 'package:kirana/widgets/VerticalText.dart';
+import 'package:kirana/widgets/DescriptionText.dart';
+import 'package:kirana/widgets/TextFieldWidget.dart';
+import 'package:kirana/widgets/OkButton.dart';
 import 'package:kirana/widgets/RedirectSignIn.dart';
 
 
@@ -20,14 +18,14 @@ class SignUpPage extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    VerticalTextSignUp(),
-                    TextNewUser()
+                    VerticalText('Sign Up'),
+                    DescriptionText('We can start something new')
                   ],
                 ),
-                NewName(),
-                NewEmail(),
-                PasswordInput(),
-                SignUpButton(),
+                TextFieldWidget('Name'),
+                TextFieldWidget('Email'),
+                TextFieldWidget('Password'),
+                OkButton(),
                 RedirectSignIn()
               ],
             )

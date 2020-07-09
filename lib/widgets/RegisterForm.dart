@@ -15,6 +15,7 @@ class _RegisterFormState extends State<RegisterForm> {
         key: _formKey,
         child: ListView(
           children: <Widget>[EmailField(),
+
             Container(
               alignment: Alignment.bottomCenter,
 

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
-class TextLogin extends StatefulWidget {
-  @override
-  _TextLoginState createState() => _TextLoginState();
-}
-
-class _TextLoginState extends State<TextLogin> {
+class DescriptionText extends StatelessWidget {
+  var text;
+  DescriptionText(this.text);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,7 +17,7 @@ class _TextLoginState extends State<TextLogin> {
             ),
             Center(
               child: Text(
-                'A world of Possibility in an app',
+                '$text',
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.white,
