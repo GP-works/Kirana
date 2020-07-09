@@ -17,7 +17,7 @@ class _TextNewUserState extends State<TextNewUser> {
           children: <Widget>[
             Container(
               height: 40,
-              ),
+            ),
             Center(
               child: Text(
                 'We can start something new',
@@ -25,10 +25,10 @@ class _TextNewUserState extends State<TextNewUser> {
                   fontSize: 24,
                   color: Colors.white,
                 ),
-                ),
+              ),
             )
           ],
-          ),
+        ),
       ),
     );
   }

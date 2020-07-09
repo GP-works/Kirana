@@ -14,25 +14,17 @@ class _SignUpButtonState extends State<SignUpButton> {
         alignment: Alignment.bottomRight,
         height: 50,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
               color: Colors.blue[300],
               blurRadius: 10,
               spreadRadius: 1,
-              offset: Offset(
-                5,
-                5
-              )
-            )
-          ],
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30)
-        ),
+              offset: Offset(5, 5))
+        ], color: Colors.white, borderRadius: BorderRadius.circular(30)),
         child: FlatButton(
-          onPressed:(){
-             Navigator.pop(context);
-              },
+          onPressed: () {
+            Navigator.pop(context);
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

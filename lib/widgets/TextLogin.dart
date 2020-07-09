@@ -17,7 +17,7 @@ class _TextLoginState extends State<TextLogin> {
           children: <Widget>[
             Container(
               height: 40,
-              ),
+            ),
             Center(
               child: Text(
                 'A world of Possibility in an app',
@@ -25,10 +25,10 @@ class _TextLoginState extends State<TextLogin> {
                   fontSize: 24,
                   color: Colors.white,
                 ),
-                ),
+              ),
             )
           ],
-          ),
+        ),
       ),
     );
   }

@@ -23,11 +23,11 @@ class RedirectSignUp extends StatelessWidget {
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => SignUpPage()));
-               },
+              },
               child: Text(
                 'Sign up',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 18,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.right,

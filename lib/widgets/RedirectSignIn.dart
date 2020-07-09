@@ -23,7 +23,7 @@ class RedirectSignIn extends StatelessWidget {
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => SignInPage()));
-               },
+              },
               child: Text(
                 'Sign in',
                 style: TextStyle(

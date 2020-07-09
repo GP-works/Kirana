@@ -7,20 +7,18 @@ import 'package:kirana/widgets/RedirectSignUp.dart';
 import 'package:kirana/widgets/SignInButton.dart';
 
 class SignInPage extends StatelessWidget {
-  final name='signin';
+  final name = 'signin';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body :Container(
+      body: Container(
         child: ListView(
           children: <Widget>[
             Column(
               children: <Widget>[
                 Row(
-                  children: <Widget>[
-                    VerticalText(),
-                    TextLogin()
-                  ],
+                  children: <Widget>[VerticalText(), TextLogin()],
                 ),
                 InputEmail(),
                 PasswordInput(),
@@ -36,10 +34,7 @@ class SignInPage extends StatelessWidget {
               end: Alignment.bottomLeft,
               colors: [Colors.blueGrey, Colors.lightBlueAccent]),
         ),
-        ),
+      ),
     );
   }
 }
-
-
-

@@ -11,16 +11,16 @@ class _VerticalTextState extends State<VerticalText> {
     return Padding(
       padding: const EdgeInsets.only(top: 60, left: 10),
       child: RotatedBox(
-              quarterTurns: -1,
-              child: Text(
-              'Sign in',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 38,
-                fontWeight: FontWeight.w900,
-              ),
-              ),
-              ),
+        quarterTurns: -1,
+        child: Text(
+          'Sign in',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 38,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ),
     );
   }
 }

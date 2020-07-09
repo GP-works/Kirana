@@ -8,19 +8,19 @@ class VerticalTextSignUp extends StatefulWidget {
 class _VerticalTextSignUpState extends State<VerticalTextSignUp> {
   @override
   Widget build(BuildContext context) {
-     return Padding(
+    return Padding(
       padding: const EdgeInsets.only(top: 60, left: 10),
       child: RotatedBox(
-              quarterTurns: -1,
-              child: Text(
-              'Sign Up',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 38,
-                fontWeight: FontWeight.w900,
-              ),
-              ),
-              ),
+        quarterTurns: -1,
+        child: Text(
+          'Sign Up',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 38,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ),
     );
   }
 }
