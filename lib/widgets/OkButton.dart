@@ -17,7 +17,7 @@ class _OkButtonState extends State<OkButton> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.blue[300],
+              color: Colors.black,
               blurRadius: 10,
               spreadRadius: 1,
               offset: Offset(
@@ -39,7 +39,7 @@ class _OkButtonState extends State<OkButton> {
               Text(
                 'OK',
                 style: TextStyle(
-                  color: Colors.lightBlueAccent,
+                  color: Colors.black,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),

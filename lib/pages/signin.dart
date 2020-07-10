@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kirana/widgets/VerticalText.dart';
 import 'package:kirana/widgets/DescriptionText.dart';
-import 'package:kirana/widgets/RedirectSignUp.dart';
+import 'package:kirana/widgets/RedirectPage.dart';
 import 'package:kirana/widgets/OkButton.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
+import 'package:kirana/pages/signup.dart';
 
 class SignInPage extends StatelessWidget {
   final name='signin';
@@ -15,27 +15,16 @@ class SignInPage extends StatelessWidget {
           children: <Widget>[
             Column(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    VerticalText('Sign In'),
-                    DescriptionText('A World of possibility in an app')
-                  ],
-                ),
+                DescriptionText('Sign In'),
                 TextFieldWidget('Email'),
                 TextFieldWidget('Password'),
                 OkButton(),
-                RedirectSignUp()
+                RedirectPage(SignUpPage(),'Sign Up', 'give it a shot')
               ],
             )
           ],
         ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [Colors.blueGrey, Colors.lightBlueAccent]),
-        ),
-        ),
+      )
     );
   }
 }

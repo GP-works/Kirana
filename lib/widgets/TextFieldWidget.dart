@@ -12,14 +12,15 @@ class TextFieldWidget extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         child: TextField(
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
           ),
           decoration: InputDecoration(
             border: InputBorder.none,
-            fillColor: Colors.lightBlueAccent,
+            contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
+            fillColor: Colors.green,
             labelText: '$name',
             labelStyle: TextStyle(
-              color: Colors.white70,
+              color: Colors.black,
               fontSize: 20
             )
           ),
