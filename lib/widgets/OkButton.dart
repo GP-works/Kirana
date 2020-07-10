@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class OkButton extends StatefulWidget {
+  final String text;
+  OkButton(this.text);
   @override
   _OkButtonState createState() => _OkButtonState();
 }
@@ -14,9 +16,8 @@ class _OkButtonState extends State<OkButton> {
         alignment: Alignment.bottomRight,
         height: 50,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
               color: Colors.black,
               blurRadius: 10,
               spreadRadius: 1,
@@ -30,7 +31,7 @@ class _OkButtonState extends State<OkButton> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'OK',
+                widget.text,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 14,

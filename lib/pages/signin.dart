@@ -11,21 +11,20 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: ListView(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                DescriptionText('Sign In'),
-                TextFieldWidget('Email'),
-                TextFieldWidget('Password'),
-                OkButton(),
-                RedirectPage(SignUpPage(),'Sign Up', 'give it a shot')
-              ],
-            )
-          ],
-        ),
-    )
-    );
+        body: Container(
+      child: ListView(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              DescriptionText('Sign In'),
+              TextFieldWidget('Email'),
+              TextFieldWidget('Password'),
+              OkButton('Ok'),
+              RedirectPage(SignUpPage(), 'Sign Up', 'give it a shot')
+            ],
+          )
+        ],
+      ),
+    ));
   }
 }

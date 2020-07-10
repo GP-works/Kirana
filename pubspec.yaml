@@ -25,6 +25,9 @@ dependencies:
     sdk: flutter
   lipsum: ^1.0.1
   email_validator: ^1.0.0
+  intl_phone_field: ^1.2.0
+  geolocator: ^5.3.2+2
+  google_maps_flutter: ^0.5.27+3
 
 
   # The following adds the Cupertino Icons font to your application.
