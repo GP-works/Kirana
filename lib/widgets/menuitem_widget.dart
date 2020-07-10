@@ -8,9 +8,10 @@ class MenuItem extends StatefulWidget {
   final int price;
   final int originalPrice;
   final String image;
-
+  final bool edit;
   MenuItem(
-      this.name, this.price, this.description, this.originalPrice, this.image);
+      this.name, this.price, this.description, this.originalPrice, this.image,
+      {this.edit = false});
 
   @override
   _MenuItemState createState() => _MenuItemState();
@@ -33,7 +34,7 @@ class _MenuItemState extends State<MenuItem> {
         children: <Widget>[
           Image.asset(
             widget.image,
-            width: MediaQuery.of(context).size.width/4,
+            width: MediaQuery.of(context).size.width / 4,
             height: 120,
             fit: BoxFit.cover,
           ),
@@ -44,7 +45,7 @@ class _MenuItemState extends State<MenuItem> {
               children: <Widget>[
                 Container(
                     padding: EdgeInsets.all(3),
-                    width: (3*MediaQuery.of(context).size.width)/4-50,
+                    width: (3 * MediaQuery.of(context).size.width) / 4 - 50,
                     child: Text(
                       widget.name,
                       style: TextStyle(fontSize: 18),

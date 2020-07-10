@@ -10,7 +10,7 @@ class _LocationState extends State<Location> {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   Position _currentPosition;
-  var _currentAddress = new Map();
+  var _currentAddress ;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _LocationState extends State<Location> {
 
   _getCurrentLocation() {
     geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
       setState(() {
         _currentPosition = position;
@@ -58,10 +58,15 @@ class _LocationState extends State<Location> {
       setState(() {
         //_currentAddress =
         //   "${place.locality}, ${place.postalCode}, ${place.country}";
-        _currentAddress['locality'] = place.locality;
+        /*_currentAddress['locality'] = place.locality;
         _currentAddress['sublocality'] = place.subLocality;
         _currentAddress['postalcode'] = place.postalCode;
         _currentAddress['state'] = place.administrativeArea;
+        _currentAddress['a']=place.name;
+        _currentAddress['b']=place.subThoroughfare;
+        _currentAddress['c']=place.thoroughfare;*/
+        _currentAddress=place.toJson();
+
       });
     } catch (e) {
       print(e);
