@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class button extends StatelessWidget {
-  var widget;
+  final widget;
 
   button(this.widget, {Key key}) : super(key: key);
 

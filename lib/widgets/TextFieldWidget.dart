@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {
   var name;
+
   TextFieldWidget(this.name);
+
   @override
   Widget build(BuildContext context) {
     return Padding(

@@ -6,11 +6,12 @@ import 'package:kirana/widgets/TextFieldWidget.dart';
 import 'package:kirana/pages/signup.dart';
 
 class SignInPage extends StatelessWidget {
-  final name='signin';
+  final name = 'signin';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body :Container(
+      body: Container(
         child: ListView(
           children: <Widget>[
             Column(
@@ -24,10 +25,7 @@ class SignInPage extends StatelessWidget {
             )
           ],
         ),
-      )
+    )
     );
   }
 }
-
-
-

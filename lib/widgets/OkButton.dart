@@ -20,19 +20,12 @@ class _OkButtonState extends State<OkButton> {
               color: Colors.black,
               blurRadius: 10,
               spreadRadius: 1,
-              offset: Offset(
-                5,
-                5
-              )
-            )
-          ],
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30)
-        ),
+              offset: Offset(5, 5))
+        ], color: Colors.white, borderRadius: BorderRadius.circular(30)),
         child: FlatButton(
-          onPressed:(){
+          onPressed: () {
             Navigator.pop(context);
-           },
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

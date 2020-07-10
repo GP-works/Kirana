@@ -16,7 +16,7 @@ class RedirectPage extends StatelessWidget {
           children: <Widget>[
             Text(
               '$description',
-              style: TextStyle(
+               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black,
               ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DescriptionText extends StatelessWidget {
-  var text;
+  final String text;
   DescriptionText(this.text);
   @override
   Widget build(BuildContext context) {
@@ -11,6 +11,9 @@ class DescriptionText extends StatelessWidget {
         width: 200,
         child: Column(
           children: <Widget>[
+            Container(
+              height: 40,
+              ),
             Center(
               child: Text(
                 '$text',
@@ -19,10 +22,10 @@ class DescriptionText extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                   color: Colors.black,
                 ),
-                ),
+              ),
             )
           ],
           ),
-    );
+          );
   }
 }
