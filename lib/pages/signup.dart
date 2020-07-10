@@ -5,9 +5,8 @@ import 'package:kirana/widgets/OkButton.dart';
 import 'package:kirana/widgets/RedirectPage.dart';
 import 'package:kirana/pages/signin.dart';
 
-
 class SignUpPage extends StatelessWidget {
-  final name='signup';
+  final name = 'signup';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,13 +19,13 @@ class SignUpPage extends StatelessWidget {
                 TextFieldWidget('Name'),
                 TextFieldWidget('Email'),
                 TextFieldWidget('Password'),
-                OkButton(),
+                OkButton("Ok"),
                 RedirectPage(SignInPage(), 'Sign in', 'Have we met before')
               ],
             )
           ],
         ),
-        ),
+      ),
     );
   }
 }
