@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kirana/pages/signup.dart';
 
-class RedirectSignUp extends StatelessWidget {
+class RedirectPage extends StatelessWidget {
+  final Widget widget;
+  final String text;
+  final String description;
+  RedirectPage(this.widget, this.text, this.description, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -12,23 +15,23 @@ class RedirectSignUp extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Text(
-              'Have we met before?',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.white70,
+              '$description',
+               style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
               ),
             ),
             FlatButton(
               padding: EdgeInsets.all(0),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignUpPage()));
-              },
+                    MaterialPageRoute(builder: (context) => widget));
+               },
               child: Text(
-                'Sign up',
+                '$text',
                 style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
+                  fontSize: 16,
+                  color: Colors.black,
                 ),
                 textAlign: TextAlign.right,
               ),
