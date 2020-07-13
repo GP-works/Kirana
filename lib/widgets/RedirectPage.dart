@@ -4,7 +4,8 @@ class RedirectPage extends StatelessWidget {
   final Widget widget;
   final String text;
   final String description;
-  RedirectPage(this.widget, this.text, this.description, {Key key}) : super(key: key);
+  RedirectPage(this.widget, this.text, this.description, {Key key})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,7 +17,7 @@ class RedirectPage extends StatelessWidget {
           children: <Widget>[
             Text(
               '$description',
-               style: TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 color: Colors.black,
               ),
@@ -24,9 +25,9 @@ class RedirectPage extends StatelessWidget {
             FlatButton(
               padding: EdgeInsets.all(0),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => widget));
-               },
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => widget));
+              },
               child: Text(
                 '$text',
                 style: TextStyle(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/widgets/menuitem_widget.dart';
-import 'package:lipsum/lipsum.dart' as lipsum;
+
+import 'package:provider/provider.dart';
+import 'package:kirana/models/items.dart';
 
 class ItemsPage extends StatelessWidget {
   final name = 'Items';
@@ -8,24 +10,16 @@ class ItemsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(children: [
-        MenuItem('SurfExcel 1kg pack super saver pack ', 80,
-            'dajgdlashkj', 100, 'images/example.jpeg'),
-        MenuItem(lipsum.createSentence(), 80,
-            'dajgdlashkj', 100, 'images/example.jpeg'),
-        MenuItem(lipsum.createSentence(), 80,
-            'dajgdlashkj', 100, 'images/example.jpeg'),
-        MenuItem(lipsum.createSentence(), 80,
-            'dajgdlashkj', 100, 'images/example.jpeg'),
-        MenuItem(lipsum.createSentence(), 80,
-            'dajgdlashkj', 100, 'images/example.jpeg'),
-        MenuItem(lipsum.createSentence(), 80,
-            'dajgdlashkj', 100, 'images/example.jpeg'),
-        MenuItem(lipsum.createSentence(), 80,
-            'dajgdlashkj', 100, 'images/example.jpeg'),
-        MenuItem(lipsum.createSentence(), 80,
-            'dajgdlashkj', 100, 'images/example.jpeg'),
-      ]),
+      body: ChangeNotifierProvider(
+        create: (BuildContext context) => ItemsModel(),
+        child: Consumer<ItemsModel>(builder: (context, catalog, child) {
+          return ListView(children: [
+            for (var item in catalog.items)
+              MenuItem(item.name, item.price, item.description,
+                  item.originalPrice, item.imageurl),
+          ]);
+        }),
+      ),
       appBar: AppBar(title: Text("Items")),
     );
   }

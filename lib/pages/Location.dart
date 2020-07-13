@@ -10,7 +10,7 @@ class _LocationState extends State<Location> {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   Position _currentPosition;
-  var _currentAddress ;
+  var _currentAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +65,7 @@ class _LocationState extends State<Location> {
         _currentAddress['a']=place.name;
         _currentAddress['b']=place.subThoroughfare;
         _currentAddress['c']=place.thoroughfare;*/
-        _currentAddress=place.toJson();
-
+        _currentAddress = place.toJson();
       });
     } catch (e) {
       print(e);

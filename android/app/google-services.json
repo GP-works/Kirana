@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "910294986944",
+    "firebase_url": "https://kirana-app-gp-works.firebaseio.com",
+    "project_id": "kirana-app-gp-works",
+    "storage_bucket": "kirana-app-gp-works.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910294986944:android:0bca0ac45db32f7bcabd25",
+        "android_client_info": {
+          "package_name": "com.example.kirana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910294986944-vfl3t1ehjvalve4vbpfa3uopvm6cccut.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNVrrnCnVW0I55ku8RInZraXoFa46Rn70"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910294986944-vfl3t1ehjvalve4vbpfa3uopvm6cccut.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,6 +10,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="kirana"
         android:icon="@mipmap/ic_launcher">
+        android:requestLegacyExternalStorage="true"
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
