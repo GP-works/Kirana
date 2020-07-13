@@ -16,8 +16,7 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
   set catalog(ItemsModel catalog){
-    _catalog=catalog;
-
+    _catalog = catalog;
   }
 
   void remove(int id) {
@@ -26,6 +25,10 @@ class CartModel extends ChangeNotifier {
     } else {
       _cartitems[id]--;
     }
+    notifyListeners();
+  }
+  void delete(){
+    _cartitems = new Map();
     notifyListeners();
   }
 }
