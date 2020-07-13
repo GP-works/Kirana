@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kirana/models/cart.dart';
 import 'package:kirana/widgets/menuitem_widget.dart';
 
 import 'package:provider/provider.dart';
@@ -10,13 +11,23 @@ class ItemsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ChangeNotifierProvider(
-        create: (BuildContext context) => ItemsModel(),
+      body: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => ItemsModel(),
+          ),
+          ChangeNotifierProxyProvider<ItemsModel,CartModel>(
+            create: (BuildContext context) => CartModel(),
+            update: (context, items, cart) {
+              cart.catalog = items;
+              return cart;
+            },
+          ),
+
+        ],
         child: Consumer<ItemsModel>(builder: (context, catalog, child) {
           return ListView(children: [
-            for (var item in catalog.items)
-              MenuItem(item.name, item.price, item.description,
-                  item.originalPrice, item.imageurl),
+            for (var item in catalog.items) MenuItem(item.id),
           ]);
         }),
       ),

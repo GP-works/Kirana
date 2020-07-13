@@ -11,7 +11,8 @@ class Item {
   final int id;
   Item(this.name, this.price, this.description, this.originalPrice,
       this.imageurl,
-      {this.edit, this.id});
+      this.id,
+      {this.edit });
   @override
   // TODO: implement hashCode
   int get hashCode => this.id;
