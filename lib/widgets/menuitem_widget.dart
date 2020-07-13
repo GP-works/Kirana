@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:kirana/models/cart.dart';
+import 'package:provider/provider.dart';
+import 'package:kirana/models/Item.dart';
 
 class MenuItem extends StatefulWidget {
-  final String name;
-  final String description;
-  final int price;
-  final int originalPrice;
-  final String image;
+  final int id;
   final bool edit;
-  MenuItem(
-      this.name, this.price, this.description, this.originalPrice, this.image,
-      {this.edit = false});
+  MenuItem(this.id, {this.edit = false});
 
   @override
   _MenuItemState createState() => _MenuItemState();
@@ -19,21 +16,28 @@ class MenuItem extends StatefulWidget {
 
 class _MenuItemState extends State<MenuItem> {
   int count = 0;
-  Widget cart;
+
 
   @override
   Widget build(BuildContext context) {
-    cart = count == 0 ? buttonFlat() : buttonIncrementDecrement();
-    return Column(children: [_Tile(), Divider()]);
+    var cartProvider = Provider.of<CartModel>(context);
+    Item item = cartProvider.catalog.getItemById(widget.id);
+    if(cartProvider.items.containsKey(widget.id))
+    {count =0;}
+    else{
+      count= cartProvider.items[widget.id];
+    }
+
+    return Column(children: [_Tile(item), Divider()]);
   }
 
-  Widget _Tile() {
+  Widget _Tile(Item item) {
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
         children: <Widget>[
           Image.asset(
-            widget.image,
+            item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
             fit: BoxFit.cover,
@@ -47,7 +51,7 @@ class _MenuItemState extends State<MenuItem> {
                     padding: EdgeInsets.all(3),
                     width: (3 * MediaQuery.of(context).size.width) / 4 - 50,
                     child: Text(
-                      widget.name,
+                      item.name,
                       style: TextStyle(fontSize: 18),
                       softWrap: true,
                       maxLines: 2,
@@ -59,7 +63,7 @@ class _MenuItemState extends State<MenuItem> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
                       child: Text(
-                        widget.originalPrice.toString(),
+                        item.originalPrice.toString(),
                         style: TextStyle(
                             decoration: TextDecoration.lineThrough,
                             color: Colors.red[800]),
@@ -68,13 +72,17 @@ class _MenuItemState extends State<MenuItem> {
                     Padding(
                         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                         child: Text(
-                          widget.price.toString(),
+                          item.price.toString(),
                           style:
                               TextStyle(fontSize: 20, color: Colors.green[800]),
                         )),
                   ],
                 ),
-                cart
+                Consumer<CartModel>(
+                  builder: (context,cartp,child)=> !cartp.items.containsKey(widget.id)
+                      ? buttonFlat(cartp)
+                      : buttonIncrementDecrement(cartp),
+                )
               ],
             ),
           )
@@ -83,7 +91,7 @@ class _MenuItemState extends State<MenuItem> {
     );
   }
 
-  Widget buttonFlat() {
+  Widget buttonFlat(CartModel cart) {
     return ConstrainedBox(
         constraints: BoxConstraints(
           minWidth: 20,
@@ -96,11 +104,16 @@ class _MenuItemState extends State<MenuItem> {
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
               color: Colors.amber[700],
-              onPressed: _incrementCount,
+              onPressed:(){ _incrementCount(cart);},
             )));
   }
 
-  Widget buttonIncrementDecrement() {
+  Widget buttonIncrementDecrement(CartModel cart) {
+    if(!cart.items.containsKey(widget.id))
+    {count =0;}
+    else{
+      count= cart.items[widget.id];
+    }
     return Padding(
       padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
       child: Container(
@@ -108,14 +121,14 @@ class _MenuItemState extends State<MenuItem> {
           IconButton(
             icon: Icon(Icons.remove),
             hoverColor: Colors.red,
-            onPressed: _decrementCount,
+            onPressed:(){ _decrementCount(cart);},
             color: Colors.red,
           ),
           Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0), child: Text("$count")),
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: _incrementCount,
+            onPressed:(){ _incrementCount(cart);},
             color: Colors.green,
           ),
         ]),
@@ -126,15 +139,11 @@ class _MenuItemState extends State<MenuItem> {
     );
   }
 
-  void _incrementCount() {
-    setState(() {
-      count++;
-    });
+  void _incrementCount(CartModel cart) {
+      cart.add(widget.id);
   }
 
-  void _decrementCount() {
-    setState(() {
-      count--;
-    });
+  void _decrementCount(CartModel cart) {
+      cart.remove(widget.id);
   }
 }
