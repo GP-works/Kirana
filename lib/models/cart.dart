@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:kirana/models/Item.dart';
 import 'package:kirana/models/items.dart';
 
 class CartModel extends ChangeNotifier {
@@ -15,7 +14,8 @@ class CartModel extends ChangeNotifier {
     }
     notifyListeners();
   }
-  set catalog(ItemsModel catalog){
+
+  set catalog(ItemsModel catalog) {
     _catalog = catalog;
   }
 
@@ -27,7 +27,8 @@ class CartModel extends ChangeNotifier {
     }
     notifyListeners();
   }
-  void delete(){
+
+  void delete() {
     _cartitems = new Map();
     notifyListeners();
   }

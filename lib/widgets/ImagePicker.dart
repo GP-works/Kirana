@@ -11,7 +11,6 @@ class _ItemImagePickerState extends State<ItemImagePicker> {
   File _image;
   final picker = ImagePicker();
 
-  @override
   Future getImage() async {
     final pickedFile = await picker.getImage(
         source: ImageSource.gallery, maxWidth: 300, maxHeight: 300);
@@ -20,6 +19,7 @@ class _ItemImagePickerState extends State<ItemImagePicker> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
