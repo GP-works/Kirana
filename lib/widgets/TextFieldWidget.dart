@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final name;
@@ -30,7 +31,9 @@ class TextFieldWidget extends StatelessWidget {
 
 class TextFieldWidgetWithValidation extends StatelessWidget {
   final String name;
+
   TextFieldWidgetWithValidation(this.name);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -50,5 +53,68 @@ class TextFieldWidgetWithValidation extends StatelessWidget {
                   contentPadding: EdgeInsets.fromLTRB(10, 10, 5, 0),
                   labelText: name,
                 ))));
+  }
+}
+
+class NumberFieldWidgetWithValidation extends StatelessWidget {
+  final String name;
+
+  NumberFieldWidgetWithValidation(this.name);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(bottom: 20),
+        child: Padding(
+            padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 10,
+                20, MediaQuery.of(context).size.width / 10, 5),
+            child: TextFormField(
+              validator: (value) {
+                if ((value.isEmpty)) {
+                  return "please enter valid $name";
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.fromLTRB(10, 10, 5, 0),
+                labelText: name,
+              ),
+              keyboardType: TextInputType.number,
+            )));
+  }
+}
+
+class MultilineTextWidgetWithValidation extends StatelessWidget {
+  final String name;
+
+  MultilineTextWidgetWithValidation(this.name);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 10, 20,
+            MediaQuery.of(context).size.width / 10, 5),
+        child: Container(
+          child: TextFormField(
+            validator: (value) {
+              if ((value.isEmpty)) {
+                return "please enter valid $name";
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.fromLTRB(10, 10, 5, 0),
+                labelText: name,
+                hintText: "press enter for a new line"),
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+          ),
+        ),
+      ),
+    );
   }
 }
