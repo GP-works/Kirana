@@ -31,5 +31,3 @@ class HomeApp extends StatelessWidget {
             )));
   }
 }
-
-

@@ -13,9 +13,11 @@ class ItemsPage extends StatelessWidget {
       body: ChangeNotifierProvider(
         create: (BuildContext context) => ItemsModel(),
         child: Consumer<ItemsModel>(builder: (context, catalog, child) {
-          return ListView(
-            children: [for (var item in catalog.items) MenuItem(item.name,item.price,item.description,item.originalPrice,item.imageurl),]
-          );
+          return ListView(children: [
+            for (var item in catalog.items)
+              MenuItem(item.name, item.price, item.description,
+                  item.originalPrice, item.imageurl),
+          ]);
         }),
       ),
       appBar: AppBar(title: Text("Items")),

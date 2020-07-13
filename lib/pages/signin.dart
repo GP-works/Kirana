@@ -15,24 +15,22 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
-      child: Scaffold(
-        body: Container(
-      child: ListView(
-        children: <Widget>[
-          Column(
+        key: _formKey,
+        child: Scaffold(
+            body: Container(
+          child: ListView(
             children: <Widget>[
-              DescriptionText('Sign In'),
-              TextFieldWidgetWithValidation('Email'),
-              TextFieldWidgetWithValidation('Password'),
-              OkButton('Ok'),
-              RedirectPage(SignUpPage(), 'Sign Up', 'give it a shot')
+              Column(
+                children: <Widget>[
+                  DescriptionText('Sign In'),
+                  TextFieldWidgetWithValidation('Email'),
+                  TextFieldWidgetWithValidation('Password'),
+                  OkButton('Ok'),
+                  RedirectPage(SignUpPage(), 'Sign Up', 'give it a shot')
+                ],
+              )
             ],
-          )
-        ],
-      ),
-    )
-    )
-    );
+          ),
+        )));
   }
 }
