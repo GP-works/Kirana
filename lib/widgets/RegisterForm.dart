@@ -19,8 +19,9 @@ class _RegisterFormState extends State<RegisterForm> {
         key: _formKey,
         child: ListView(
           children: <Widget>[
-            TextFieldWidgetWithValidation('Shop Name'),
-            TextFieldWidgetWithValidation("Owner Name"),
+            TextFieldWidgetWithValidation('Shop Name', TextEditingController()),
+            TextFieldWidgetWithValidation(
+                "Owner Name", TextEditingController()),
             PhoneNumber(),
             EmailField(),
             Container(

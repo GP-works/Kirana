@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
@@ -17,14 +18,13 @@ class MenuItem extends StatefulWidget {
 class _MenuItemState extends State<MenuItem> {
   int count = 0;
 
-
   @override
   Widget build(BuildContext context) {
     var cartProvider = Provider.of<CartModel>(context);
     Item item = cartProvider.catalog.getItemById(widget.id);
-    if(!cartProvider.items.containsKey(widget.id))
-    {count = 0;}
-    else{
+    if (!cartProvider.items.containsKey(widget.id)) {
+      count = 0;
+    } else {
       count = cartProvider.items[widget.id];
     }
 
@@ -36,8 +36,9 @@ class _MenuItemState extends State<MenuItem> {
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
         children: <Widget>[
-          Image.asset(
-            item.imageurl,
+          CachedNetworkImage(
+            placeholder: (context, url) => CircularProgressIndicator(),
+            imageUrl:item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
             fit: BoxFit.cover,
@@ -79,9 +80,10 @@ class _MenuItemState extends State<MenuItem> {
                   ],
                 ),
                 Consumer<CartModel>(
-                  builder: (context,cartp,child)=> !cartp.items.containsKey(widget.id)
-                      ? buttonFlat(cartp)
-                      : buttonIncrementDecrement(cartp),
+                  builder: (context, cartp, child) =>
+                      !cartp.items.containsKey(widget.id)
+                          ? buttonFlat(cartp)
+                          : buttonIncrementDecrement(cartp),
                 )
               ],
             ),
@@ -104,15 +106,17 @@ class _MenuItemState extends State<MenuItem> {
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
               color: Colors.amber[700],
-              onPressed:(){ _incrementCount(cart);},
+              onPressed: () {
+                _incrementCount(cart);
+              },
             )));
   }
 
   Widget buttonIncrementDecrement(CartModel cart) {
-    if(!cart.items.containsKey(widget.id))
-    {count =0;}
-    else{
-      count= cart.items[widget.id];
+    if (!cart.items.containsKey(widget.id)) {
+      count = 0;
+    } else {
+      count = cart.items[widget.id];
     }
     return Padding(
       padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
@@ -121,14 +125,18 @@ class _MenuItemState extends State<MenuItem> {
           IconButton(
             icon: Icon(Icons.remove),
             hoverColor: Colors.red,
-            onPressed:(){ _decrementCount(cart);},
+            onPressed: () {
+              _decrementCount(cart);
+            },
             color: Colors.red,
           ),
           Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0), child: Text("$count")),
           IconButton(
             icon: Icon(Icons.add),
-            onPressed:(){ _incrementCount(cart);},
+            onPressed: () {
+              _incrementCount(cart);
+            },
             color: Colors.green,
           ),
         ]),
@@ -140,10 +148,10 @@ class _MenuItemState extends State<MenuItem> {
   }
 
   void _incrementCount(CartModel cart) {
-      cart.add(widget.id);
+    cart.add(widget.id);
   }
 
   void _decrementCount(CartModel cart) {
-      cart.remove(widget.id);
+    cart.remove(widget.id);
   }
 }

@@ -23,8 +23,10 @@ class _SignInPageState extends State<SignInPage> {
               Column(
                 children: <Widget>[
                   DescriptionText('Sign In'),
-                  TextFieldWidgetWithValidation('Email'),
-                  TextFieldWidgetWithValidation('Password'),
+                  TextFieldWidgetWithValidation(
+                      'Email', TextEditingController()),
+                  TextFieldWidgetWithValidation(
+                      'Password', TextEditingController()),
                   OkButton('Ok'),
                   RedirectPage(SignUpPage(), 'Sign Up', 'give it a shot')
                 ],
