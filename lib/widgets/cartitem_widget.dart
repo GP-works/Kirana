@@ -96,10 +96,6 @@ class _CartItemState extends State<CartItem> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text('Delete'),
-                Icon(
-                  Icons.delete,
-                  color: Colors.black,
-                )
               ],
             ),
           ),
@@ -123,7 +119,6 @@ class _CartItemState extends State<CartItem> {
         ]),
         decoration: BoxDecoration(
             border: Border.all(color: Colors.white), color: Colors.white60),
-        margin: EdgeInsets.all(20),
       ),
     );
   }
@@ -136,7 +131,8 @@ class _CartItemState extends State<CartItem> {
     cart.remove(widget.id);
   }
 
-  void _delete(CartModel cart) {
-    cart.delete();
+  void _delete(CartModel cart){
+    cart.delete(widget.id);
+
   }
 }
