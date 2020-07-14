@@ -28,7 +28,12 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void delete() {
+  void delete(int id) {
+      _cartitems.remove(id);
+      notifyListeners();
+  }
+
+  void delete_all() {
     _cartitems = new Map();
     notifyListeners();
   }
