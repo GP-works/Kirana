@@ -23,9 +23,12 @@ class _SignUpPageState extends State<SignUpPage> {
               Column(
                 children: <Widget>[
                   DescriptionText('Sign Up'),
-                  TextFieldWidgetWithValidation('Name'),
-                  TextFieldWidgetWithValidation('Email'),
-                  TextFieldWidgetWithValidation('Password'),
+                  TextFieldWidgetWithValidation(
+                      'Name', TextEditingController()),
+                  TextFieldWidgetWithValidation(
+                      'Email', TextEditingController()),
+                  TextFieldWidgetWithValidation(
+                      'Password', TextEditingController()),
                   OkButton("Ok"),
                   RedirectPage(SignInPage(), 'Sign in', 'Have we met before')
                 ],

@@ -31,8 +31,9 @@ class TextFieldWidget extends StatelessWidget {
 
 class TextFieldWidgetWithValidation extends StatelessWidget {
   final String name;
+  final controller;
 
-  TextFieldWidgetWithValidation(this.name);
+  TextFieldWidgetWithValidation(this.name, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class TextFieldWidgetWithValidation extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 10,
                 20, MediaQuery.of(context).size.width / 10, 5),
             child: TextFormField(
+                controller: controller,
                 validator: (value) {
                   if ((value.isEmpty)) {
                     return "please enter valid Name";
@@ -58,8 +60,9 @@ class TextFieldWidgetWithValidation extends StatelessWidget {
 
 class NumberFieldWidgetWithValidation extends StatelessWidget {
   final String name;
+  final controller;
 
-  NumberFieldWidgetWithValidation(this.name);
+  NumberFieldWidgetWithValidation(this.name, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +72,7 @@ class NumberFieldWidgetWithValidation extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 10,
                 20, MediaQuery.of(context).size.width / 10, 5),
             child: TextFormField(
+              controller: controller,
               validator: (value) {
                 if ((value.isEmpty)) {
                   return "please enter valid $name";
@@ -87,8 +91,9 @@ class NumberFieldWidgetWithValidation extends StatelessWidget {
 
 class MultilineTextWidgetWithValidation extends StatelessWidget {
   final String name;
+  final controller;
 
-  MultilineTextWidgetWithValidation(this.name);
+  MultilineTextWidgetWithValidation(this.name, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +104,7 @@ class MultilineTextWidgetWithValidation extends StatelessWidget {
             MediaQuery.of(context).size.width / 10, 5),
         child: Container(
           child: TextFormField(
+            controller: controller,
             validator: (value) {
               if ((value.isEmpty)) {
                 return "please enter valid $name";

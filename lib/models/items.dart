@@ -5,20 +5,20 @@ import 'package:lipsum/lipsum.dart' as lipsum;
 class ItemsModel extends ChangeNotifier {
   List<Item> _items = [
     Item('SurfExcel 1kg pack super saver pack ', 80, 'dajgdlashkj', 100,
-        'images/example.jpeg', 1),
-    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 200, 'images/example.jpeg',
+        'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT0aeFHUBNuVUVB59hp-dwIM02L_ELJWo39qKMG1kwHTt4OORoQbTwIzN7Kvunu0FANl_76ox1adw&usqp=CAc', 1),
+    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 200, 'https://m.media-amazon.com/images/I/61dUCXFgN3L._SS140_.jpg',
         2),
-    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 300, 'images/example.jpeg',
+    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 300, 'https://www.amazon.in/images/I/51KgEYJtvlL._SS140_.jpg',
         3),
-    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 400, 'images/example.jpeg',
+    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 400, 'https://www.amazon.in/images/I/71illy+aC6L._SS140_.jpg',
         4),
-    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 500, 'images/example.jpeg',
+    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 500, 'https://m.media-amazon.com/images/I/71aQtgyXN9L._SS140_.jpg',
         5),
-    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 600, 'images/example.jpeg',
+    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 600, 'https://www.amazon.in/images/I/51y+C6WvBqL._AC_UL246_SR190,246_FMwebp_QL70_.jpg',
         6),
-    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 700, 'images/example.jpeg',
+    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 700, 'https://www.amazon.in/images/I/81ZFWYxDNTL._SS140_.jpg',
         7),
-    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 800, 'images/example.jpeg',
+    Item(lipsum.createSentence(), 80, 'dajgdlashkj', 800, 'https://m.media-amazon.com/images/I/61ltYn2nmXL._SS140_.jpg',
         8),
   ];
   get items => _items;
@@ -29,6 +29,7 @@ class ItemsModel extends ChangeNotifier {
 
   void add(Item item) {
     _items.add(item);
+    print("added");
     notifyListeners();
   }
 

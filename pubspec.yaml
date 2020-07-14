@@ -29,6 +29,8 @@ dependencies:
   geolocator: ^5.3.2+2
   provider: ^4.3.1
   image_picker: ^0.6.7+4
+  firebase_storage: ^3.1.6
+  cached_network_image: ^2.2.0+1
 
 
 

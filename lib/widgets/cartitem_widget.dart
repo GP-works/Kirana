@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:kirana/models/cart.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/Item.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CartItem extends StatefulWidget {
   final int id;
@@ -31,8 +32,9 @@ class _CartItemState extends State<CartItem> {
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
         children: <Widget>[
-          Image.asset(
-            item.imageurl,
+          CachedNetworkImage(
+            placeholder: (context, url) => CircularProgressIndicator(),
+            imageUrl:item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
             fit: BoxFit.cover,
@@ -128,7 +130,9 @@ class _CartItemState extends State<CartItem> {
   void _decrementCount(CartModel cart) {
     cart.remove(widget.id);
   }
+
   void _delete(CartModel cart){
     cart.delete(widget.id);
+
   }
 }

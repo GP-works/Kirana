@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 class Item {
   final String name;
   final String description;
-  final int price;
-  final int originalPrice;
+  final double price;
+  final double originalPrice;
   final String imageurl;
   final bool edit;
   final int id;
