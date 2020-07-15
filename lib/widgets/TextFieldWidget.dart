@@ -32,8 +32,11 @@ class TextFieldWidget extends StatelessWidget {
 class TextFieldWidgetWithValidation extends StatelessWidget {
   final String name;
   final controller;
+  bool obscure;
 
-  TextFieldWidgetWithValidation(this.name, this.controller);
+  TextFieldWidgetWithValidation(this.name, this.controller){
+    obscure=name=="password";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,7 @@ class TextFieldWidgetWithValidation extends StatelessWidget {
                 20, MediaQuery.of(context).size.width / 10, 5),
             child: TextFormField(
                 controller: controller,
+                obscureText: obscure,
                 validator: (value) {
                   if ((value.isEmpty)) {
                     return "please enter valid Name";
