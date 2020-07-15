@@ -46,4 +46,7 @@ class ItemsModel extends ChangeNotifier {
     _items = newitems;
     notifyListeners();
   }
+  void edititem(){
+    notifyListeners();
+}
 }

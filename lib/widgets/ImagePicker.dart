@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class ItemImagePicker extends StatefulWidget {
   final void Function(File image) notifyParent;
+  final bool fromEdit;
 
-  ItemImagePicker({Key key, @required this.notifyParent}) : super(key: key);
-
+  ItemImagePicker({Key key, @required this.notifyParent,this.fromEdit}) : super(key: key);
   @override
   _ItemImagePickerState createState() => _ItemImagePickerState();
 }
@@ -17,6 +17,7 @@ class _ItemImagePickerState extends State<ItemImagePicker> {
   File image;
   String url = "";
   final picker = ImagePicker();
+  String texts="Oldimage";
 
   Future getImage(ImageSource source) async {
     final pickedFile =
@@ -24,16 +25,21 @@ class _ItemImagePickerState extends State<ItemImagePicker> {
     setState(() {
       image = File(pickedFile.path);
       widget.notifyParent(image);
+      texts = "new image added";
     });
 
   }
 
-
   @override
   Widget build(BuildContext context) {
     String text = image==null ? "Add Photo" : "Change Photo";
+    if(widget.fromEdit)
+      {
+        text = "Change Photo";
+      }
     return Column(
       children: <Widget>[
+        (!widget.fromEdit)?
         Container(
           margin: EdgeInsets.only(bottom: 20, top: 20),
           child: Center(
@@ -46,7 +52,7 @@ class _ItemImagePickerState extends State<ItemImagePicker> {
                     fit: BoxFit.cover,
                   ),
           ),
-        ),
+        ): Center(child: Text("$texts")),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(

@@ -8,8 +8,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class CartItem extends StatefulWidget {
   final int id;
-  final bool edit;
-  CartItem(this.id, {this.edit = false});
+  CartItem(this.id);
 
   @override
   _CartItemState createState() => _CartItemState();
