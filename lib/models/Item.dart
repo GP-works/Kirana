@@ -1,18 +1,18 @@
 import 'package:flutter/foundation.dart';
 
-@immutable
 class Item {
-  final String name;
-  final String description;
-  final double price;
-  final double originalPrice;
-  final String imageurl;
-  final bool edit;
-  final int id;
+  String name;
+  String description;
+  double price;
+  double originalPrice;
+  String imageurl;
+  bool edit;
+  int id;
+
   Item(this.name, this.price, this.description, this.originalPrice,
-      this.imageurl,
-      this.id,
-      {this.edit });
+      this.imageurl, this.id,
+      {this.edit});
+
   @override
   // TODO: implement hashCode
   int get hashCode => this.id;
@@ -20,5 +20,14 @@ class Item {
   @override
   bool operator ==(Object other) {
     return other is Item && other.id == id;
+  }
+
+  void update(
+      {newname, newprice, newdescription, neworiginalprice, newimageurl}) {
+    name = newname;
+    price = newprice;
+    description = newdescription;
+    neworiginalprice = neworiginalprice;
+    newimageurl = newimageurl;
   }
 }

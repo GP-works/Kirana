@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 
 class ItemImagePicker extends StatefulWidget {
-  final void Function(String url) notifyParent;
+  final void Function(File image) notifyParent;
 
   ItemImagePicker({Key key, @required this.notifyParent}) : super(key: key);
 
@@ -23,43 +23,15 @@ class _ItemImagePickerState extends State<ItemImagePicker> {
         await picker.getImage(source: source, maxHeight: 400, maxWidth: 400);
     setState(() {
       image = File(pickedFile.path);
-      print(image.lengthSync());
-      uploadPic();
+      widget.notifyParent(image);
     });
+
   }
 
-  FirebaseStorage _storage = FirebaseStorage.instance;
-
-  Future<String> uploadPic() async {
-    StorageReference reference = _storage.ref().child('images/');
-    StorageUploadTask uploadTask = reference.child('image1').putFile(image);
-    if (uploadTask.isSuccessful || uploadTask.isComplete) {
-      final String url = await reference.getDownloadURL();
-      print("The download URL is " + url);
-      widget.notifyParent(url);
-    } else if (uploadTask.isInProgress) {
-      uploadTask.events.listen((event) {
-        double percentage = 100 *
-            (event.snapshot.bytesTransferred.toDouble() /
-                event.snapshot.totalByteCount.toDouble());
-        print("THe percentage " + percentage.toString());
-      });
-
-      StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-      url = await storageTaskSnapshot.ref.getDownloadURL();
-      widget.notifyParent(url);
-
-      //Here you can get the download URL when the task has been completed.
-      print("Download URL " + url.toString());
-    } else {
-      url = "";
-    }
-    return url;
-  }
 
   @override
   Widget build(BuildContext context) {
-    String text = url == "" ? "Add Photo" : "Change Photo";
+    String text = image==null ? "Add Photo" : "Change Photo";
     return Column(
       children: <Widget>[
         Container(
