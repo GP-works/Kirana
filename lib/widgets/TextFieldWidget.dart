@@ -77,7 +77,16 @@ class NumberFieldWidgetWithValidation extends StatelessWidget {
                 if ((value.isEmpty)) {
                   return "please enter valid $name";
                 }
-                return null;
+                else {
+                  try {
+                    var n = double.parse(controller.text);
+                    return null;
+                  } on FormatException {
+                    return "Invalid format";
+                  }
+
+                }
+
               },
               decoration: InputDecoration(
                 border: OutlineInputBorder(),

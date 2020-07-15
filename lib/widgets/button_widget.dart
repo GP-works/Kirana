@@ -10,14 +10,14 @@ class button extends StatelessWidget {
     return Container(
         child: Center(
             child: RaisedButton(
-      color: Colors.red,
-      child: Text("$widget"),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => widget),
-        );
-      },
-    )));
+              color: Colors.red,
+              child: Text("$widget"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => widget),
+                );
+              },
+            )));
   }
 }
