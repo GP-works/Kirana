@@ -22,6 +22,7 @@ class _AddItemPageFormState extends State<AddItemPageForm> {
   String imageurl = '';
   File itemimage;
   int id;
+  bool isLoading=false;
   final nameController = TextEditingController();
   final priceController = TextEditingController();
   final mrpController = TextEditingController();
@@ -40,12 +41,22 @@ class _AddItemPageFormState extends State<AddItemPageForm> {
   Future<String> uploadImage() async {
     StorageReference reference = _storage.ref().child('images/');
     StorageUploadTask uploadTask = reference.child("${nameController.text}${DateTime.now().millisecondsSinceEpoch}").putFile(itemimage);
-    if (uploadTask.isSuccessful || uploadTask.isComplete) {
-      final String url = await reference.getDownloadURL();
-      print("The download URL is " + url);
-      setState(() {
-        imageurl=url;
+    if (uploadTask.isComplete) {
+      if(uploadTask.isSuccessful)
+        {
+          final String url = await reference.getDownloadURL();
+          print("The download URL is " + url);
+           setState(() {
+          imageurl=url;
       });
+        }
+      else{
+        isLoading=false;
+        Scaffold.of(context).showSnackBar( SnackBar(
+          content: Text("Error uploading pic"),
+          backgroundColor: Colors.red,
+        ));
+      }
     } else if (uploadTask.isInProgress) {
       uploadTask.events.listen((event) {
         double percentage = 100 *
@@ -57,12 +68,12 @@ class _AddItemPageFormState extends State<AddItemPageForm> {
       StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
       imageurl = await storageTaskSnapshot.ref.getDownloadURL();
 
-
       //Here you can get the download URL when the task has been completed.
       print("Download URL " + imageurl.toString());
     } else {
-      Scaffold.of(context).showSnackBar(new SnackBar(
-        content: new Text("Error uploading pic"),
+      isLoading=false;
+      Scaffold.of(context).showSnackBar( SnackBar(
+        content: Text("Error uploading pic"),
         backgroundColor: Colors.red,
       ));
       return imageurl;
@@ -85,14 +96,18 @@ class _AddItemPageFormState extends State<AddItemPageForm> {
           alignment: Alignment.bottomRight,
           child: Padding(
               padding: EdgeInsets.fromLTRB(0, 10, 20, 0),
-              child: RaisedButton(
+               child: !isLoading? RaisedButton(
                   child: Text(
                     "Submit".toUpperCase(),
                     style: TextStyle(color: Colors.white, letterSpacing: 1),
                   ),
                   color: Colors.green[700],
                   onPressed: () async{
-                    if (_formKey.currentState.validate()) {
+                    setState(() {
+
+                    });
+                    if (_formKey.currentState.validate()&&itemimage!=null) {
+                      isLoading=true;
                       await uploadImage();
                       itemname = nameController.text;
                       price = double.parse(priceController.text);
@@ -101,7 +116,8 @@ class _AddItemPageFormState extends State<AddItemPageForm> {
                       id = new DateTime.now().millisecondsSinceEpoch;
                       if (imageurl == "") {
                         Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text("select an image")));
+                            SnackBar(content: Text("Upload failed please check internet connection")));
+                        isLoading=false;
                       } else {
                         _additem_to_container();
                         Navigator.pushReplacement(
@@ -110,7 +126,17 @@ class _AddItemPageFormState extends State<AddItemPageForm> {
                                 builder: (context) => ItemsPage()));
                       }
                     }
-                  })),
+                    else if(itemimage==null)
+                      {
+                        Scaffold.of(context).showSnackBar(
+                            SnackBar(content: Text("select an image")));
+                        isLoading=false;
+                      }
+
+
+                  }):Center(
+                 child: CircularProgressIndicator(),
+               ),) ,
         )
       ]),
     );

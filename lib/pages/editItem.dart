@@ -24,6 +24,7 @@ class _editItemPageFormState extends State<editItemPageForm> {
   final priceController = TextEditingController();
   final mrpController = TextEditingController();
   final descriptionController = TextEditingController();
+  bool isLoading=false;
   File itemimage;
 
   @override
@@ -63,6 +64,7 @@ class _editItemPageFormState extends State<editItemPageForm> {
       //Here you can get the download URL when the task has been completed.
       print("Download URL " + widget.item.imageurl.toString());
     } else {
+      isLoading=false;
       Scaffold.of(context).showSnackBar(new SnackBar(
         content: new Text("Error uploading pic"),
         backgroundColor: Colors.red,
@@ -113,17 +115,21 @@ class _editItemPageFormState extends State<editItemPageForm> {
           alignment: Alignment.bottomRight,
           child: Padding(
               padding: EdgeInsets.fromLTRB(0, 10, 20, 0),
-              child: RaisedButton(
+              child: !isLoading ? RaisedButton(
                   child: Text(
                     "Submit".toUpperCase(),
                     style: TextStyle(color: Colors.white, letterSpacing: 1),
                   ),
                   color: Colors.green[700],
                   onPressed: () async {
-                    if (itemimage != null) {
-                      await uploadImage();
-                    }
+
                     if (_formKey.currentState.validate()) {
+                      setState(() {
+                        isLoading=true;
+                      });
+                      if (itemimage != null) {
+                        await uploadImage();
+                      }
                       widget.item.name = nameController.text;
                       widget.item.price = double.parse(priceController.text);
                       widget.item.originalPrice =
@@ -140,7 +146,7 @@ class _editItemPageFormState extends State<editItemPageForm> {
                                 builder: (context) => ItemsPage()));
                       }
                     }
-                  })),
+                  }): Center(child: CircularProgressIndicator(),)),
         )
       ]),
     );

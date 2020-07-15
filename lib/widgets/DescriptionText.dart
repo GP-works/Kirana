@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class DescriptionText extends StatelessWidget {
   final String text;
   DescriptionText(this.text);
