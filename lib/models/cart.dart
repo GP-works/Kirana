@@ -1,11 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:kirana/models/items.dart';
+import 'package:kirana/models/orders.dart';
+import 'orderslist.dart';
 
 class CartModel extends ChangeNotifier {
   Map _cartitems = new Map();
   ItemsModel _catalog;
   get items => _cartitems;
   get catalog => _catalog;
+  
   void add(int id) {
     if (_cartitems.containsKey(id)) {
       _cartitems[id]++;
@@ -36,5 +39,14 @@ class CartModel extends ChangeNotifier {
   void delete_all() {
     _cartitems = new Map();
     notifyListeners();
+  }
+
+  double get_price()
+  {
+    double total_price = 0;
+    _cartitems.forEach((key, value) { 
+      total_price = total_price + (value * catalog.getItemById(key).price);
+      });
+      return total_price;
   }
 }

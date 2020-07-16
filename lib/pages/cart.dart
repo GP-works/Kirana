@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/models/cart.dart';
+import 'package:kirana/models/orderslist.dart';
 import 'package:kirana/widgets/cartitem_widget.dart';
-
+import 'package:kirana/pages/orders.dart';
+import 'package:kirana/widgets/menuitem_widget.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
@@ -10,9 +12,11 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Consumer<CartModel>(builder: (context, cart, child) {
+      child: Consumer2<CartModel,OrdersListModel>(builder: (context, cart, orderslist, child) {
         List<CartItem> list = [];
+        List<MenuItem> itemslist = [];
         cart.items.forEach((k, v) => list.add(CartItem(k)));
+        cart.catalog.items.forEach((item) => itemslist.add(MenuItem(item.hashCode)));
         return Scaffold(
           appBar: AppBar(
             title: Text("Cart"),
@@ -29,31 +33,59 @@ class CartPage extends StatelessWidget {
                )
                )
                ]),
-          body: ListView(children: list)
+          body: Container(
+            child: CartContents(list, itemslist)
+          ),
+          bottomNavigationBar: BottomAppBar(
+            child: Row(
+              children: <Widget>[
+                Text('Total price : ${cart.get_price()}'),
+                FlatButton(
+                  onPressed:()
+                  { 
+                    orderslist.create_order(cart);
+                    Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => OrdersPage()));
+                    },
+                  child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "checkout",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: Colors.lightBlueAccent,
+                            )
+                          ],
+                        ),
+                )
+              ],
+            ),
+            ),
                );
       }),
       );
-    /*return Scaffold(
-      body: Consumer<CartModel>(builder: (context, cart, child) {
-        List<CartItem> list = [];
-        cart.items.forEach((k, v) => list.add(CartItem(k)));
-        return ListView(children: list);
-      }),
-      appBar: AppBar(
-        title: Text("Cart"),
-        actions: <Widget>[
-        Padding(
-         padding: EdgeInsets.only(right: 20.0),
-         child: GestureDetector(
-            onTap: () {},
-            child: Icon(
-            Icons.delete,
-            size: 26.0,
-            color: Colors.red,
-        ),
-          )
-        )],
-        ),
-    );*/
+  }
+
+  Widget CartContents(List<CartItem> list, List<MenuItem> itemslist){
+      if(list.length == 0)
+      { 
+        return Container(
+          child: 
+                ListView(children: itemslist),                
+        );
+      }
+      else
+      {
+        return Container(
+          child: ListView(children: list)
+          );
+      }
   }
 }
