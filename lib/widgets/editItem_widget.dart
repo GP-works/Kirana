@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:kirana/models/items.dart';
 import 'package:kirana/models/Item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/rendering.dart';
 
 class EditItemTile extends StatefulWidget {
   final id;
@@ -130,17 +131,20 @@ class _EditItemTileState extends State<EditItemTile> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('No'),
+              child: Text('No',style: TextStyle(fontSize: 25),),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-            FlatButton(
-              child: Text('Yes'),
-              onPressed: () {
-                catalog.remove(item);
-                Navigator.pop(context);
-              },
+            Padding(
+              padding:  EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/3,0,0,0),
+              child: FlatButton(
+                child: Text('Yes',style: TextStyle(fontSize: 25)),
+                onPressed: () {
+                  catalog.remove(item);
+                  Navigator.pop(context);
+                },
+              ),
             ),
           ],
         );

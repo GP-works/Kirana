@@ -29,6 +29,10 @@ class HomeApp extends StatelessWidget {
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
+            routes: {
+              "/signin": (context) => SignInPage(),
+              "/signup":(context) => SignUpPage()
+            },
             home: Scaffold(
                 appBar: AppBar(
                   title: Text('Home page'),
