@@ -10,7 +10,7 @@ import 'package:kirana/widgets/button_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/items.dart';
 import 'package:kirana/models/cart.dart';
-
+import 'package:kirana/models/orders.dart';
 import 'package:kirana/models/orderslist.dart';
 
 import 'package:kirana/models/startup.dart';
@@ -39,6 +39,9 @@ class _HomeAppState extends State<HomeApp> {
           ),
           ChangeNotifierProvider(
             create: (context) => OrdersListModel(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => OrdersModel(),
           ),
         ],
         child: MaterialApp(
