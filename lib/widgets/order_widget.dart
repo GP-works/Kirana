@@ -3,7 +3,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kirana/models/orderslist.dart';
 import 'package:provider/provider.dart';
-import 'package:kirana/models/Item.dart';
+import 'package:kirana/pages/orderitems.dart';
 import 'package:kirana/models/orders.dart';
 
 class Order_widget extends StatefulWidget {
@@ -22,28 +22,38 @@ class _Order_widgetState extends State<Order_widget> {
     var orderProvider = Provider.of<OrdersListModel>(context);
     OrdersModel order = orderProvider.getItemById(widget.id);
 
-    return Column(children: [_Tile(order), Divider()]);
+    return Column(children: [_Tile(order), Divider(thickness: 5, color: Colors.blue,)]);
   }
 
   Widget _Tile(OrdersModel order) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
-      child: Row(
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Text("${DateTime.fromMillisecondsSinceEpoch(order.hashCode)}"),
-              Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: Text(
-                    order.price().toString(),
-                    style: TextStyle(fontSize: 20, color: Colors.green[800]),
-                  )),
-            ],
-          ),
-        ],
-      ),
-    );
+      padding: EdgeInsets.fromLTRB(0, 5, 5, 0),
+      child: Column(
+                  children: <Widget>[
+                    Text("Date : ${DateTime.fromMillisecondsSinceEpoch(order.id)}",
+                          style: TextStyle(color: Colors.green[800],fontSize: 18),
+                    ),
+                    Container(
+                        child: Text(
+                          'Price : ' + order.price().toString(),
+                          style:
+                              TextStyle(fontSize: 20, color: Colors.green[800]),
+                        )),
+                    FlatButton(
+                      onPressed: ()
+                      {
+                        Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => OrderItemsPage(order)));
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.explore),
+                          Text('Expand'),
+                        ]
+                      ),
+                    ),
+                  ],
+                ),
+          );
   }
 }

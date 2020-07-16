@@ -2,31 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kirana/models/orders.dart';
-import 'package:provider/provider.dart';
-import 'package:kirana/models/Item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class OrderItem_widget extends StatefulWidget {
-  final int id;
-  OrderItem_widget(this.id);
+  OrderItem orderitem;
+  OrderItem_widget(this.orderitem);
 
   @override
   _OrderItem_widgetState createState() => _OrderItem_widgetState();
 }
 
 class _OrderItem_widgetState extends State<OrderItem_widget> {
-  int count = 0;
-
+  
   @override
   Widget build(BuildContext context) {
-    var orderProvider = Provider.of<OrdersModel>(context);
-    Item item = orderProvider.items.getItemById(widget.id);
-    count = orderProvider.items[widget.id];
-
-    return Column(children: [_Tile(item), Divider()]);
+    return Column(children: [_Tile(widget.orderitem), Divider()]);
   }
 
-  Widget _Tile(Item item) {
+  Widget _Tile(OrderItem item) {
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
@@ -59,7 +52,20 @@ class _OrderItem_widgetState extends State<OrderItem_widget> {
                     Padding(
                         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                         child: Text(
-                          (item.price * count).toString(),
+                          (item.price * item.count).toString(),
+                          style:
+                              TextStyle(fontSize: 20, color: Colors.green[800]),
+                        )),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Text("Count"),
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: Text(
+                          (item.count).toString(),
                           style:
                               TextStyle(fontSize: 20, color: Colors.green[800]),
                         )),

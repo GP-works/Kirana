@@ -1,6 +1,6 @@
+
 import 'items.dart';
 import 'package:provider/provider.dart';
-
 class OrderItem {
   String name;
   double price;
@@ -19,7 +19,8 @@ class OrderItem {
   }
 }
 
-class OrdersModel {
+
+class OrdersModel extends ChangeNotifier{
   List<OrderItem> _orderitems = [];
   int id;
   get items => _orderitems;
@@ -37,8 +38,10 @@ class OrdersModel {
   @override
   int get hashCode => this.id;
 
-  double price() {
-    double total_price = 0;
+
+  double price()
+  {
+   double total_price = 0 ;
     _orderitems.forEach((item) => total_price = total_price + item.price);
     return total_price;
   }
