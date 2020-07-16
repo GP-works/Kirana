@@ -10,7 +10,11 @@ import 'package:kirana/widgets/button_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/items.dart';
 import 'package:kirana/models/cart.dart';
+
+import 'package:kirana/models/orderslist.dart';
+
 import 'package:kirana/models/startup.dart';
+
 
 class HomeApp extends StatefulWidget {
   @override
@@ -32,6 +36,9 @@ class _HomeAppState extends State<HomeApp> {
               cart.catalog = items;
               return cart;
             },
+          ),
+          ChangeNotifierProvider(
+            create: (context) => OrdersListModel(),
           ),
         ],
         child: MaterialApp(
