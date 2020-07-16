@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'items.dart';
 
 class OrderItem{
   String name;
@@ -19,7 +18,7 @@ class OrderItem{
   }
 }
 
-class OrdersModel{
+class OrdersModel extends ChangeNotifier{
   List<OrderItem> _orderitems = [];
   int id;
   get items => _orderitems;
@@ -34,9 +33,13 @@ class OrdersModel{
     print("added");
   }
 
+  @override
+  int get hashCode => this.id;
+
   double price()
   {
    double total_price = 0 ;
     _orderitems.forEach((item) => total_price = total_price + item.price);
+    return total_price;
   }
 }
