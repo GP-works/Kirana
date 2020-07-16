@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 
-class OrderItem{
+import 'items.dart';
+import 'package:provider/provider.dart';
+class OrderItem {
   String name;
   double price;
   int id;
@@ -17,6 +18,7 @@ class OrderItem{
     return other is OrderItem && other.id == id;
   }
 }
+
 
 class OrdersModel extends ChangeNotifier{
   List<OrderItem> _orderitems = [];
@@ -35,6 +37,7 @@ class OrdersModel extends ChangeNotifier{
 
   @override
   int get hashCode => this.id;
+
 
   double price()
   {

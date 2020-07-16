@@ -2,26 +2,42 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kirana/pages/home.dart';
+import 'package:kirana/pages/navigation.dart';
+import 'package:provider/provider.dart';
 
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final CollectionReference _usersCollectionReference =
-Firestore.instance.collection("users");
+    Firestore.instance.collection("users");
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-class User {
+class User extends ChangeNotifier {
   String uid;
   String name;
   String email;
   String role;
 
-  User({this.uid, this.name, this.email, this.role});
+  User.getData() {
+    var user = _auth.currentUser();
+
+    if (user != null) {
+      var userid = user.then((value) => value.uid);
+      getUser(uid);
+    }
+  }
 
   User.fromData(Map<String, dynamic> data)
       : uid = data['id'],
         name = data['fullName'],
         email = data['email'],
         role = data['userRole'];
+
+  void setData(user) async {
+    var data = await _usersCollectionReference.document(user.uid).get();
+    uid = data['id'];
+    name = data['fullName'];
+    email = data['email'];
+    role = data['userRole'];
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -31,7 +47,8 @@ class User {
       'userRole': role,
     };
   }
-  Future getUser(String uid) async {
+
+  Future getUser(uid) async {
     try {
       var userData = await _usersCollectionReference.document(uid).get();
       return User.fromData(userData.data);
@@ -39,7 +56,6 @@ class User {
       return e.message;
     }
   }
-
 
   Future register(
       {@required userEmail, @required userPassword, @required userName}) async {
@@ -59,6 +75,7 @@ class User {
         uid = user.uid;
         name = userName;
         role = "user";
+        notifyListeners();
         try {
           return await createUser();
         } catch (e) {
@@ -77,23 +94,55 @@ class User {
     if (!ds.exists) {
       try {
         await _usersCollectionReference.document(uid).setData(toJson());
+        notifyListeners();
         return true;
       } catch (e) {
         return e.message;
       }
+    } else {
+      notifyListeners();
+    }
+  }
+
+  void signout() async {
+    uid = name = email = role = null;
+    await _auth.signOut();
+    notifyListeners();
+  }
+
+  bool isLogged() {
+    if (uid != null)
+      return true;
+    else {
+      get();
+      if (uid != null)
+        return true;
+      else
+        return false;
+    }
+  }
+
+  void get() async {
+    FirebaseUser user = await _auth.currentUser();
+    if (user != null) {
+      uid = user.uid;
+      setData(user);
+      notifyListeners();
     }
   }
 }
 
 class GoogleSignInSection extends StatefulWidget {
   final from;
+
   GoogleSignInSection(this.from);
+
   @override
   State<StatefulWidget> createState() => _GoogleSignInSectionState();
 }
 
 class _GoogleSignInSectionState extends State<GoogleSignInSection> {
-  User _user=User();
+  User _user;
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +161,12 @@ class _GoogleSignInSectionState extends State<GoogleSignInSection> {
             onPressed: () async {
               _signInWithGoogle();
             },
-            child:  Text('${widget.from} with Google'),
+            child: Text('${widget.from} with Google'),
           ),
         ),
       ],
     );
   }
-
 
   void _signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -136,13 +184,14 @@ class _GoogleSignInSectionState extends State<GoogleSignInSection> {
     assert(user.uid == currentUser.uid);
     setState(() {
       if (user != null && user.isEmailVerified) {
+        _user = Provider.of<User>(context, listen: false);
         _user.uid = user.uid;
         _user.email = user.email;
         _user.name = user.displayName;
         _user.role = "user";
         _user.createUser();
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeApp()));
+            context, MaterialPageRoute(builder: (context) => Navigation()));
       } else {
         if (user != null) {
           Scaffold.of(context)

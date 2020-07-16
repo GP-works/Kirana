@@ -6,6 +6,7 @@ import 'package:kirana/widgets/RedirectPage.dart';
 import 'package:kirana/pages/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kirana/models/user.dart';
+import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   bool _isLoading = false;
-  User user = User();
+  User user;
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +106,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   void _register() async {
+    user = Provider.of<User>(context, listen: false);
     var response = await user.register(
         userEmail: _emailController.text,
         userPassword: _passwordController.text,
