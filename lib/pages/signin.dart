@@ -7,9 +7,10 @@ import 'package:kirana/pages/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:kirana/models/user.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final GoogleSignIn _googleSignIn = GoogleSignIn();
+
 
 class SignIn extends StatefulWidget {
   @override
@@ -78,7 +79,7 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                   ),
-                  _GoogleSignInSection(),
+                  GoogleSignInSection("Login"),
                   RedirectPage(SignUpPage(), 'Sign Up', 'New User?'),
                   Container(
                     padding: EdgeInsets.only(left: 20),
@@ -171,74 +172,6 @@ class _SignInState extends State<SignIn> {
         );
       },
     );
-  }
-}
-
-class _GoogleSignInSection extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _GoogleSignInSectionState();
-}
-
-class _GoogleSignInSectionState extends State<_GoogleSignInSection> {
-  bool _success;
-  String _userID;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          child: const Text('OR'),
-          padding: const EdgeInsets.fromLTRB(16,16,16,10),
-          margin: EdgeInsets.only(top: 20),
-          alignment: Alignment.center,
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          alignment: Alignment.center,
-          child: RaisedButton(
-            onPressed: () async {
-              _signInWithGoogle();
-            },
-            child: const Text('Login with Google'),
-          ),
-        ),
-      ],
-    );
-  }
-
-
-  void _signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    final FirebaseUser user =
-        (await _auth.signInWithCredential(credential)).user;
-    assert(user.email != null);
-    final FirebaseUser currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
-    setState(() {
-      if (user != null && user.isEmailVerified) {
-        _success = true;
-        _userID = user.uid;
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => ItemsPage()));
-      } else {
-        if (user != null) {
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: Text("Please verify email ")));
-        }
-        else
-          {
-            Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text("Unable to login ")));
-          }
-      }
-    });
   }
 }
 

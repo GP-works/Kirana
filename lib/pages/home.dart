@@ -13,7 +13,16 @@ import 'package:kirana/models/cart.dart';
 import 'package:kirana/models/orders.dart';
 import 'package:kirana/models/orderslist.dart';
 
-class HomeApp extends StatelessWidget {
+import 'package:kirana/models/startup.dart';
+
+
+class HomeApp extends StatefulWidget {
+  @override
+  _HomeAppState createState() => _HomeAppState();
+}
+
+class _HomeAppState extends State<HomeApp> {
+  bool is_signed_in;
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
