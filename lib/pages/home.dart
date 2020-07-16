@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
-import 'cart.dart';
+import 'package:kirana/models/user.dart';
+import 'package:kirana/pages/navigation.dart';
 import 'signin.dart';
 import 'signup.dart';
-import 'edititems.dart';
-import 'orders.dart';
-import 'register.dart';
-import 'items.dart';
-import 'package:kirana/widgets/button_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/items.dart';
 import 'package:kirana/models/cart.dart';
-
 import 'package:kirana/models/orderslist.dart';
-
-import 'package:kirana/models/startup.dart';
-
 
 class HomeApp extends StatefulWidget {
   @override
@@ -22,11 +14,13 @@ class HomeApp extends StatefulWidget {
 }
 
 class _HomeAppState extends State<HomeApp> {
-  bool is_signed_in;
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          ChangeNotifierProvider(
+            create: (context) => User.getData(),
+          ),
           ChangeNotifierProvider(
             create: (context) => ItemsModel(),
           ),
@@ -45,23 +39,8 @@ class _HomeAppState extends State<HomeApp> {
             debugShowCheckedModeBanner: false,
             routes: {
               "/signin": (context) => SignInPage(),
-              "/signup":(context) => SignUpPage()
+              "/signup": (context) => SignUpPage()
             },
-            home: Scaffold(
-                appBar: AppBar(
-                  title: Text('Home page'),
-                  centerTitle: true,
-                ),
-                body: ListView(
-                  children: <Widget>[
-                    button(SignInPage()),
-                    button(SignUpPage()),
-                    button(CartPage()),
-                    button(EditItemsPage()),
-                    button(OrdersPage()),
-                    button(Register()),
-                    button(ItemsPage())
-                  ],
-                ))));
+            home: Navigation()));
   }
 }

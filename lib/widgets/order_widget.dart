@@ -30,21 +30,20 @@ class _Order_widgetState extends State<Order_widget> {
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
         children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text("${DateTime.fromMillisecondsSinceEpoch(order.id)}"),
-                    Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(
-                          order.price.toString(),
-                          style:
-                              TextStyle(fontSize: 20, color: Colors.green[800]),
-                        )),
-                  ],
-                ),
-              ],
-            ),
-          );
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Text("${DateTime.fromMillisecondsSinceEpoch(order.hashCode)}"),
+              Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Text(
+                    order.price().toString(),
+                    style: TextStyle(fontSize: 20, color: Colors.green[800]),
+                  )),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

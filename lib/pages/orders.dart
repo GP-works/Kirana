@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:kirana/widgets/order_widget.dart';
 import 'package:kirana/models/orderslist.dart';
-
 import 'package:provider/provider.dart';
 
 class OrdersPage extends StatelessWidget {

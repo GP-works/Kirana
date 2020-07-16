@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'items.dart';
+import 'package:provider/provider.dart';
 
-class OrderItem{
+class OrderItem {
   String name;
   double price;
   int id;
@@ -19,7 +19,7 @@ class OrderItem{
   }
 }
 
-class OrdersModel{
+class OrdersModel {
   List<OrderItem> _orderitems = [];
   int id;
   get items => _orderitems;
@@ -34,9 +34,12 @@ class OrdersModel{
     print("added");
   }
 
-  double price()
-  {
-   double total_price = 0 ;
+  @override
+  int get hashCode => this.id;
+
+  double price() {
+    double total_price = 0;
     _orderitems.forEach((item) => total_price = total_price + item.price);
+    return total_price;
   }
 }
