@@ -28,7 +28,7 @@ class Navigation extends StatelessWidget {
                   button(OrdersPage()),
                   button(Register()),
                   button(ItemsPage()),
-                  SignOut(),
+                  SignOut("${user.name}"),
                 ],
               ))
           : SignInPage();

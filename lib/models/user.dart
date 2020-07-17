@@ -4,10 +4,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kirana/pages/navigation.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GoogleSignIn _googleSignIn = GoogleSignIn();
-final CollectionReference _usersCollectionReference =
-    Firestore.instance.collection("users");
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class User extends ChangeNotifier {
@@ -15,28 +15,58 @@ class User extends ChangeNotifier {
   String name;
   String email;
   String role;
-
-  User.getData() {
-    var user = _auth.currentUser();
-
-    if (user != null) {
-      var userid = user.then((value) => value.uid);
-      getUser(uid);
-    }
-  }
-
+  User() {}
   User.fromData(Map<String, dynamic> data)
       : uid = data['id'],
         name = data['fullName'],
         email = data['email'],
         role = data['userRole'];
 
-  void setData(user) async {
+  void setData() async {
+    FirebaseUser user = await _auth.currentUser();
+    final CollectionReference _usersCollectionReference =
+        Firestore.instance.collection("users");
     var data = await _usersCollectionReference.document(user.uid).get();
     uid = data['id'];
     name = data['fullName'];
     email = data['email'];
     role = data['userRole'];
+    notifyListeners();
+    writetoSf();
+    print("called firestore");
+  }
+
+  void writetoSf() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("id", uid);
+    await prefs.setString("name", name);
+    await prefs.setString("email", email);
+    await prefs.setString("role", role);
+    notifyListeners();
+  }
+
+  void checkValidAndUpdate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id');
+    if (id == uid) {
+      name = prefs.getString('name');
+      email = prefs.getString('email');
+      role = prefs.getString('role');
+      print("read from device");
+      notifyListeners();
+    } else {
+      FirebaseUser user = await _auth.currentUser();
+      setData();
+      notifyListeners();
+      writetoSf();
+      notifyListeners();
+    }
+  }
+
+  void getfromSf() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    checkValidAndUpdate();
+    notifyListeners();
   }
 
   Map<String, dynamic> toJson() {
@@ -46,15 +76,6 @@ class User extends ChangeNotifier {
       'email': email,
       'userRole': role,
     };
-  }
-
-  Future getUser(uid) async {
-    try {
-      var userData = await _usersCollectionReference.document(uid).get();
-      return User.fromData(userData.data);
-    } catch (e) {
-      return e.message;
-    }
   }
 
   Future register(
@@ -90,6 +111,8 @@ class User extends ChangeNotifier {
   }
 
   Future createUser() async {
+    final CollectionReference _usersCollectionReference =
+        Firestore.instance.collection("users");
     DocumentSnapshot ds = await _usersCollectionReference.document(uid).get();
     if (!ds.exists) {
       try {
@@ -126,7 +149,7 @@ class User extends ChangeNotifier {
     FirebaseUser user = await _auth.currentUser();
     if (user != null) {
       uid = user.uid;
-      setData(user);
+      getfromSf();
       notifyListeners();
     }
   }
