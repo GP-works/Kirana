@@ -20,7 +20,10 @@ class _HomeAppState extends State<HomeApp> {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => User.getData(),
+            create: (context) {
+              User user = User();
+              return user;
+            },
           ),
           ChangeNotifierProvider(
             create: (context) => ItemsModel(),

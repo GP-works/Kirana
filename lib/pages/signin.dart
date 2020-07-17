@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/pages/items.dart';
+import 'package:kirana/pages/navigation.dart';
 import 'package:kirana/widgets/DescriptionText.dart';
 import 'package:kirana/widgets/RedirectPage.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
@@ -13,6 +14,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
 class SignIn extends StatefulWidget {
+
   @override
   _SignInState createState() => _SignInState();
 }
@@ -20,9 +22,8 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _success;
-  String _userEmail;
   final _formKey = GlobalKey<FormState>();
+  User _user;
 
   @override
   Widget build(BuildContext context) {
@@ -124,17 +125,19 @@ class _SignInState extends State<SignIn> {
       if (user != null) {
         if (user.isEmailVerified) {
           setState(() {
-            _success = true;
-            _userEmail = user.email;
+            _user=User();
+             _user.setData();
+             _user.writetoSf();
+            _user.notifyListeners();
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => ItemsPage()));
+                context, MaterialPageRoute(builder: (context) => Navigation()));
           });
         } else {
           Scaffold.of(context)
               .showSnackBar(SnackBar(content: Text("Please verify email ")));
         }
       } else {
-        _success = false;
+
       }
     } catch (e) {
       Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
