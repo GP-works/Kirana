@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:kirana/widgets/EmailField.dart';
 import 'package:kirana/widgets/PhoneNumber.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
 import 'package:kirana/pages/Location.dart';
+import 'package:provider/provider.dart';
+import 'package:kirana/models/shops.dart';
 
 class RegisterForm extends StatefulWidget {
   @override
@@ -12,6 +13,10 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
+  final _shopNameController = TextEditingController();
+  final _ownerNameController = TextEditingController();
+  final _phonenumberController = TextEditingController();
+  final _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +24,10 @@ class _RegisterFormState extends State<RegisterForm> {
         key: _formKey,
         child: ListView(
           children: <Widget>[
-            TextFieldWidgetWithValidation('Shop Name', TextEditingController()),
-            TextFieldWidgetWithValidation(
-                "Owner Name", TextEditingController()),
-            PhoneNumber(),
-            EmailField(),
+            TextFieldWidgetWithValidation('Shop Name', _shopNameController),
+            TextFieldWidgetWithValidation("Owner Name", _ownerNameController),
+            PhoneNumber(_phonenumberController),
+            EmailField(_emailController),
             Container(
               alignment: Alignment.bottomRight,
               child: Padding(
@@ -35,14 +39,20 @@ class _RegisterFormState extends State<RegisterForm> {
                     ),
                     color: Colors.green[700],
                     onPressed: () {
-                      //if (_formKey.currentState.validate())
-                      // Scaffold.of(context).showSnackBar(
-                      //  SnackBar(content: Text("valid processing")));
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Location(),
-                          ));
+                      if (_formKey.currentState.validate()) {
+                        Shops shopsProvider =
+                            Provider.of<Shops>(context, listen: false);
+
+                        Scaffold.of(context).showSnackBar(
+                            SnackBar(content: Text("valid processing")));
+                        print(_phonenumberController.text);
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Location(),
+                            ));
+                      }
                     },
                   )),
             )

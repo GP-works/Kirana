@@ -4,7 +4,7 @@ import 'package:kirana/models/orderslist.dart';
 import 'package:provider/provider.dart';
 
 class OrdersPage extends StatelessWidget {
-  final name = 'Items';
+  final name = 'Orders';
 
   @override
   Widget build(BuildContext context) {

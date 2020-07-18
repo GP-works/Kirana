@@ -35,6 +35,12 @@ dependencies:
   firebase_auth: ^0.16.1
   cloud_firestore: ^0.13.7
   shared_preferences: ^0.5.8
+  moor: ^3.2.0
+  moor_ffi: ^0.7.0
+  path_provider:
+  path:
+  uuid: ^2.2.0
+
 
 
 
@@ -46,6 +52,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  moor_generator: ^3.2.0
+  build_runner:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -15,7 +15,7 @@ class User extends ChangeNotifier {
   String name;
   String email;
   String role;
-  User() {}
+  User() ;
   User.fromData(Map<String, dynamic> data)
       : uid = data['id'],
         name = data['fullName'],

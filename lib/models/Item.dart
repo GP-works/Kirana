@@ -12,7 +12,6 @@ class Item {
       {this.edit});
 
   @override
-  // TODO: implement hashCode
   int get hashCode => this.id;
 
   @override

@@ -11,7 +11,7 @@ class button extends StatelessWidget {
         child: Center(
             child: RaisedButton(
               color: Colors.red,
-              child: Text("$widget"),
+              child: Text("${widget.name}"),
               onPressed: () {
                 Navigator.push(
                   context,

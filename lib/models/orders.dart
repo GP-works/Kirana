@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'items.dart';
-import 'package:provider/provider.dart';
+
 class OrderItem {
   String name;
   double price;
@@ -19,8 +18,7 @@ class OrderItem {
   }
 }
 
-
-class OrdersModel extends ChangeNotifier{
+class OrdersModel extends ChangeNotifier {
   List<OrderItem> _orderitems = [];
   int id;
   get items => _orderitems;
@@ -36,12 +34,12 @@ class OrdersModel extends ChangeNotifier{
   }
 
   @override
+  // ignore: hash_and_equals
   int get hashCode => this.id;
 
-
-  double price()
-  {
-   double total_price = 0 ;
+  double price() {
+    // ignore: non_constant_identifier_names
+    double total_price = 0;
     _orderitems.forEach((item) => total_price = total_price + item.price);
     return total_price;
   }
