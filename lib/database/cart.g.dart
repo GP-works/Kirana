@@ -8,7 +8,6 @@ part of 'cart.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class Orderitem extends DataClass implements Insertable<Orderitem> {
-  final int id;
   final String name;
   final double price;
   final int count;
@@ -16,8 +15,7 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
   final String status;
   final String menuitemid;
   Orderitem(
-      {@required this.id,
-      @required this.name,
+      {@required this.name,
       @required this.price,
       @required this.count,
       @required this.shop,
@@ -26,11 +24,10 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
   factory Orderitem.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
     final doubleType = db.typeSystem.forDartType<double>();
+    final intType = db.typeSystem.forDartType<int>();
     return Orderitem(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       price:
           doubleType.mapFromDatabaseResponse(data['${effectivePrefix}price']),
@@ -45,9 +42,6 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
     if (!nullToAbsent || name != null) {
       map['name'] = Variable<String>(name);
     }
@@ -71,7 +65,6 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
 
   OrderitemsCompanion toCompanion(bool nullToAbsent) {
     return OrderitemsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       price:
           price == null && nullToAbsent ? const Value.absent() : Value(price),
@@ -90,7 +83,6 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Orderitem(
-      id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       price: serializer.fromJson<double>(json['price']),
       count: serializer.fromJson<int>(json['count']),
@@ -103,7 +95,6 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
   Map<String, dynamic> toJson({ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'price': serializer.toJson<double>(price),
       'count': serializer.toJson<int>(count),
@@ -114,15 +105,13 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
   }
 
   Orderitem copyWith(
-          {int id,
-          String name,
+          {String name,
           double price,
           int count,
           String shop,
           String status,
           String menuitemid}) =>
       Orderitem(
-        id: id ?? this.id,
         name: name ?? this.name,
         price: price ?? this.price,
         count: count ?? this.count,
@@ -133,7 +122,6 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
   @override
   String toString() {
     return (StringBuffer('Orderitem(')
-          ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('price: $price, ')
           ..write('count: $count, ')
@@ -146,20 +134,17 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
 
   @override
   int get hashCode => $mrjf($mrjc(
-      id.hashCode,
+      name.hashCode,
       $mrjc(
-          name.hashCode,
+          price.hashCode,
           $mrjc(
-              price.hashCode,
-              $mrjc(
-                  count.hashCode,
-                  $mrjc(shop.hashCode,
-                      $mrjc(status.hashCode, menuitemid.hashCode)))))));
+              count.hashCode,
+              $mrjc(shop.hashCode,
+                  $mrjc(status.hashCode, menuitemid.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Orderitem &&
-          other.id == this.id &&
           other.name == this.name &&
           other.price == this.price &&
           other.count == this.count &&
@@ -169,7 +154,6 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
 }
 
 class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
-  final Value<int> id;
   final Value<String> name;
   final Value<double> price;
   final Value<int> count;
@@ -177,7 +161,6 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
   final Value<String> status;
   final Value<String> menuitemid;
   const OrderitemsCompanion({
-    this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.price = const Value.absent(),
     this.count = const Value.absent(),
@@ -186,7 +169,6 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
     this.menuitemid = const Value.absent(),
   });
   OrderitemsCompanion.insert({
-    this.id = const Value.absent(),
     @required String name,
     @required double price,
     @required int count,
@@ -200,7 +182,6 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
         status = Value(status),
         menuitemid = Value(menuitemid);
   static Insertable<Orderitem> custom({
-    Expression<int> id,
     Expression<String> name,
     Expression<double> price,
     Expression<int> count,
@@ -209,7 +190,6 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
     Expression<String> menuitemid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (price != null) 'price': price,
       if (count != null) 'count': count,
@@ -220,15 +200,13 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
   }
 
   OrderitemsCompanion copyWith(
-      {Value<int> id,
-      Value<String> name,
+      {Value<String> name,
       Value<double> price,
       Value<int> count,
       Value<String> shop,
       Value<String> status,
       Value<String> menuitemid}) {
     return OrderitemsCompanion(
-      id: id ?? this.id,
       name: name ?? this.name,
       price: price ?? this.price,
       count: count ?? this.count,
@@ -241,9 +219,6 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
@@ -268,7 +243,6 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
   @override
   String toString() {
     return (StringBuffer('OrderitemsCompanion(')
-          ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('price: $price, ')
           ..write('count: $count, ')
@@ -285,15 +259,6 @@ class $OrderitemsTable extends Orderitems
   final GeneratedDatabase _db;
   final String _alias;
   $OrderitemsTable(this._db, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   GeneratedTextColumn _name;
   @override
@@ -359,16 +324,13 @@ class $OrderitemsTable extends Orderitems
   @override
   GeneratedTextColumn get menuitemid => _menuitemid ??= _constructMenuitemid();
   GeneratedTextColumn _constructMenuitemid() {
-    return GeneratedTextColumn(
-      'menuitemid',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('menuitemid', $tableName, false,
+        $customConstraints: 'UNIQUE');
   }
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, price, count, shop, status, menuitemid];
+      [name, price, count, shop, status, menuitemid];
   @override
   $OrderitemsTable get asDslTable => this;
   @override
@@ -380,9 +342,6 @@ class $OrderitemsTable extends Orderitems
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
-    }
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
@@ -425,7 +384,7 @@ class $OrderitemsTable extends Orderitems
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
   @override
   Orderitem map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
