@@ -3,7 +3,7 @@ import 'package:kirana/widgets/shop_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/shops.dart';
 
-class ItemsPage extends StatelessWidget {
+class ShopsPage extends StatelessWidget {
   final name = 'Items';
 
   @override

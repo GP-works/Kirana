@@ -36,7 +36,7 @@ class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
   Stream<List<Orderitem>> watchCartItems() {
-    (select(orderitems)
+    return (select(orderitems)
           ..where((t) => t.status.equals("cart"))
           ..orderBy([(t) => OrderingTerm(expression: t.menuitemid)]))
         .watch();
