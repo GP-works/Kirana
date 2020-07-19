@@ -34,8 +34,8 @@ class TextFieldWidgetWithValidation extends StatelessWidget {
   final controller;
   bool obscure;
 
-  TextFieldWidgetWithValidation(this.name, this.controller){
-    obscure=name=="password";
+  TextFieldWidgetWithValidation(this.name, this.controller) {
+    obscure = name == "password";
   }
 
   @override
@@ -80,17 +80,51 @@ class NumberFieldWidgetWithValidation extends StatelessWidget {
               validator: (value) {
                 if ((value.isEmpty)) {
                   return "please enter valid $name";
-                }
-                else {
+                } else {
                   try {
                     var n = double.parse(controller.text);
                     return null;
                   } on FormatException {
                     return "Invalid format";
                   }
-
                 }
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.fromLTRB(10, 10, 5, 0),
+                labelText: name,
+              ),
+              keyboardType: TextInputType.number,
+            )));
+  }
+}
 
+class pinCodeWidget extends StatelessWidget {
+  final String name;
+  final controller;
+
+  pinCodeWidget(this.name, this.controller);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(bottom: 20),
+        child: Padding(
+            padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 10,
+                20, MediaQuery.of(context).size.width / 10, 5),
+            child: TextFormField(
+              controller: controller,
+              validator: (value) {
+                if ((value.isEmpty)) {
+                  return "please enter valid $name";
+                } else {
+                  try {
+                    var n = double.parse(controller.text);
+                    return null;
+                  } on FormatException {
+                    return "Invalid format";
+                  }
+                }
               },
               decoration: InputDecoration(
                 border: OutlineInputBorder(),

@@ -34,9 +34,9 @@ class Shop {
       String phoneNumber,
       String email});
   String getHashCode() => this.id;
-  get name => _shopName;
-  get owner => _ownerName;
-  get address => {"$_adressLane1,$_adressLane2"};
+  get name => "$_shopName";
+  get owner => "$_ownerName";
+  get address => "$_adressLane1,$_adressLane2";
   void setPosition(
       {@required double latitude,
       @required double longitude,
