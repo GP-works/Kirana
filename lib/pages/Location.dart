@@ -67,8 +67,6 @@ class _LocationState extends State<Location> {
                     Scaffold.of(context).showSnackBar(
                         SnackBar(content: Text("failed to upload")));
                   }
-                  var shops = Provider.of<Shops>(context, listen: false);
-                  shops.add(widget.shop);
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => ShopsPage()));
                 }
