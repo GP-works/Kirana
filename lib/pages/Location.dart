@@ -1,7 +1,10 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
+import 'package:kirana/models/shop.dart';
 
 class Location extends StatefulWidget {
+  final Shop shop;
+  Location({this.shop});
   @override
   _LocationState createState() => _LocationState();
 }
@@ -44,7 +47,7 @@ class _LocationState extends State<Location> {
       });
       _getAddressFromLatLng();
     }).catchError((e) {
-      print(e);
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
   }
 

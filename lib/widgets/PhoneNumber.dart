@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 class PhoneNumber extends StatelessWidget {
   final controller;
-  PhoneNumber(this.controller);
+  final dummy;
+  String number;
+  PhoneNumber(this.controller, this.dummy);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,6 +18,7 @@ class PhoneNumber extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(10, 10, 5, 0),
             labelText: "Phone Number",
           ),
+          onChanged: (value) => dummy.text = value.completeNumber,
           initialCountryCode: "IN",
         ));
   }

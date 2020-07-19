@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kirana/models/shop.dart';
 import 'package:kirana/widgets/EmailField.dart';
 import 'package:kirana/widgets/PhoneNumber.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
@@ -12,21 +13,24 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
+  final Shop shop = Shop();
   final _formKey = GlobalKey<FormState>();
   final _shopNameController = TextEditingController();
   final _ownerNameController = TextEditingController();
   final _phonenumberController = TextEditingController();
   final _emailController = TextEditingController();
+  final _dummyController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var number = PhoneNumber(_phonenumberController, _dummyController);
     return Form(
         key: _formKey,
         child: ListView(
           children: <Widget>[
             TextFieldWidgetWithValidation('Shop Name', _shopNameController),
             TextFieldWidgetWithValidation("Owner Name", _ownerNameController),
-            PhoneNumber(_phonenumberController),
+            number,
             EmailField(_emailController),
             Container(
               alignment: Alignment.bottomRight,
@@ -40,17 +44,16 @@ class _RegisterFormState extends State<RegisterForm> {
                     color: Colors.green[700],
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        Shops shopsProvider =
-                            Provider.of<Shops>(context, listen: false);
-
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text("valid processing")));
-                        print(_phonenumberController.text);
-
+                        print(_dummyController.text);
+                        shop.setBasics(
+                            shopName: _shopNameController.text,
+                            ownerName: _ownerNameController.text,
+                            phoneNumber: _dummyController.text,
+                            email: _emailController.text);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Location(),
+                              builder: (context) => Location(shop: shop),
                             ));
                       }
                     },
