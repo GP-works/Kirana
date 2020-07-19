@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kirana/pages/shops.dart';
 import 'package:kirana/widgets/sinout_button.dart';
 import 'edititems.dart';
 import 'orders.dart';
@@ -28,6 +29,7 @@ class Navigation extends StatelessWidget {
                   button(OrdersPage()),
                   button(Register()),
                   button(ItemsPage()),
+                  button(ShopsPage()),
                   SignOut("${user.name}"),
                 ],
               ))
