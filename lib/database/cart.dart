@@ -3,7 +3,7 @@ import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'dart:io';
-
+import 'dart:async';
 part 'cart.g.dart';
 
 LazyDatabase _openConnection() {
@@ -15,8 +15,6 @@ LazyDatabase _openConnection() {
 }
 
 class Orderitems extends Table {
-  IntColumn get id => integer().autoIncrement()();
-
   TextColumn get name => text()();
 
   RealColumn get price => real()();
@@ -27,24 +25,74 @@ class Orderitems extends Table {
 
   TextColumn get status => text()();
 
-  TextColumn get menuitemid => text()();
+  TextColumn get menuitemid => text().customConstraint('UNIQUE')();
 }
 
-@UseMoor(tables: [Orderitems])
+@UseMoor(
+  tables: [Orderitems],
+)
 class MyDatabase extends _$MyDatabase {
   // we tell the database where to store the data with this constructor
   MyDatabase() : super(_openConnection());
 
   Stream<List<Orderitem>> watchCartItems() {
-    list= (select(orderitems)..where((t) => t.status.equals("cart"))..orderBy([(t) => OrderingTerm(expression: t.menuitemid)])).watch();
+    (select(orderitems)
+          ..where((t) => t.status.equals("cart"))
+          ..orderBy([(t) => OrderingTerm(expression: t.menuitemid)]))
+        .watch();
   }
 
-  int getCount(menuitemid)
-  {
-    final query= (select(orderitems)..where((t) => t.menuitemid.equals(menuitemid)));
+  Future<int> getCount(menuitemid) async {
+    final query = await (select(orderitems)
+          ..where((t) => t.menuitemid.equals(menuitemid)))
+        .get();
+    return query.length;
   }
 
+  Stream<List<dynamic>> getshopids() {
+    final query = (selectOnly(orderitems, distinct: true))
+      ..addColumns([orderitems.shop]);
+    return query.watch();
+  }
+
+  Future createEntry(
+      {@required String name,
+      @required double price,
+      @required String shopid,
+      @required String menuitemid}) async {
+    await into(orderitems).insert(Orderitem(
+        name: name,
+        price: price,
+        count: 1,
+        shop: shopid,
+        status: "cart",
+        menuitemid: menuitemid));
+  }
+
+  Future incrementItem(menuitemid, count) async {
+    return (update(orderitems)..where((t) => t.menuitemid.equals(menuitemid)))
+        .write(
+      OrderitemsCompanion(
+        count: Value(count + 1),
+      ),
+    );
+  }
+
+  Future decrementItem(menuitemid, count) async {
+    if (count == 0) {
+      return delete(orderitems)
+        ..where((tbl) => tbl.menuitemid.equals(menuitemid));
+    } else {
+      return await (update(orderitems)
+            ..where((t) => t.menuitemid.equals(menuitemid)))
+          .write(
+        OrderitemsCompanion(
+          count: Value(count - 1),
+        ),
+      );
+    }
+  }
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 6;
 }
