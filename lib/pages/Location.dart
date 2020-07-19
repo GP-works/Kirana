@@ -55,14 +55,18 @@ class _LocationState extends State<Location> {
                 style: TextStyle(color: Colors.white, letterSpacing: 1),
               ),
               color: Colors.green[700],
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState.validate()) {
-                  widget.shop.setPosition(
+                  bool b = await widget.shop.setPosition(
                       latitude: _currentPosition.latitude,
                       longitude: _currentPosition.longitude,
                       adressLane1: _address1Controller.text,
                       pincode: _pincodeController.text,
                       adressLane2: _address2Controller.text);
+                  if (!b) {
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text("failed to upload")));
+                  }
                   var shops = Provider.of<Shops>(context, listen: false);
                   shops.add(widget.shop);
                   Navigator.pushReplacement(context,
@@ -80,21 +84,17 @@ class _LocationState extends State<Location> {
           key: _formKey,
           child: (_currentPosition != null)
               ? adressForm
-              : ListView(
-                  children: <Widget>[
-                    Center(
-                      child: RaisedButton(
-                        child: Text(
-                          "Get location",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        onPressed: () {
-                          _getCurrentLocation();
-                        },
-                        color: Colors.amber[800],
-                      ),
+              : Center(
+                  child: RaisedButton(
+                    child: Text(
+                      "Get location",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
-                  ],
+                    onPressed: () {
+                      _getCurrentLocation();
+                    },
+                    color: Colors.amber[800],
+                  ),
                 ),
         ));
   }

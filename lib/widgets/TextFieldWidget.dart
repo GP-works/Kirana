@@ -119,7 +119,7 @@ class pinCodeWidget extends StatelessWidget {
                   return "please enter valid $name";
                 } else {
                   try {
-                    var n = double.parse(controller.text);
+                    var n = int.parse(controller.text);
                     return null;
                   } on FormatException {
                     return "Invalid format";

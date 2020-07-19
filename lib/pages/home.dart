@@ -26,7 +26,11 @@ class _HomeAppState extends State<HomeApp> {
               return user;
             },
           ),
-          ChangeNotifierProvider(create: (context) => Shops()),
+          ChangeNotifierProvider(create: (context) {
+            Shops shop = Shops();
+            shop.fromf();
+            return shop;
+          }),
           ChangeNotifierProvider(
             create: (context) => ItemsModel(),
           ),
