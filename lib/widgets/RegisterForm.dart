@@ -50,7 +50,7 @@ class _RegisterFormState extends State<RegisterForm> {
                             ownerName: _ownerNameController.text,
                             phoneNumber: _dummyController.text,
                             email: _emailController.text);
-                        Navigator.push(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => Location(shop: shop),

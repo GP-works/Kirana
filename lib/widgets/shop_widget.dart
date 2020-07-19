@@ -26,7 +26,6 @@ class _MenuItemState extends State<ShopPage> {
   }
 
   Widget _Tile(Shop shop) {
-    print("inside tile");
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
