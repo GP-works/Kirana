@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
-import 'package:kirana/models/cart.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/shop.dart';
 import 'package:kirana/models/shops.dart';
@@ -31,12 +30,6 @@ class _MenuItemState extends State<ShopPage> {
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
         children: <Widget>[
-          CachedNetworkImage(
-            imageUrl: shop.imageurl,
-            width: MediaQuery.of(context).size.width / 4,
-            height: 120,
-            fit: BoxFit.cover,
-          ),
           Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
             child: Column(

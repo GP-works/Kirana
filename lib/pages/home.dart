@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kirana/models/shops.dart';
 import 'package:kirana/models/user.dart';
 import 'package:kirana/pages/navigation.dart';
 import 'signin.dart';
@@ -25,6 +26,11 @@ class _HomeAppState extends State<HomeApp> {
               return user;
             },
           ),
+          ChangeNotifierProvider(create: (context) {
+            Shops shop = Shops();
+            shop.fromf();
+            return shop;
+          }),
           ChangeNotifierProvider(
             create: (context) => ItemsModel(),
           ),

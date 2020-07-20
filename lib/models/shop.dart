@@ -4,7 +4,9 @@ import 'package:kirana/models/items.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 
+var uuid = Uuid();
 FirebaseAuth _auth = FirebaseAuth.instance;
 
 class Shop {
@@ -19,9 +21,7 @@ class Shop {
   String _adressLane1;
   String _adressLane2;
   int _pincode;
-  bool isuploaded;
   String userid;
-  String imageurl;
 
   Shop(
       {double latitude,
@@ -33,11 +33,25 @@ class Shop {
       String ownerName,
       String phoneNumber,
       String email});
+
+  Shop.fromJson(doc) {
+    id = doc["id"];
+    userid = doc["userid"];
+    _shopName = doc["shopName"];
+    _ownerName = doc["ownerName"];
+    _phoneNumber = doc["phoneNumber"];
+    _email = doc["email"];
+    _latitude = doc["latitude"];
+    _longitude = doc["longitude"];
+    _adressLane1 = doc["address1"];
+    _adressLane2 = doc["address2"];
+    _pincode = doc["pincode"];
+  }
   String getHashCode() => this.id;
-  get name => _shopName;
-  get owner => _ownerName;
-  get address => {"$_adressLane1,$_adressLane2"};
-  void setPosition(
+  get name => "$_shopName";
+  get owner => "$_ownerName";
+  get address => "$_adressLane1,$_adressLane2";
+  Future<bool> setPosition(
       {@required double latitude,
       @required double longitude,
       @required adressLane1,
@@ -47,8 +61,11 @@ class Shop {
     _longitude = longitude;
     _adressLane1 = adressLane1;
     _adressLane2 = adressLane2;
-    _pincode = pincode;
+    _pincode = int.parse(pincode);
     userid = await _auth.currentUser().then((value) => value.uid);
+
+    String msg = await uploadToFirestore();
+    return msg == 'true';
   }
 
   void setBasics(
@@ -60,13 +77,18 @@ class Shop {
     _ownerName = ownerName;
     _phoneNumber = phoneNumber;
     _email = email;
-    id = UniqueKey().toString();
+    id = uuid.v1();
   }
 
-  Future uploadToFirestore() {
-    final CollectionReference _shopsCollectionReference =
-        Firestore.instance.collection("shops");
-    _shopsCollectionReference.document(id).setData(toJson());
+  Future uploadToFirestore() async {
+    try {
+      final CollectionReference _shopsCollectionReference =
+          Firestore.instance.collection("shops");
+      await _shopsCollectionReference.document(userid).setData(toJson());
+      return "true";
+    } catch (e) {
+      return e.message;
+    }
   }
 
   Map<String, dynamic> toJson() {
