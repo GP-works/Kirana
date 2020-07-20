@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/models/orders.dart';
-import 'package:kirana/models/orderslist.dart';
 import 'package:kirana/widgets/orderitem_widget.dart';
-import 'package:provider/provider.dart';
 
 class OrderItemsPage extends StatelessWidget {
   final name = 'OrderItems';
@@ -15,7 +13,7 @@ class OrderItemsPage extends StatelessWidget {
       body: ListView(children: [
           for (var item in this.order.items) OrderItem_widget(item),
         ]),
-      appBar: AppBar(title: Text("Order Items")),
+      appBar: AppBar(title: Text("APP_NAME")),
     );
   }
 }

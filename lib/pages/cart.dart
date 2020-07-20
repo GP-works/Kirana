@@ -3,6 +3,7 @@ import 'package:kirana/models/cart.dart';
 import 'package:kirana/models/orderslist.dart';
 import 'package:kirana/widgets/cartitem_widget.dart';
 import 'package:kirana/pages/orders.dart';
+import 'package:kirana/widgets/drawer.dart';
 import 'package:kirana/widgets/menuitem_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -18,8 +19,9 @@ class CartPage extends StatelessWidget {
         cart.items.forEach((k, v) => list.add(CartItem(k)));
         cart.catalog.items.forEach((item) => itemslist.add(MenuItem(item.hashCode)));
         return Scaffold(
+          drawer: DrawerPage(),
           appBar: AppBar(
-            title: Text("Cart"),
+            title: Text("APP_NAME"),
             actions: <Widget>[
               Padding(
                 padding: EdgeInsets.only(right: 20.0),

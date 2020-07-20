@@ -15,7 +15,7 @@ class User extends ChangeNotifier {
   String name;
   String email;
   String role;
-  User() ;
+  User();
   User.fromData(Map<String, dynamic> data)
       : uid = data['id'],
         name = data['fullName'],
@@ -199,8 +199,8 @@ class _GoogleSignInSectionState extends State<GoogleSignInSection> {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    final FirebaseUser user =
-        (await _auth.signInWithCredential(credential)).user;
+    final authresult = (await _auth.signInWithCredential(credential));
+    final FirebaseUser user = authresult.user;
     assert(user.email != null);
     assert(user.displayName != null);
     final FirebaseUser currentUser = await _auth.currentUser();
@@ -212,7 +212,9 @@ class _GoogleSignInSectionState extends State<GoogleSignInSection> {
         _user.email = user.email;
         _user.name = user.displayName;
         _user.role = "user";
-        _user.createUser();
+        if (authresult.additionalUserInfo.isNewUser) {
+          _user.createUser();
+        }
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Navigation()));
       } else {

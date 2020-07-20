@@ -1,10 +1,8 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:kirana/models/shop.dart';
-import 'package:kirana/models/shops.dart';
 import 'package:kirana/pages/shops.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
-import 'package:provider/provider.dart';
 
 class Location extends StatefulWidget {
   final Shop shop;
@@ -74,38 +72,33 @@ class _LocationState extends State<Location> {
             )),
       )
     ]);
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Location"),
-        ),
-        body: Form(
-          key: _formKey,
-          child: (_currentPosition != null)
-              ? adressForm
-              : Center(
-                  child: RaisedButton(
-                    child: Text(
-                      "Get location",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                    onPressed: () {
-                      _getCurrentLocation();
-                    },
-                    color: Colors.amber[800],
-                  ),
+    return Form(
+      key: _formKey,
+      child: (_currentPosition != null)
+          ? adressForm
+          : Center(
+              child: RaisedButton(
+                child: Text(
+                  "Get location",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
-        ));
+                onPressed: () {
+                  _getCurrentLocation();
+                },
+                color: Colors.amber[800],
+              ),
+            ),
+    );
   }
 
-  _getCurrentLocation() {
-    geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-      _currentPosition = position;
+  _getCurrentLocation() async {
+    try {
+      _currentPosition = await geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
       _getAddressFromLatLng();
-    }).catchError((e) {
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-    });
+    } catch (e) {
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+    }
   }
 
   _getAddressFromLatLng() async {
@@ -125,5 +118,21 @@ class _LocationState extends State<Location> {
     } catch (e) {
       Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     }
+  }
+}
+
+class LocationPage extends StatelessWidget {
+  final shop;
+  LocationPage({this.shop});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Location"),
+      ),
+      body: Location(
+        shop: shop,
+      ),
+    );
   }
 }
