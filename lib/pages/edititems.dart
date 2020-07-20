@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/pages/addItem.dart';
+import 'package:kirana/widgets/drawer.dart';
 import 'package:kirana/widgets/editItem_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/items.dart';
@@ -9,6 +10,7 @@ class EditItemsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: DrawerPage(),
       appBar: AppBar(
         title: Text(
           "Edit items",),
