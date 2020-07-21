@@ -8,7 +8,7 @@ class CartModel extends ChangeNotifier {
   // ignore: unnecessary_getters_setters
   get catalog => _catalog;
 
-  void add(int id) {
+  void add(String id) {
     if (_cartitems.containsKey(id)) {
       _cartitems[id]++;
     } else {
@@ -22,7 +22,7 @@ class CartModel extends ChangeNotifier {
     _catalog = catalog;
   }
 
-  void remove(int id) {
+  void remove(String id) {
     if (_cartitems[id] == 1) {
       _cartitems.remove(id);
     } else {
@@ -31,7 +31,7 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void delete(int id) {
+  void delete(String id) {
     _cartitems.remove(id);
     notifyListeners();
   }

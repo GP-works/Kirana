@@ -22,10 +22,45 @@ class _MenuItemState extends State<ShopPage> {
     var shopProvider = Provider.of<Shops>(context);
     Shop shop = shopProvider.getShopById(widget.id);
 
-    return Column(children: [_Tile(shop), Divider()]);
+    return Column(children: [
+      Tile(shop, shopProvider),
+      Divider(),
+    ]);
   }
+}
 
-  Widget _Tile(Shop shop) {
+Widget Tile(Shop shop, Shops shopProvider) {
+  return ListTile(
+    onTap: () {
+      shopProvider.setItems(shop.userid);
+    },
+    isThreeLine: true,
+    title: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        shop.name.toUpperCase(),
+        style: TextStyle(fontSize: 20),
+      ),
+    ),
+    subtitle: Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            shop.owner,
+            style: TextStyle(fontSize: 18),
+          ),
+          Text(
+            "  " + shop.address,
+            style: TextStyle(fontSize: 18, color: Colors.red),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+/*Widget _Tile(Shop shop) {
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
@@ -64,4 +99,4 @@ class _MenuItemState extends State<ShopPage> {
       ),
     );
   }
-}
+}*/

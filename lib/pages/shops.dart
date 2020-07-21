@@ -17,7 +17,10 @@ class ShopsPage extends StatelessWidget {
           for (var shop in shops.shops) ShopPage(shop.id),
         ]);
       }),
-      appBar: AppBar(title: Text("Shops"),actions: <Widget>[CartIcon()],),
+      appBar: AppBar(
+        title: Text("Shops"),
+        actions: <Widget>[CartIcon()],
+      ),
     );
   }
 }

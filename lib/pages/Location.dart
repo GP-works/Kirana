@@ -93,11 +93,21 @@ class _LocationState extends State<Location> {
 
   _getCurrentLocation() async {
     try {
+      if(!await geolocator.isLocationServiceEnabled())
+      {
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text("please enable location service in you device")));
+      }
       _currentPosition = await geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       _getAddressFromLatLng();
     } catch (e) {
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      if(!await geolocator.isLocationServiceEnabled())
+        {
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text("please enable location service in you device")));
+        }
+      else {
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      }
     }
   }
 

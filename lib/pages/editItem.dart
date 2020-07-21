@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:kirana/models/items.dart';
+import 'package:kirana/models/shops.dart';
+import 'package:kirana/models/user.dart';
 import 'package:kirana/pages/items.dart';
 import 'package:kirana/widgets/ImagePicker.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
@@ -24,7 +26,7 @@ class _editItemPageFormState extends State<editItemPageForm> {
   final priceController = TextEditingController();
   final mrpController = TextEditingController();
   final descriptionController = TextEditingController();
-  bool isLoading=false;
+  bool isLoading = false;
   File itemimage;
 
   @override
@@ -64,7 +66,7 @@ class _editItemPageFormState extends State<editItemPageForm> {
       //Here you can get the download URL when the task has been completed.
       print("Download URL " + widget.item.imageurl.toString());
     } else {
-      isLoading=false;
+      isLoading = false;
       Scaffold.of(context).showSnackBar(new SnackBar(
         content: new Text("Error uploading pic"),
         backgroundColor: Colors.red,
@@ -76,9 +78,9 @@ class _editItemPageFormState extends State<editItemPageForm> {
   @override
   void initState() {
     nameController.text = widget.item.name;
-    priceController.text="${widget.item.price}";
-    mrpController.text="${widget.item.originalPrice}";
-    descriptionController.text=widget.item.description;
+    priceController.text = "${widget.item.price}";
+    mrpController.text = "${widget.item.originalPrice}";
+    descriptionController.text = widget.item.description;
 
     return super.initState();
   }
@@ -115,38 +117,46 @@ class _editItemPageFormState extends State<editItemPageForm> {
           alignment: Alignment.bottomRight,
           child: Padding(
               padding: EdgeInsets.fromLTRB(0, 10, 20, 0),
-              child: !isLoading ? RaisedButton(
-                  child: Text(
-                    "Submit".toUpperCase(),
-                    style: TextStyle(color: Colors.white, letterSpacing: 1),
-                  ),
-                  color: Colors.green[700],
-                  onPressed: () async {
-
-                    if (_formKey.currentState.validate()) {
-                      setState(() {
-                        isLoading=true;
-                      });
-                      if (itemimage != null) {
-                        await uploadImage();
-                      }
-                      widget.item.name = nameController.text;
-                      widget.item.price = double.parse(priceController.text);
-                      widget.item.originalPrice =
-                          double.parse(mrpController.text);
-                      widget.item.description = descriptionController.text;
-                      Provider.of<ItemsModel>(context,listen: false).edititem();
-                      if (widget.item.imageurl == "") {
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text("select an image")));
-                      } else {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ItemsPage()));
-                      }
-                    }
-                  }): Center(child: CircularProgressIndicator(),)),
+              child: !isLoading
+                  ? RaisedButton(
+                      child: Text(
+                        "Submit".toUpperCase(),
+                        style: TextStyle(color: Colors.white, letterSpacing: 1),
+                      ),
+                      color: Colors.green[700],
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          if (itemimage != null) {
+                            await uploadImage();
+                          }
+                          widget.item.name = nameController.text;
+                          widget.item.price =
+                              double.parse(priceController.text);
+                          widget.item.originalPrice =
+                              double.parse(mrpController.text);
+                          widget.item.description = descriptionController.text;
+                          var user = Provider.of<User>(context, listen: false);
+                          Provider.of<Shops>(context, listen: false)
+                              .getShopByuserId(user.uid)
+                              .items
+                              .edititem();
+                          if (widget.item.imageurl == "") {
+                            Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text("select an image")));
+                          } else {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ItemsPage()));
+                          }
+                        }
+                      })
+                  : Center(
+                      child: CircularProgressIndicator(),
+                    )),
         )
       ]),
     );
@@ -155,20 +165,20 @@ class _editItemPageFormState extends State<editItemPageForm> {
   void setUrl(File image) {
     setState(() {
       itemimage = image;
-
     });
   }
-  
 }
+
 class editItemPage extends StatelessWidget {
   final Item item;
   editItemPage(this.item);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit a item"),),
+      appBar: AppBar(
+        title: Text("Edit a item"),
+      ),
       body: editItemPageForm(item),
     );
   }
 }
-

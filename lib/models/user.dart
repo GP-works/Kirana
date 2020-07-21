@@ -127,10 +127,12 @@ class User extends ChangeNotifier {
     }
   }
 
-  void signout() async {
+  void signout(context) async {
     uid = name = email = role = null;
-    await _auth.signOut();
     notifyListeners();
+    await _auth.signOut();
+    Navigator.pushReplacementNamed(context, "/signin");
+
   }
 
   bool isLogged() {

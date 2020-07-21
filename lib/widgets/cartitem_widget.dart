@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kirana/models/cart.dart';
+import 'package:kirana/models/shops.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/Item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class CartItem extends StatefulWidget {
-  final int id;
+  final String id;
   CartItem(this.id);
 
   @override
@@ -19,9 +20,8 @@ class _CartItemState extends State<CartItem> {
 
   @override
   Widget build(BuildContext context) {
-    var cartProvider = Provider.of<CartModel>(context);
-    Item item = cartProvider.catalog.getItemById(widget.id);
-    count = cartProvider.items[widget.id];
+    Item item = Provider.of<Shops>(context).items.getItemById(widget.id);
+    count = 0;
 
     return Column(children: [_Tile(item), Divider()]);
   }
@@ -33,7 +33,7 @@ class _CartItemState extends State<CartItem> {
         children: <Widget>[
           CachedNetworkImage(
             placeholder: (context, url) => CircularProgressIndicator(),
-            imageUrl:item.imageurl,
+            imageUrl: item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
             fit: BoxFit.cover,
@@ -130,8 +130,7 @@ class _CartItemState extends State<CartItem> {
     cart.remove(widget.id);
   }
 
-  void _delete(CartModel cart){
+  void _delete(CartModel cart) {
     cart.delete(widget.id);
-
   }
 }
