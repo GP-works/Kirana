@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kirana/models/shops.dart';
+import 'package:kirana/models/user.dart';
 import 'package:kirana/pages/editItem.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/items.dart';
@@ -18,12 +20,17 @@ class EditItemTile extends StatefulWidget {
 class _EditItemTileState extends State<EditItemTile> {
   @override
   Widget build(BuildContext context) {
-    var catalog = Provider.of<ItemsModel>(context, listen: false);
+    var user = Provider.of<User>(context, listen: false);
+    var catalog = Provider.of<Shops>(context, listen: false)
+        .getShopByuserId(user.uid)
+        .items;
     Item item = catalog.getItemById(widget.id);
     return Column(children: [_Tile(item), Divider()]);
   }
 
   Widget _Tile(Item item) {
+    var catalog = Provider.of<Shops>(context, listen: false);
+
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
@@ -62,10 +69,7 @@ class _EditItemTileState extends State<EditItemTile> {
                         )),
                   ],
                 ),
-                Consumer<ItemsModel>(
-                  builder: (context, catalog, child) =>
-                      buttonEdit(catalog, item),
-                )
+                buttonEdit(catalog, item),
               ],
             ),
           )
@@ -98,15 +102,17 @@ class _EditItemTileState extends State<EditItemTile> {
                                 editItemPage(catalog.getItemById(item.id))));
                   },
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(left: 25),
                   child: Center(
                     child: IconButton(
-                      icon: Icon(Icons.delete,color: Colors.red,size: 30,),
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                        size: 30,
+                      ),
                       onPressed: () {
                         _showMyDialog(catalog, item);
-
                       },
                     ),
                   ),
@@ -114,7 +120,8 @@ class _EditItemTileState extends State<EditItemTile> {
               ],
             )));
   }
-  Future<void> _showMyDialog(catalog,item) async {
+
+  Future<void> _showMyDialog(catalog, item) async {
     return showDialog<void>(
       context: context, // user must tap button!
       builder: (BuildContext context) {
@@ -124,22 +131,32 @@ class _EditItemTileState extends State<EditItemTile> {
             child: ListBody(
               children: <Widget>[
                 Text('Do you really Want to remove'),
-                SizedBox(height: 10,),
-                Text("${item.name}",style: TextStyle(color: Colors.red[800],fontWeight: FontWeight.bold),),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "${item.name}",
+                  style: TextStyle(
+                      color: Colors.red[800], fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('No',style: TextStyle(fontSize: 25),),
+              child: Text(
+                'No',
+                style: TextStyle(fontSize: 25),
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             Padding(
-              padding:  EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/3,0,0,0),
+              padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width / 3, 0, 0, 0),
               child: FlatButton(
-                child: Text('Yes',style: TextStyle(fontSize: 25)),
+                child: Text('Yes', style: TextStyle(fontSize: 25)),
                 onPressed: () {
                   catalog.remove(item);
                   Navigator.pop(context);

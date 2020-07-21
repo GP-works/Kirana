@@ -46,7 +46,7 @@ class MyDatabase extends _$MyDatabase {
     final query = await (select(orderitems)
           ..where((t) => t.menuitemid.equals(menuitemid)))
         .get();
-    return query.length;
+    return query.first.count;
   }
 
   Stream<List<dynamic>> getshopids() {

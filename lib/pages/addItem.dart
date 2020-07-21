@@ -1,4 +1,6 @@
 import 'package:kirana/models/items.dart';
+import 'package:kirana/models/shops.dart';
+import 'package:kirana/models/user.dart';
 import 'package:kirana/pages/items.dart';
 import 'package:kirana/widgets/ImagePicker.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
@@ -80,8 +82,6 @@ class _AddItemPageFormState extends State<AddItemPageForm> {
     }
 
   }
-
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -153,9 +153,10 @@ class _AddItemPageFormState extends State<AddItemPageForm> {
   }
 
   void _additem_to_container() {
-    var catalog = Provider.of<ItemsModel>(context, listen: false);
-    catalog
-        .add(Item(itemname, price, description, originalPrice, imageurl, id));
+    var shops = Provider.of<Shops>(context, listen: false);
+    var user=Provider.of<User>(context,listen: false);
+    shops.
+        getShopByuserId(user.uid).items.add(Item(itemname, price, description, originalPrice, imageurl),user.uid);
   }
 }
 class addItemPage extends StatelessWidget {

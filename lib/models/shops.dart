@@ -1,9 +1,13 @@
+import 'package:kirana/models/items.dart';
 import 'package:kirana/models/shop.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Shops extends ChangeNotifier {
   List<Shop> shops = [];
+  ItemsModel items = ItemsModel();
+  Shop selectedshop;
+
   Shops();
   void fromf() {
     Firestore.instance
@@ -20,9 +24,21 @@ class Shops extends ChangeNotifier {
     return shops[index];
   }
 
+  Shop getShopByuserId(String id) {
+    int index = shops.indexWhere((element) => element.userid == id);
+    return shops[index];
+  }
+
   void add(Shop shop) {
     shops.add(shop);
     print("added");
+    notifyListeners();
+  }
+
+  void setItems(shopownerid) {
+    selectedshop = getShopByuserId(shopownerid);
+    items = selectedshop.items;
+    items.addFromFireStore(shopownerid);
     notifyListeners();
   }
 }

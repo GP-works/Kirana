@@ -39,16 +39,6 @@ class _HomeAppState extends State<HomeApp> {
             return shop;
           }),
           ChangeNotifierProvider(
-            create: (context) => ItemsModel(),
-          ),
-          ChangeNotifierProxyProvider<ItemsModel, CartModel>(
-            create: (BuildContext context) => CartModel(),
-            update: (context, items, cart) {
-              cart.catalog = items;
-              return cart;
-            },
-          ),
-          ChangeNotifierProvider(
             create: (context) => OrdersListModel(),
           ),
           ChangeNotifierProvider(

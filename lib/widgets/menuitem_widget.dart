@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kirana/models/cart.dart';
+import 'package:kirana/models/shops.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/Item.dart';
 
 class MenuItem extends StatefulWidget {
-  final int id;
+  final String id;
   final bool edit;
   MenuItem(this.id, {this.edit = false});
 
@@ -20,25 +21,26 @@ class _MenuItemState extends State<MenuItem> {
 
   @override
   Widget build(BuildContext context) {
-    var cartProvider = Provider.of<CartModel>(context);
-    Item item = cartProvider.catalog.getItemById(widget.id);
-    if (!cartProvider.items.containsKey(widget.id)) {
+    var cartProvider = Provider.of<Shops>(context);
+    Item item = cartProvider.items.getItemById(widget.id);
+    /*if (!cartProvider.items.containsKey(widget.id)) {
       count = 0;
     } else {
       count = cartProvider.items[widget.id];
-    }
+    }*/
+    count = 0;
 
     return Column(children: [_Tile(item), Divider()]);
   }
 
   Widget _Tile(Item item) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
+    return Container(
+      margin: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
         children: <Widget>[
           CachedNetworkImage(
             placeholder: (context, url) => CircularProgressIndicator(),
-            imageUrl:item.imageurl,
+            imageUrl: item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
             fit: BoxFit.cover,
@@ -79,12 +81,12 @@ class _MenuItemState extends State<MenuItem> {
                         )),
                   ],
                 ),
-                Consumer<CartModel>(
-                  builder: (context, cartp, child) =>
-                      !cartp.items.containsKey(widget.id)
-                          ? buttonFlat(cartp)
-                          : buttonIncrementDecrement(cartp),
-                )
+                // Consumer<CartModel>(
+                // builder: (context, cartp, child) =>
+                //   !cartp.items.containsKey(widget.id)?
+                buttonFlat(CartModel())
+                // : buttonIncrementDecrement(cartp),
+                // )
               ],
             ),
           )

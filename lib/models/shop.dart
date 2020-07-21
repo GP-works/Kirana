@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:kirana/models/items.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kirana/models/items.dart';
 import 'package:uuid/uuid.dart';
 
 var uuid = Uuid();
@@ -48,7 +48,7 @@ class Shop {
     _pincode = doc["pincode"];
   }
   String getHashCode() => this.id;
-  get name => "$_shopName";
+  String get name => _shopName;
   get owner => "$_ownerName";
   get address => "$_adressLane1,$_adressLane2";
   Future<bool> setPosition(

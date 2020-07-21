@@ -13,7 +13,7 @@ class SignOut extends StatelessWidget {
       color: Colors.red,
       child: Text("$name Signout"),
       onPressed: () {
-        Provider.of<User>(context, listen: false).signout();
+        Provider.of<User>(context, listen: false).signout(context);
       },
     )));
   }
