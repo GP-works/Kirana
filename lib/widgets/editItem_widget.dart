@@ -29,7 +29,6 @@ class _EditItemTileState extends State<EditItemTile> {
       child: Row(
         children: <Widget>[
           CachedNetworkImage(
-            placeholder: (context, url) => CircularProgressIndicator(),
             imageUrl: item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
@@ -91,8 +90,7 @@ class _EditItemTileState extends State<EditItemTile> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                editItemPage(catalog.getItemById(item.id))));
+                            builder: (context) => editItemPage(item)));
                   },
                 ),
                 Padding(
@@ -114,9 +112,9 @@ class _EditItemTileState extends State<EditItemTile> {
             )));
   }
 
-  Future<void> _showMyDialog(catalog, item) async {
+  Future<void> _showMyDialog(Shops catalog, Item item) async {
     return showDialog<void>(
-      context: context, // user must tap button!
+      context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Alert'),
@@ -151,7 +149,8 @@ class _EditItemTileState extends State<EditItemTile> {
               child: FlatButton(
                 child: Text('Yes', style: TextStyle(fontSize: 25)),
                 onPressed: () {
-                  catalog.remove(item);
+                  catalog.items.remove(
+                      item, Provider.of<User>(context, listen: false).uid);
                   Navigator.pop(context);
                 },
               ),

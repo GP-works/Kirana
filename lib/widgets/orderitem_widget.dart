@@ -13,7 +13,6 @@ class OrderItem_widget extends StatefulWidget {
 }
 
 class _OrderItem_widgetState extends State<OrderItem_widget> {
-  
   @override
   Widget build(BuildContext context) {
     return Column(children: [_Tile(widget.orderitem), Divider()]);
@@ -25,8 +24,7 @@ class _OrderItem_widgetState extends State<OrderItem_widget> {
       child: Row(
         children: <Widget>[
           CachedNetworkImage(
-            placeholder: (context, url) => CircularProgressIndicator(),
-            imageUrl:item.imageurl,
+            imageUrl: item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
             fit: BoxFit.cover,

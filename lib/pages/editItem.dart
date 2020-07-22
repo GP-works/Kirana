@@ -139,14 +139,14 @@ class _editItemPageFormState extends State<editItemPageForm> {
                               double.parse(mrpController.text);
                           widget.item.description = descriptionController.text;
                           var user = Provider.of<User>(context, listen: false);
-                          Provider.of<Shops>(context, listen: false)
-                              .getShopByuserId(user.uid)
-                              .items
-                              .edititem();
+                          ItemsModel model =
+                              Provider.of<Shops>(context, listen: false).items;
+
                           if (widget.item.imageurl == "") {
                             Scaffold.of(context).showSnackBar(
                                 SnackBar(content: Text("select an image")));
                           } else {
+                            model.add(widget.item, user.uid);
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

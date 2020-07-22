@@ -25,25 +25,21 @@ class _CartItemState extends State<CartItem> {
     return Column(children: [_Tile(widget.orderitem), Divider()]);
   }
 
-
-  void getCount(CartModel cart, Orderitem item) async
-  {
-    int coun=await cart.getcount(item.menuitemid);
-    setState((){
-       count=coun;
+  void getCount(CartModel cart, Orderitem item) async {
+    int coun = await cart.getcount(item.menuitemid);
+    setState(() {
+      count = coun;
     });
-    
   }
 
   Widget _Tile(Orderitem item) {
-
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
         children: <Widget>[
           CachedNetworkImage(
-            placeholder: (context, url) => CircularProgressIndicator(),
-            imageUrl: 'https://m.media-amazon.com/images/I/71aQtgyXN9L._SS140_.jpg',
+            imageUrl:
+                'https://m.media-amazon.com/images/I/71aQtgyXN9L._SS140_.jpg',
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
             fit: BoxFit.cover,
@@ -128,11 +124,11 @@ class _CartItemState extends State<CartItem> {
     );
   }
 
-  void _incrementCount(CartModel cart, Orderitem item) async{
+  void _incrementCount(CartModel cart, Orderitem item) async {
     cart.incrementitem(item.menuitemid, await cart.getcount(item.menuitemid));
   }
 
-  void _decrementCount(CartModel cart, Orderitem item) async{
+  void _decrementCount(CartModel cart, Orderitem item) async {
     cart.decrementitem(item.menuitemid, await cart.getcount(item.menuitemid));
   }
 

@@ -24,13 +24,23 @@ class ItemsModel extends ChangeNotifier {
         .setData(item.toJson());
   }
 
+  void remove(Item item, String userid) {
+    Firestore.instance
+        .collection('shops')
+        .document(userid)
+        .collection('items')
+        .document(item.id)
+        .delete()
+        .catchError((e) {
+      print(e);
+    });
+  }
 
   void edititem() {
     notifyListeners();
   }
 
   Stream<List<Item>> addFromFireStore(shopid) {
-    print("inside stream");
     return Firestore.instance
         .collection('shops')
         .document(shopid)

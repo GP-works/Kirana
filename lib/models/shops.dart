@@ -13,9 +13,9 @@ class Shops extends ChangeNotifier {
   void fromf() async {
     QuerySnapshot snapshot =
         await Firestore.instance.collection('shops').getDocuments();
-    snapshot.documentChanges.forEach((element) {
+    snapshot.documents.forEach((element) {
       shops = [];
-      shops.add(Shop.fromJson(element.document));
+      shops.add(Shop.fromJson(element.data));
       notifyListeners();
     });
   }
@@ -68,18 +68,20 @@ class Shops extends ChangeNotifier {
       }
     }
   }
-  Future<Item> getItem(String shopid,String menuitemid) async {
-    try{
-       DocumentSnapshot s= await Firestore.instance.collection('shops').document(shopid).collection('items').document(menuitemid).get();
-       if(s.exists) {
-         return Item.fromJson(s.data);
-       }
-       else {
-         return null;
-       }
-    }
-    catch(e)
-    {
-    }
+
+  Future<Item> getItem(String shopid, String menuitemid) async {
+    try {
+      DocumentSnapshot s = await Firestore.instance
+          .collection('shops')
+          .document(shopid)
+          .collection('items')
+          .document(menuitemid)
+          .get();
+      if (s.exists) {
+        return Item.fromJson(s.data);
+      } else {
+        return null;
+      }
+    } catch (e) {}
   }
 }

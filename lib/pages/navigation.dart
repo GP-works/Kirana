@@ -26,7 +26,9 @@ class _NavigationState extends State<Navigation> {
   }
 
   void setshop(Shops shops) async {
-    print("called");
-    shop = await shops.getfromSF();
+    bool sho = await shops.getfromSF();
+    setState(() {
+      shop = sho;
+    });
   }
 }

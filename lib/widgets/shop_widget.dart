@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
@@ -23,13 +22,13 @@ class _MenuItemState extends State<ShopPage> {
     Shop shop = shopProvider.getShopById(widget.id);
 
     return Column(children: [
-      Tile(shop, shopProvider,context),
+      Tile(shop, shopProvider, context),
       Divider(),
     ]);
   }
 }
 
-Widget Tile(Shop shop, Shops shopProvider,context) {
+Widget Tile(Shop shop, Shops shopProvider, context) {
   return ListTile(
     onTap: () {
       shopProvider.setItems(shop.userid);

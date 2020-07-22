@@ -40,7 +40,6 @@ class DrawerPage extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 ),
                 onTap: () {
-                  Navigator.pop(context);
                   Navigator.pushNamed(context, '/');
                 },
               ),

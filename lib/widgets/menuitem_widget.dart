@@ -38,7 +38,6 @@ class _MenuItemState extends State<MenuItem> {
       child: Row(
         children: <Widget>[
           CachedNetworkImage(
-            placeholder: (context, url) => CircularProgressIndicator(),
             imageUrl: item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
