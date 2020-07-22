@@ -6,15 +6,27 @@ import 'package:provider/provider.dart';
 import 'package:kirana/models/user.dart';
 import 'signin.dart';
 
-class Navigation extends StatelessWidget {
+class Navigation extends StatefulWidget {
+  @override
+  _NavigationState createState() => _NavigationState();
+}
+
+class _NavigationState extends State<Navigation> {
+  bool shop = false;
   @override
   Widget build(BuildContext context) {
     return Consumer<Shops>(builder: (context, shops, child) {
+      setshop(shops);
       return Consumer<User>(builder: (context, user, child) {
         return user.isLogged()
-            ? shops.items.isEmpty() ? ShopsPage() : ItemsPage()
+            ? !shop ? ShopsPage() : ItemsPage()
             : SignInPage();
       });
     });
+  }
+
+  void setshop(Shops shops) async {
+    print("called");
+    shop = await shops.getfromSF();
   }
 }

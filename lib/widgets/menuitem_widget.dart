@@ -8,9 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:kirana/models/Item.dart';
 
 class MenuItem extends StatefulWidget {
-  final String id;
-  final bool edit;
-  MenuItem(this.id, {this.edit = false});
+  final Item item;
+  MenuItem(this.item);
 
   @override
   _MenuItemState createState() => _MenuItemState();
@@ -21,10 +20,7 @@ class _MenuItemState extends State<MenuItem> {
 
   @override
   Widget build(BuildContext context) {
-    var shopProvider = Provider.of<Shops>(context);
-    Item item = shopProvider.items.getItemById(widget.id);
-
-    return Column(children: [_Tile(item), Divider()]);
+    return Column(children: [_Tile(widget.item), Divider()]);
   }
 
   void getCount(CartModel cart, Item item) 
@@ -115,6 +111,7 @@ class _MenuItemState extends State<MenuItem> {
             )));
   }
 
+
   Widget buttonIncrementDecrement(CartModel cart, Item item) {
     getCount(cart, item);
     return Padding(
@@ -146,6 +143,7 @@ class _MenuItemState extends State<MenuItem> {
     );
   }
 
+
   void _createitem (CartModel cart, Item item) async
   {
     var shopProvider = Provider.of<Shops>(context, listen: false);
@@ -158,5 +156,6 @@ class _MenuItemState extends State<MenuItem> {
 
   void _decrementCount(CartModel cart, Item item) async{
     cart.decrementitem(item.id, await cart.getcount(item.id));
+
   }
 }

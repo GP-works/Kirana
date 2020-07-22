@@ -6,8 +6,6 @@ import 'package:kirana/pages/shops.dart';
 import 'signin.dart';
 import 'signup.dart';
 import 'package:provider/provider.dart';
-import 'package:kirana/models/items.dart';
-import 'package:kirana/models/cart.dart';
 import 'package:kirana/models/orders.dart';
 import 'package:kirana/models/orderslist.dart';
 import 'package:kirana/pages/edititems.dart';
@@ -51,19 +49,19 @@ class _HomeAppState extends State<HomeApp> {
           ),
         ],
         child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            routes: {
-              "/":(context)=>Navigation(),
-              "/signin": (context) => SignInPage(),
-              "/signup": (context) => SignUpPage(),
-              "/items":(context)=> ItemsPage(),
-              "/shops":(context)=> ShopsPage(),
-              "/register":(context)=> Register(),
-              "/orders":(context)=> OrdersPage(),
-              "/cart":(context)=>CartPage(),
-              "/navigation":(context)=>Navigation(),
-              "/edit":(context)=>EditItemsPage(),
-            },
+          debugShowCheckedModeBanner: false,
+          routes: {
+            "/": (context) => Navigation(),
+            "/signin": (context) => SignInPage(),
+            "/signup": (context) => SignUpPage(),
+            "/items": (context) => ItemsPage(),
+            "/shops": (context) => ShopsPage(),
+            "/register": (context) => Register(),
+            "/orders": (context) => OrdersPage(),
+            "/cart": (context) => CartPage(),
+            "/navigation": (context) => Navigation(),
+            "/edit": (context) => EditItemsPage(),
+          },
         ));
   }
 }
