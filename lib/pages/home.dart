@@ -41,6 +41,11 @@ class _HomeAppState extends State<HomeApp> {
           ChangeNotifierProvider(
             create: (context) => OrdersListModel(),
           ),
+          ChangeNotifierProvider(create: (context) {
+            CartModel cart = CartModel();
+            cart.fromf();
+            return cart;
+          }),
           ChangeNotifierProvider(
             create: (context) => OrdersModel(),
           ),

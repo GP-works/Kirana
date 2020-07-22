@@ -21,16 +21,18 @@ class _MenuItemState extends State<MenuItem> {
 
   @override
   Widget build(BuildContext context) {
-    var cartProvider = Provider.of<Shops>(context);
-    Item item = cartProvider.items.getItemById(widget.id);
-    /*if (!cartProvider.items.containsKey(widget.id)) {
-      count = 0;
-    } else {
-      count = cartProvider.items[widget.id];
-    }*/
-    count = 0;
+    var shopProvider = Provider.of<Shops>(context);
+    Item item = shopProvider.items.getItemById(widget.id);
 
     return Column(children: [_Tile(item), Divider()]);
+  }
+
+  void getCount(CartModel cart, Item item) 
+  {
+    setState(() async{
+      count = await cart.getcount(item.id);
+    });
+    
   }
 
   Widget _Tile(Item item) {
@@ -81,12 +83,10 @@ class _MenuItemState extends State<MenuItem> {
                         )),
                   ],
                 ),
-                // Consumer<CartModel>(
-                // builder: (context, cartp, child) =>
-                //   !cartp.items.containsKey(widget.id)?
-                buttonFlat(CartModel())
-                // : buttonIncrementDecrement(cartp),
-                // )
+                 Consumer<CartModel>(
+                 builder: (context, cartp, child) =>
+                   (count == 0) ? buttonFlat(cartp, item) : buttonIncrementDecrement(cartp, item),
+                 )
               ],
             ),
           )
@@ -95,7 +95,8 @@ class _MenuItemState extends State<MenuItem> {
     );
   }
 
-  Widget buttonFlat(CartModel cart) {
+  Widget buttonFlat(CartModel cart ,Item item) {
+    getCount(cart, item);
     return ConstrainedBox(
         constraints: BoxConstraints(
           minWidth: 20,
@@ -109,35 +110,31 @@ class _MenuItemState extends State<MenuItem> {
               ),
               color: Colors.amber[700],
               onPressed: () {
-                _incrementCount(cart);
+                _createitem(cart, item);
               },
             )));
   }
 
-  Widget buttonIncrementDecrement(CartModel cart) {
-    if (!cart.items.containsKey(widget.id)) {
-      count = 0;
-    } else {
-      count = cart.items[widget.id];
-    }
+  Widget buttonIncrementDecrement(CartModel cart, Item item) {
+    getCount(cart, item);
     return Padding(
-      padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Container(
         child: Row(children: [
           IconButton(
             icon: Icon(Icons.remove),
             hoverColor: Colors.red,
             onPressed: () {
-              _decrementCount(cart);
+              _decrementCount(cart, item);
             },
             color: Colors.red,
           ),
           Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 0), child: Text("$count")),
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0), child: Text('$count')),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              _incrementCount(cart);
+              _incrementCount(cart, item);
             },
             color: Colors.green,
           ),
@@ -149,11 +146,17 @@ class _MenuItemState extends State<MenuItem> {
     );
   }
 
-  void _incrementCount(CartModel cart) {
-    cart.add(widget.id);
+  void _createitem (CartModel cart, Item item) async
+  {
+    var shopProvider = Provider.of<Shops>(context, listen: false);
+    cart.createentry(item.name, item.price, shopProvider.selectedshop.userid, item.id);
   }
 
-  void _decrementCount(CartModel cart) {
-    cart.remove(widget.id);
+  void _incrementCount(CartModel cart, Item item) async{
+    cart.incrementitem(item.id, await cart.getcount(item.id));
+  }
+
+  void _decrementCount(CartModel cart, Item item) async{
+    cart.decrementitem(item.id, await cart.getcount(item.id));
   }
 }
