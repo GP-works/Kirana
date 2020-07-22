@@ -46,7 +46,8 @@ class MyDatabase extends _$MyDatabase {
     final query = await (select(orderitems)
           ..where((t) => t.menuitemid.equals(menuitemid)))
         .get();
-    return query.length == 0 ? 0 : query.first.count;
+    int count=query.length == 0 ?  0 : query.first.count;
+    return count;
   }
 
   Stream<List<dynamic>> getshopids() {
@@ -79,18 +80,18 @@ class MyDatabase extends _$MyDatabase {
   }
 
   Future deleteItem(menuitemid) async {
-    return delete(orderitems)
-      ..where((tbl) => tbl.menuitemid.equals(menuitemid));
+    return (delete(orderitems)
+      ..where((tbl) => tbl.menuitemid.equals(menuitemid))).go();
   }
 
   Future deleteall() async {
-    return delete(orderitems);
+    return (delete(orderitems)).go();
   }
 
   Future decrementItem(menuitemid, count) async {
     if (count == 1) {
-      return delete(orderitems)
-        ..where((tbl) => tbl.menuitemid.equals(menuitemid));
+      return (delete(orderitems)
+        ..where((tbl) => tbl.menuitemid.equals(menuitemid))).go();
     } else {
       return await (update(orderitems)
             ..where((t) => t.menuitemid.equals(menuitemid)))

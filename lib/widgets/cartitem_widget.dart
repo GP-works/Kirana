@@ -26,10 +26,11 @@ class _CartItemState extends State<CartItem> {
   }
 
 
-  void getCount(CartModel cart, Orderitem item) 
+  void getCount(CartModel cart, Orderitem item) async
   {
-    setState(() async{
-      count = await cart.getcount(item.menuitemid);
+    int coun=await cart.getcount(item.menuitemid);
+    setState((){
+       count=coun;
     });
     
   }
@@ -87,6 +88,7 @@ class _CartItemState extends State<CartItem> {
   }
 
   Widget buttonIncrementDecrement(CartModel cart, Orderitem item) {
+    getCount(cart, item);
     return Padding(
       padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
       child: Container(

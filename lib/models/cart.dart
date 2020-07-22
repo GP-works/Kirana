@@ -56,7 +56,7 @@ class CartModel extends ChangeNotifier {
     {
       mydb.deleteall();
     }
-    double getprice()
+    double getprice(orderitems)
     {
       double totalprice = 0;
       orderitems.forEach((element) {totalprice = totalprice + element.price;});
