@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kirana/models/Item.dart';
+import 'package:kirana/models/items.dart';
 import 'package:kirana/models/shops.dart';
 import 'package:kirana/widgets/GotoCartIcon.dart';
 import 'package:kirana/widgets/drawer.dart';
@@ -13,9 +15,17 @@ class ItemsPage extends StatelessWidget {
     return Scaffold(
       drawer: DrawerPage(),
       body: Consumer<Shops>(builder: (context, catalog, child) {
-        return ListView(children: [
-          for (var item in (catalog.items.items)) MenuItem(item.id),
-        ]);
+        return StreamBuilder<List<Item>>(
+            stream: catalog.items.addFromFireStore(catalog.selectedshopid),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return ListView(children: [
+                  for (var item in (snapshot.data)) MenuItem(item),
+                ]);
+              }
+            });
       }),
       appBar: AppBar(
         title: Text("APP_NAME"),

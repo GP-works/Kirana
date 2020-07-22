@@ -23,16 +23,17 @@ class _MenuItemState extends State<ShopPage> {
     Shop shop = shopProvider.getShopById(widget.id);
 
     return Column(children: [
-      Tile(shop, shopProvider),
+      Tile(shop, shopProvider,context),
       Divider(),
     ]);
   }
 }
 
-Widget Tile(Shop shop, Shops shopProvider) {
+Widget Tile(Shop shop, Shops shopProvider,context) {
   return ListTile(
     onTap: () {
       shopProvider.setItems(shop.userid);
+      Navigator.pushReplacementNamed(context, '/items');
     },
     isThreeLine: true,
     title: Padding(

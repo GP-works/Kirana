@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kirana/models/cart.dart';
+import 'package:kirana/models/items.dart';
 import 'package:kirana/models/shops.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/Item.dart';
@@ -17,13 +18,21 @@ class CartItem extends StatefulWidget {
 
 class _CartItemState extends State<CartItem> {
   int count = 0;
+  Item item;
 
   @override
   Widget build(BuildContext context) {
-    Item item = Provider.of<Shops>(context).items.getItemById(widget.id);
+    ItemsModel catalog = Provider.of<Shops>(context, listen: false).items;
     count = 0;
+    getItem(catalog, widget.id);
 
     return Column(children: [_Tile(item), Divider()]);
+  }
+
+  void getItem(catalog, id) {
+    setState(() {
+      item = catalog.getItemById(id);
+    });
   }
 
   Widget _Tile(Item item) {

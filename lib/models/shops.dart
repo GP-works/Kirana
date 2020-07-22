@@ -2,21 +2,21 @@ import 'package:kirana/models/items.dart';
 import 'package:kirana/models/shop.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Shops extends ChangeNotifier {
   List<Shop> shops = [];
   ItemsModel items = ItemsModel();
-  Shop selectedshop;
-
+  String selectedshopid;
   Shops();
-  void fromf() {
-    Firestore.instance
-        .collection('shops')
-        .snapshots()
-        .listen((data) => data.documents.forEach((doc) {
-              shops.add(Shop.fromJson(doc));
-              notifyListeners();
-            }));
+  void fromf() async {
+    QuerySnapshot snapshot =
+        await Firestore.instance.collection('shops').getDocuments();
+    snapshot.documentChanges.forEach((element) {
+      shops = [];
+      shops.add(Shop.fromJson(element.document));
+      notifyListeners();
+    });
   }
 
   Shop getShopById(String id) {
@@ -26,7 +26,7 @@ class Shops extends ChangeNotifier {
 
   Shop getShopByuserId(String id) {
     int index = shops.indexWhere((element) => element.userid == id);
-    return shops[index];
+    return index == -1 ? null : shops[index];
   }
 
   void add(Shop shop) {
@@ -36,9 +36,35 @@ class Shops extends ChangeNotifier {
   }
 
   void setItems(shopownerid) {
-    selectedshop = getShopByuserId(shopownerid);
-    items = selectedshop.items;
+    print(shops);
+    selectedshopid = shopownerid;
     items.addFromFireStore(shopownerid);
+    print("inside shops");
+    print(shops);
+    writeshoptoSF(shopownerid);
     notifyListeners();
+  }
+
+  void writeshoptoSF(String shopid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("shopid", shopid);
+  }
+
+  Future<bool> getfromSF() async {
+    if (selectedshopid != null) {
+      return true;
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String shopid = prefs.getString("shopid");
+      notifyListeners();
+      if (shopid != null) {
+        selectedshopid = shopid;
+        notifyListeners();
+        print("reading $shopid");
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 }

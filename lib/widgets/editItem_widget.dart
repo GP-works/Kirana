@@ -9,10 +9,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/rendering.dart';
 
 class EditItemTile extends StatefulWidget {
-  final id;
-
-  EditItemTile(this.id);
-
+  Item item;
+  EditItemTile(this.item);
   @override
   _EditItemTileState createState() => _EditItemTileState();
 }
@@ -20,12 +18,7 @@ class EditItemTile extends StatefulWidget {
 class _EditItemTileState extends State<EditItemTile> {
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User>(context, listen: false);
-    var catalog = Provider.of<Shops>(context, listen: false)
-        .getShopByuserId(user.uid)
-        .items;
-    Item item = catalog.getItemById(widget.id);
-    return Column(children: [_Tile(item), Divider()]);
+    return Column(children: [_Tile(widget.item), Divider()]);
   }
 
   Widget _Tile(Item item) {

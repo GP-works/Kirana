@@ -1,15 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:kirana/models/Item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kirana/models/shop.dart';
 
 class ItemsModel extends ChangeNotifier {
   String shopownerid;
-  List<Item> _items = [];
+  Stream<List<Item>> _items;
+  List<Item> itemslist;
   get items => _items;
 
-  Item getItemById(String id) {
-    int index = _items.indexWhere((element) => element.hashCod == id);
-    return _items[index];
+  Future<Item> getItemById(String id) async {
+    List items = await _items.toList();
+    int index = items.indexWhere((element) => element.hashCod == id);
+    return items[index];
   }
 
   void add(Item item, shopownerid) {
@@ -21,42 +24,18 @@ class ItemsModel extends ChangeNotifier {
         .setData(item.toJson());
   }
 
-  void addList(List<Item> items) {
-    _items = _items + items;
-  }
-
-  void remove(Item item) {
-    _items.remove(item);
-    notifyListeners();
-  }
-
-  set items(List<Item> newitems) {
-    _items = newitems;
-    notifyListeners();
-  }
-
   void edititem() {
     notifyListeners();
   }
 
-  bool isEmpty() {
-    return _items.isEmpty;
-  }
-
-  void addFromFireStore(shopid) {
-    if (shopownerid != shopid) {
-      _items = [];
-      Firestore.instance
-          .collection('shops')
-          .document(shopid)
-          .collection('items')
-          .snapshots()
-          .listen((data) => data.documents.forEach((doc) {
-                _items.add(Item.fromJson(doc));
-                notifyListeners();
-              }));
-      print("getting values from firestore");
-      print(_items);
-    }
+  Stream<List<Item>> addFromFireStore(shopid) {
+    print("inside stream");
+    return Firestore.instance
+        .collection('shops')
+        .document(shopid)
+        .collection('items')
+        .snapshots()
+        .map((event) =>
+            event.documents.map((e) => Item.fromJson(e.data)).toList());
   }
 }
