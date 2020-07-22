@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kirana/models/cart.dart';
 import 'package:kirana/models/shops.dart';
 import 'package:kirana/models/user.dart';
 import 'package:kirana/pages/navigation.dart';
