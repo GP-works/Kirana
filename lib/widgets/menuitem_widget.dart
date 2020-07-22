@@ -8,9 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:kirana/models/Item.dart';
 
 class MenuItem extends StatefulWidget {
-  final String id;
-  final bool edit;
-  MenuItem(this.id, {this.edit = false});
+  final Item item;
+  MenuItem(this.item);
 
   @override
   _MenuItemState createState() => _MenuItemState();
@@ -22,7 +21,7 @@ class _MenuItemState extends State<MenuItem> {
   @override
   Widget build(BuildContext context) {
     var cartProvider = Provider.of<Shops>(context);
-    Item item = cartProvider.items.getItemById(widget.id);
+
     /*if (!cartProvider.items.containsKey(widget.id)) {
       count = 0;
     } else {
@@ -30,7 +29,7 @@ class _MenuItemState extends State<MenuItem> {
     }*/
     count = 0;
 
-    return Column(children: [_Tile(item), Divider()]);
+    return Column(children: [_Tile(widget.item), Divider()]);
   }
 
   Widget _Tile(Item item) {
@@ -115,10 +114,10 @@ class _MenuItemState extends State<MenuItem> {
   }
 
   Widget buttonIncrementDecrement(CartModel cart) {
-    if (!cart.items.containsKey(widget.id)) {
+    if (!cart.items.containsKey(widget.item.id)) {
       count = 0;
     } else {
-      count = cart.items[widget.id];
+      count = cart.items[widget.item.id];
     }
     return Padding(
       padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
@@ -150,10 +149,10 @@ class _MenuItemState extends State<MenuItem> {
   }
 
   void _incrementCount(CartModel cart) {
-    cart.add(widget.id);
+    cart.add(widget.item.id);
   }
 
   void _decrementCount(CartModel cart) {
-    cart.remove(widget.id);
+    cart.remove(widget.item.id);
   }
 }
