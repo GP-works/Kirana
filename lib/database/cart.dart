@@ -78,18 +78,17 @@ class MyDatabase extends _$MyDatabase {
     );
   }
 
-  Future deleteItem(menuitemid) async
-  {
+  Future deleteItem(menuitemid) async {
     return delete(orderitems)
-        ..where((tbl) => tbl.menuitemid.equals(menuitemid));
+      ..where((tbl) => tbl.menuitemid.equals(menuitemid));
   }
 
-  Future deleteall() async{
+  Future deleteall() async {
     return delete(orderitems);
   }
 
   Future decrementItem(menuitemid, count) async {
-    if (count == 0) {
+    if (count == 1) {
       return delete(orderitems)
         ..where((tbl) => tbl.menuitemid.equals(menuitemid));
     } else {

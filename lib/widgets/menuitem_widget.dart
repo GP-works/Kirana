@@ -4,6 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kirana/models/cart.dart';
 import 'package:kirana/models/shops.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/Item.dart';
 
@@ -17,21 +18,21 @@ class MenuItem extends StatefulWidget {
 
 class _MenuItemState extends State<MenuItem> {
   int count = 0;
-
   @override
   Widget build(BuildContext context) {
-    return Column(children: [_Tile(widget.item), Divider()]);
+    return Column(children: [_Tile(widget.item, context), Divider()]);
   }
 
-  void getCount(CartModel cart, Item item) 
-  {
-    setState(() async{
-      count = await cart.getcount(item.id);
-    });
-    
+  void getCount(CartModel cart, Item item) async {
+    int coun = await cart.getcount(item.id);
+    if (this.mounted) {
+      setState(() {
+        count = coun;
+      });
+    }
   }
 
-  Widget _Tile(Item item) {
+  Widget _Tile(Item item, BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
@@ -79,10 +80,12 @@ class _MenuItemState extends State<MenuItem> {
                         )),
                   ],
                 ),
-                 Consumer<CartModel>(
-                 builder: (context, cartp, child) =>
-                   (count == 0) ? buttonFlat(cartp, item) : buttonIncrementDecrement(cartp, item),
-                 )
+                Consumer<CartModel>(builder: (context, cartp, child) {
+                  getCount(cartp, item);
+                  return (count == 0)
+                      ? buttonFlat(cartp, item, context)
+                      : buttonIncrementDecrement(cartp, item, context);
+                })
               ],
             ),
           )
@@ -91,8 +94,7 @@ class _MenuItemState extends State<MenuItem> {
     );
   }
 
-  Widget buttonFlat(CartModel cart ,Item item) {
-    getCount(cart, item);
+  Widget buttonFlat(CartModel cart, Item item, BuildContext context) {
     return ConstrainedBox(
         constraints: BoxConstraints(
           minWidth: 20,
@@ -106,14 +108,13 @@ class _MenuItemState extends State<MenuItem> {
               ),
               color: Colors.amber[700],
               onPressed: () {
-                _createitem(cart, item);
+                _createitem(cart, item, context);
               },
             )));
   }
 
-
-  Widget buttonIncrementDecrement(CartModel cart, Item item) {
-    getCount(cart, item);
+  Widget buttonIncrementDecrement(
+      CartModel cart, Item item, BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Container(
@@ -122,7 +123,7 @@ class _MenuItemState extends State<MenuItem> {
             icon: Icon(Icons.remove),
             hoverColor: Colors.red,
             onPressed: () {
-              _decrementCount(cart, item);
+              _decrementCount(cart, item, context);
             },
             color: Colors.red,
           ),
@@ -131,7 +132,7 @@ class _MenuItemState extends State<MenuItem> {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              _incrementCount(cart, item);
+              _incrementCount(cart, item, context);
             },
             color: Colors.green,
           ),
@@ -143,19 +144,22 @@ class _MenuItemState extends State<MenuItem> {
     );
   }
 
-
-  void _createitem (CartModel cart, Item item) async
-  {
+  void _createitem(CartModel cart, Item item, BuildContext context) async {
     var shopProvider = Provider.of<Shops>(context, listen: false);
-    cart.createentry(item.name, item.price, shopProvider.selectedshop.userid, item.id);
+    cart.createentry(
+        item.name, item.price, shopProvider.selectedshopid, item.id);
+    shopProvider.items.edititem();
   }
 
-  void _incrementCount(CartModel cart, Item item) async{
+  void _incrementCount(CartModel cart, Item item, BuildContext context) async {
     cart.incrementitem(item.id, await cart.getcount(item.id));
+    var shopProvider = Provider.of<Shops>(context, listen: false);
+    shopProvider.items.edititem();
   }
 
-  void _decrementCount(CartModel cart, Item item) async{
+  void _decrementCount(CartModel cart, Item item, BuildContext context) async {
     cart.decrementitem(item.id, await cart.getcount(item.id));
-
+    var shopProvider = Provider.of<Shops>(context, listen: false);
+    shopProvider.items.edititem();
   }
 }
