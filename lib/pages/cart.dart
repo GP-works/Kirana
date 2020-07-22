@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/models/cart.dart';
-import 'package:kirana/models/orderslist.dart';
 import 'package:kirana/widgets/cartitem_widget.dart';
 import 'package:kirana/pages/orders.dart';
 import 'package:kirana/widgets/drawer.dart';
-import 'package:kirana/widgets/menuitem_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:kirana/models/shops.dart';
+import 'package:kirana/database/cart.dart';
 
 class CartPage extends StatelessWidget {
   final name = 'CartItems';
@@ -13,21 +13,25 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Consumer2<CartModel, OrdersListModel>(
-          builder: (context, cart, orderslist, child) {
-        List<CartItem> list = [];
-        List<MenuItem> itemslist = [];
-        cart.items.forEach((k, v) => list.add(CartItem(k)));
-        cart.catalog.items
-            .forEach((item) => itemslist.add(MenuItem(item.hashCod)));
-        return Scaffold(
-          drawer: DrawerPage(),
-          appBar: AppBar(title: Text("APP_NAME"), actions: <Widget>[
+      child: Consumer2<CartModel, Shops>(
+          builder: (context, cart, shops, child) {
+        //List<CartItem> list = [];
+        //List<MenuItem> itemslist = [];
+        //cart.items.forEach((orderitem) => list.add(CartItem(orderitem.menuitemid)));
+        //shops.selectedshop.items.forEach((item) => itemslist.add(MenuItem(item.hashCod)));
+        return  Consumer<CartModel>(builder: (context, cart, child){
+              return StreamBuilder<List<Orderitem>>(
+                stream: cart.fromf(),
+                builder: (context, snapshot){
+                  if(!snapshot.hasData){
+                   return Scaffold(
+                      drawer: DrawerPage(),
+                      appBar: AppBar(title: Text("APP_NAME"), actions: <Widget>[
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    cart.delete_all();
+                    cart.deleteAll();
                   },
                   child: Icon(
                     Icons.delete,
@@ -36,14 +40,35 @@ class CartPage extends StatelessWidget {
                   ),
                 ))
           ]),
-          body: Container(child: CartContents(list, itemslist)),
-          bottomNavigationBar: BottomAppBar(
+                    body: Center(child: CircularProgressIndicator(),));
+                  }
+                  else{
+                    return Scaffold(
+                      drawer: DrawerPage(),
+                      appBar: AppBar(title: Text("APP_NAME"), actions: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    cart.deleteAll();
+                  },
+                  child: Icon(
+                    Icons.delete,
+                    size: 26.0,
+                    color: Colors.red,
+                  ),
+                ))
+          ]),
+                    body: ListView(children: <Widget>[
+                      for (var item in (snapshot.data)) CartItem(item),
+                    ],),
+                    bottomNavigationBar: BottomAppBar(
             child: Row(
               children: <Widget>[
-                Text('Total price : ${cart.get_price()}'),
+                Text('Total price : ${cart.getprice()}'),
                 FlatButton(
                   onPressed: () {
-                    orderslist.create_order(cart);
+                    //orderslist.create_order(cart);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => OrdersPage()));
                   },
@@ -67,13 +92,17 @@ class CartPage extends StatelessWidget {
                 )
               ],
             ),
-          ),
-        );
-      }),
-    );
+          ),);
+                  }
+                },
+              );
+          }         
+          );//CartContents(list, itemslist)),
+          
+          }));
   }
 
-  Widget CartContents(List<CartItem> list, List<MenuItem> itemslist) {
+  /*Widget CartContents(List<CartItem> list, List<MenuItem> itemslist) {
     if (list.length == 0) {
       return Container(
         child: ListView(children: itemslist),
@@ -81,5 +110,5 @@ class CartPage extends StatelessWidget {
     } else {
       return Container(child: ListView(children: list));
     }
-  }
+  }*/
 }

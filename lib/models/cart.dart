@@ -1,54 +1,65 @@
 import 'package:flutter/foundation.dart';
-import 'package:kirana/models/items.dart';
+import 'package:kirana/database/cart.dart';
+import 'package:kirana/models/shop.dart';
 
 class CartModel extends ChangeNotifier {
-  Map _cartitems = new Map();
-  ItemsModel _catalog;
-  get items => _cartitems;
+  List<Orderitem> orderitems;
+  List<Shop> shops = [];
+  CartModel();
+  MyDatabase mydb = MyDatabase();
+  get items => orderitems;
   // ignore: unnecessary_getters_setters
-  get catalog => _catalog;
+  Stream<List<Orderitem>> fromf() {
+    
+    //mydb.watchCartItems().listen((event) { event.forEach((element) {orderitems.add(element);});});
+      //        notifyListeners();
+      return mydb.watchCartItems();
+            }
 
-  void add(String id) {
-    if (_cartitems.containsKey(id)) {
-      _cartitems[id]++;
-    } else {
-      _cartitems[id] = 1;
+    Future<int> getcount(String menuitemId) async
+    {
+      Future<int> cnt;
+      cnt = mydb.getCount(menuitemId);
+      return cnt;
     }
-    notifyListeners();
-  }
 
-  // ignore: unnecessary_getters_setters
-  set catalog(ItemsModel catalog) {
-    _catalog = catalog;
-  }
-
-  void remove(String id) {
-    if (_cartitems[id] == 1) {
-      _cartitems.remove(id);
-    } else {
-      _cartitems[id]--;
+    void getshopids()
+    {
+      mydb.getshopids().listen((event) {event.forEach((element) {shops.add(element);});});
+      notifyListeners();
     }
-    notifyListeners();
-  }
+    
+    void createentry(String name, double price, String shopid, String menuitemid )
+    {
+      mydb.createEntry(name: name, price: price, shopid: shopid, menuitemid: menuitemid);
+      notifyListeners();
+    }
 
-  void delete(String id) {
-    _cartitems.remove(id);
-    notifyListeners();
-  }
+    void incrementitem(String menuitemId, int count)
+    {
+      mydb.incrementItem(menuitemId, count);
+      notifyListeners();
+    }
 
-  // ignore: non_constant_identifier_names
-  void delete_all() {
-    _cartitems = new Map();
-    notifyListeners();
-  }
-
-  // ignore: non_constant_identifier_names
-  double get_price() {
-    // ignore: non_constant_identifier_names
-    double total_price = 0;
-    _cartitems.forEach((key, value) {
-      total_price = total_price + (value * catalog.getItemById(key).price);
-    });
-    return total_price;
-  }
+    void decrementitem(String menuitemId, int count)
+    {
+      mydb.decrementItem(menuitemId, count);
+      notifyListeners();
+    }
+    
+    void deleteItem(String menuitemId)
+    {
+      mydb.deleteItem(menuitemId);
+      notifyListeners();
+    }
+    void deleteAll()
+    {
+      mydb.deleteall();
+    }
+    double getprice()
+    {
+      double totalprice = 0;
+      orderitems.forEach((element) {totalprice = totalprice + element.price;});
+      return totalprice;
+    }
 }

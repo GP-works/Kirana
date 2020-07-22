@@ -17,22 +17,22 @@ class OrdersListModel extends ChangeNotifier{
     notifyListeners();
   }
   
-  void create_order(CartModel cart)
+  void create_order(CartModel cart) 
   {
     OrdersModel order = new OrdersModel();
-    cart.items.forEach((key, value) {
-      order.items.add(
-      OrderItem(
-          cart.catalog.getItemById(key).name,
-          cart.catalog.getItemById(key).price,
+    cart.items.forEach((orderitem) async{
+      order.items.add (
+      OrderItem ( 
+          orderitem.name,
+          orderitem.price,
           DateTime.now().millisecondsSinceEpoch,
-          value,
-          cart.catalog.getItemById(key).imageurl
+          await cart.getcount(orderitem.menuitemid),
+          'https://m.media-amazon.com/images/I/71aQtgyXN9L._SS140_.jpg'
           ));
           });
     order.id = DateTime.now().millisecondsSinceEpoch;
     add(order);
-    cart.delete_all();
+    cart.deleteAll();
     notifyListeners();
   }
 }
