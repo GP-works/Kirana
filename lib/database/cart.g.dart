@@ -13,6 +13,7 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
   final int count;
   final String shop;
   final String status;
+  final String imageurl;
   final String menuitemid;
   Orderitem(
       {@required this.name,
@@ -20,6 +21,7 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
       @required this.count,
       @required this.shop,
       @required this.status,
+      @required this.imageurl,
       @required this.menuitemid});
   factory Orderitem.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -35,6 +37,8 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
       shop: stringType.mapFromDatabaseResponse(data['${effectivePrefix}shop']),
       status:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}status']),
+      imageurl: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}imageurl']),
       menuitemid: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}menuitemid']),
     );
@@ -57,6 +61,9 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
     if (!nullToAbsent || status != null) {
       map['status'] = Variable<String>(status);
     }
+    if (!nullToAbsent || imageurl != null) {
+      map['imageurl'] = Variable<String>(imageurl);
+    }
     if (!nullToAbsent || menuitemid != null) {
       map['menuitemid'] = Variable<String>(menuitemid);
     }
@@ -73,6 +80,9 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
       shop: shop == null && nullToAbsent ? const Value.absent() : Value(shop),
       status:
           status == null && nullToAbsent ? const Value.absent() : Value(status),
+      imageurl: imageurl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imageurl),
       menuitemid: menuitemid == null && nullToAbsent
           ? const Value.absent()
           : Value(menuitemid),
@@ -88,6 +98,7 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
       count: serializer.fromJson<int>(json['count']),
       shop: serializer.fromJson<String>(json['shop']),
       status: serializer.fromJson<String>(json['status']),
+      imageurl: serializer.fromJson<String>(json['imageurl']),
       menuitemid: serializer.fromJson<String>(json['menuitemid']),
     );
   }
@@ -100,6 +111,7 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
       'count': serializer.toJson<int>(count),
       'shop': serializer.toJson<String>(shop),
       'status': serializer.toJson<String>(status),
+      'imageurl': serializer.toJson<String>(imageurl),
       'menuitemid': serializer.toJson<String>(menuitemid),
     };
   }
@@ -110,6 +122,7 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
           int count,
           String shop,
           String status,
+          String imageurl,
           String menuitemid}) =>
       Orderitem(
         name: name ?? this.name,
@@ -117,6 +130,7 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
         count: count ?? this.count,
         shop: shop ?? this.shop,
         status: status ?? this.status,
+        imageurl: imageurl ?? this.imageurl,
         menuitemid: menuitemid ?? this.menuitemid,
       );
   @override
@@ -127,6 +141,7 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
           ..write('count: $count, ')
           ..write('shop: $shop, ')
           ..write('status: $status, ')
+          ..write('imageurl: $imageurl, ')
           ..write('menuitemid: $menuitemid')
           ..write(')'))
         .toString();
@@ -139,8 +154,10 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
           price.hashCode,
           $mrjc(
               count.hashCode,
-              $mrjc(shop.hashCode,
-                  $mrjc(status.hashCode, menuitemid.hashCode))))));
+              $mrjc(
+                  shop.hashCode,
+                  $mrjc(status.hashCode,
+                      $mrjc(imageurl.hashCode, menuitemid.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -150,6 +167,7 @@ class Orderitem extends DataClass implements Insertable<Orderitem> {
           other.count == this.count &&
           other.shop == this.shop &&
           other.status == this.status &&
+          other.imageurl == this.imageurl &&
           other.menuitemid == this.menuitemid);
 }
 
@@ -159,6 +177,7 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
   final Value<int> count;
   final Value<String> shop;
   final Value<String> status;
+  final Value<String> imageurl;
   final Value<String> menuitemid;
   const OrderitemsCompanion({
     this.name = const Value.absent(),
@@ -166,6 +185,7 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
     this.count = const Value.absent(),
     this.shop = const Value.absent(),
     this.status = const Value.absent(),
+    this.imageurl = const Value.absent(),
     this.menuitemid = const Value.absent(),
   });
   OrderitemsCompanion.insert({
@@ -174,12 +194,14 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
     @required int count,
     @required String shop,
     @required String status,
+    @required String imageurl,
     @required String menuitemid,
   })  : name = Value(name),
         price = Value(price),
         count = Value(count),
         shop = Value(shop),
         status = Value(status),
+        imageurl = Value(imageurl),
         menuitemid = Value(menuitemid);
   static Insertable<Orderitem> custom({
     Expression<String> name,
@@ -187,6 +209,7 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
     Expression<int> count,
     Expression<String> shop,
     Expression<String> status,
+    Expression<String> imageurl,
     Expression<String> menuitemid,
   }) {
     return RawValuesInsertable({
@@ -195,6 +218,7 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
       if (count != null) 'count': count,
       if (shop != null) 'shop': shop,
       if (status != null) 'status': status,
+      if (imageurl != null) 'imageurl': imageurl,
       if (menuitemid != null) 'menuitemid': menuitemid,
     });
   }
@@ -205,6 +229,7 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
       Value<int> count,
       Value<String> shop,
       Value<String> status,
+      Value<String> imageurl,
       Value<String> menuitemid}) {
     return OrderitemsCompanion(
       name: name ?? this.name,
@@ -212,6 +237,7 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
       count: count ?? this.count,
       shop: shop ?? this.shop,
       status: status ?? this.status,
+      imageurl: imageurl ?? this.imageurl,
       menuitemid: menuitemid ?? this.menuitemid,
     );
   }
@@ -234,6 +260,9 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
     if (status.present) {
       map['status'] = Variable<String>(status.value);
     }
+    if (imageurl.present) {
+      map['imageurl'] = Variable<String>(imageurl.value);
+    }
     if (menuitemid.present) {
       map['menuitemid'] = Variable<String>(menuitemid.value);
     }
@@ -248,6 +277,7 @@ class OrderitemsCompanion extends UpdateCompanion<Orderitem> {
           ..write('count: $count, ')
           ..write('shop: $shop, ')
           ..write('status: $status, ')
+          ..write('imageurl: $imageurl, ')
           ..write('menuitemid: $menuitemid')
           ..write(')'))
         .toString();
@@ -319,6 +349,18 @@ class $OrderitemsTable extends Orderitems
     );
   }
 
+  final VerificationMeta _imageurlMeta = const VerificationMeta('imageurl');
+  GeneratedTextColumn _imageurl;
+  @override
+  GeneratedTextColumn get imageurl => _imageurl ??= _constructImageurl();
+  GeneratedTextColumn _constructImageurl() {
+    return GeneratedTextColumn(
+      'imageurl',
+      $tableName,
+      false,
+    );
+  }
+
   final VerificationMeta _menuitemidMeta = const VerificationMeta('menuitemid');
   GeneratedTextColumn _menuitemid;
   @override
@@ -330,7 +372,7 @@ class $OrderitemsTable extends Orderitems
 
   @override
   List<GeneratedColumn> get $columns =>
-      [name, price, count, shop, status, menuitemid];
+      [name, price, count, shop, status, imageurl, menuitemid];
   @override
   $OrderitemsTable get asDslTable => this;
   @override
@@ -371,6 +413,12 @@ class $OrderitemsTable extends Orderitems
           status.isAcceptableOrUnknown(data['status'], _statusMeta));
     } else if (isInserting) {
       context.missing(_statusMeta);
+    }
+    if (data.containsKey('imageurl')) {
+      context.handle(_imageurlMeta,
+          imageurl.isAcceptableOrUnknown(data['imageurl'], _imageurlMeta));
+    } else if (isInserting) {
+      context.missing(_imageurlMeta);
     }
     if (data.containsKey('menuitemid')) {
       context.handle(

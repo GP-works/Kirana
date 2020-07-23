@@ -145,8 +145,8 @@ class _MenuItemState extends State<MenuItem> {
 
   void _createitem(CartModel cart, Item item, BuildContext context) async {
     var shopProvider = Provider.of<Shops>(context, listen: false);
-    cart.createentry(
-        item.name, item.price, shopProvider.selectedshopid, item.id);
+    cart.createentry(item.name, item.price, shopProvider.selectedshopid,
+        item.id, item.imageurl);
     shopProvider.items.edititem();
   }
 

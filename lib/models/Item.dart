@@ -54,6 +54,7 @@ class Item {
       "imageurl": imageurl,
       "id": id,
       "shopid": shopid,
+      "updated at": DateTime.now().millisecondsSinceEpoch
     };
   }
 }

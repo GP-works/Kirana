@@ -38,8 +38,7 @@ class _CartItemState extends State<CartItem> {
       child: Row(
         children: <Widget>[
           CachedNetworkImage(
-            imageUrl:
-                'https://m.media-amazon.com/images/I/71aQtgyXN9L._SS140_.jpg',
+            imageUrl: item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
             fit: BoxFit.cover,

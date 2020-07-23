@@ -14,7 +14,6 @@ class Shops extends ChangeNotifier {
     QuerySnapshot snapshot =
         await Firestore.instance.collection('shops').getDocuments();
     snapshot.documents.forEach((element) {
-      shops = [];
       shops.add(Shop.fromJson(element.data));
       notifyListeners();
     });

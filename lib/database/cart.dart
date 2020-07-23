@@ -25,6 +25,8 @@ class Orderitems extends Table {
 
   TextColumn get status => text()();
 
+  TextColumn get imageurl => text()();
+
   TextColumn get menuitemid => text().customConstraint('UNIQUE')();
 }
 
@@ -42,11 +44,21 @@ class MyDatabase extends _$MyDatabase {
         .watch();
   }
 
+  Future<List<String>> getMenuItemIds() async {
+    final query = ((selectOnly(orderitems, distinct: true))
+          ..addColumns([orderitems.menuitemid]))
+        .map((row) {
+      return row.read(orderitems.menuitemid);
+    });
+    final list = await query.get();
+    return list;
+  }
+
   Future<int> getCount(menuitemid) async {
     final query = await (select(orderitems)
           ..where((t) => t.menuitemid.equals(menuitemid)))
         .get();
-    int count=query.length == 0 ?  0 : query.first.count;
+    int count = query.length == 0 ? 0 : query.first.count;
     return count;
   }
 
@@ -60,14 +72,16 @@ class MyDatabase extends _$MyDatabase {
       {@required String name,
       @required double price,
       @required String shopid,
-      @required String menuitemid}) async {
+      @required String menuitemid,
+      @required String imageurl}) async {
     await into(orderitems).insert(Orderitem(
         name: name,
         price: price,
         count: 1,
         shop: shopid,
         status: "cart",
-        menuitemid: menuitemid));
+        menuitemid: menuitemid,
+        imageurl: imageurl));
   }
 
   Future incrementItem(menuitemid, count) async {
@@ -81,7 +95,8 @@ class MyDatabase extends _$MyDatabase {
 
   Future deleteItem(menuitemid) async {
     return (delete(orderitems)
-      ..where((tbl) => tbl.menuitemid.equals(menuitemid))).go();
+          ..where((tbl) => tbl.menuitemid.equals(menuitemid)))
+        .go();
   }
 
   Future deleteall() async {
@@ -91,7 +106,8 @@ class MyDatabase extends _$MyDatabase {
   Future decrementItem(menuitemid, count) async {
     if (count == 1) {
       return (delete(orderitems)
-        ..where((tbl) => tbl.menuitemid.equals(menuitemid))).go();
+            ..where((tbl) => tbl.menuitemid.equals(menuitemid)))
+          .go();
     } else {
       return await (update(orderitems)
             ..where((t) => t.menuitemid.equals(menuitemid)))
@@ -103,6 +119,14 @@ class MyDatabase extends _$MyDatabase {
     }
   }
 
+  Future updateItem({name, id, price, imageurl}) async {
+    return await (update(orderitems)..where((t) => t.menuitemid.equals(id)))
+        .write(
+      OrderitemsCompanion(
+          name: Value(name), price: Value(price), imageurl: Value(imageurl)),
+    );
+  }
+
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 }

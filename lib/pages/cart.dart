@@ -66,8 +66,19 @@ class CartPage extends StatelessWidget {
                 ),
                 bottomNavigationBar: BottomAppBar(
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text('Total price : ${cart.getprice(snapshot.data)}'),
+                      Text(
+                        'Total price : ',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        "${cart.getprice(snapshot.data)}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red,
+                            fontSize: 18),
+                      ),
                       FlatButton(
                         onPressed: () {
                           //orderslist.create_order(cart);
@@ -83,7 +94,7 @@ class CartPage extends StatelessWidget {
                               "checkout",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 14,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),

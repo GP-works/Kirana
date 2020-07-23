@@ -43,6 +43,7 @@ class _HomeAppState extends State<HomeApp> {
           ChangeNotifierProvider(create: (context) {
             CartModel cart = CartModel();
             cart.fromf();
+            cart.getmenuitemids();
             return cart;
           }),
           ChangeNotifierProvider(
