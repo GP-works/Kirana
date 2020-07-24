@@ -366,8 +366,11 @@ class $OrderitemsTable extends Orderitems
   @override
   GeneratedTextColumn get menuitemid => _menuitemid ??= _constructMenuitemid();
   GeneratedTextColumn _constructMenuitemid() {
-    return GeneratedTextColumn('menuitemid', $tableName, false,
-        $customConstraints: 'UNIQUE');
+    return GeneratedTextColumn(
+      'menuitemid',
+      $tableName,
+      false,
+    );
   }
 
   @override
