@@ -5,6 +5,9 @@ import 'package:kirana/models/Item.dart';
 import 'package:kirana/models/orders.dart';
 import 'package:kirana/models/shop.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
+
+var uuid = Uuid();
 
 class CartModel extends ChangeNotifier {
   List<Orderitem> orderitems;
@@ -100,23 +103,24 @@ class CartModel extends ChangeNotifier {
       int i;
       List<String> sublist = menuitemids.sublist(0, length % 10);
       print(sublist);
-      Query query =  Firestore.instance
+      Query query = Firestore.instance
           .collectionGroup('items')
           .where("id", whereIn: sublist)
           .where('updatedat', isGreaterThan: prefs.getInt('lastupdated'));
       print(query.buildArguments());
-        QuerySnapshot snapshot=await query.getDocuments();
+      QuerySnapshot snapshot = await query.getDocuments();
       snapshot.documents.forEach((element) {
         update(Item.fromJson(element.data));
         print(element.data);
         notifyListeners();
       });
-      for (i = length % 10; i < length; length+=10) {
-        List<String> sublist = menuitemids.sublist(i, i  + 10);
+      for (i = length % 10; i < length; length += 10) {
+        List<String> sublist = menuitemids.sublist(i, i + 10);
         QuerySnapshot snapshot = await Firestore.instance
             .collectionGroup('items')
-            .where('id', whereIn: sublist).
-            where('updatedat', isGreaterThan: prefs.getInt('lastupdated')).getDocuments();
+            .where('id', whereIn: sublist)
+            .where('updatedat', isGreaterThan: prefs.getInt('lastupdated'))
+            .getDocuments();
         snapshot.documents.forEach((element) {
           update(Item.fromJson(element.data));
           notifyListeners();
@@ -125,5 +129,25 @@ class CartModel extends ChangeNotifier {
       }
     }
     WritetoSf();
+  }
+
+  void create_order(shopid) async {
+    List<Orderitem> orderitems = await mydb.getAllItems(shopid);
+    String unique = uuid.v1();
+    Firestore.instance.collection('orders').document(unique).setData({
+      'createdAt': DateTime.now().millisecondsSinceEpoch,
+      'status': 'ordered',
+      'shopid': shopid,
+      'remarks': "no"
+    });
+    orderitems.forEach((element) {
+      Firestore.instance
+          .collection('orders')
+          .document(unique)
+          .collection('orderitems')
+          .document(element.menuitemid)
+          .setData(element.toJson());
+      mydb.updateToOrdered(element.menuitemid);
+    });
   }
 }

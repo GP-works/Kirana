@@ -14,10 +14,6 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(child:
         Consumer2<CartModel, Shops>(builder: (context, cart, shops, child) {
-      //List<CartItem> list = [];
-      //List<MenuItem> itemslist = [];
-      //cart.items.forEach((orderitem) => list.add(CartItem(orderitem.menuitemid)));
-      //shops.selectedshop.items.forEach((item) => itemslist.add(MenuItem(item.hashCod)));
       return Consumer<CartModel>(builder: (context, cart, child) {
         return StreamBuilder<List<Orderitem>>(
           stream: cart.fromf(),
@@ -81,7 +77,7 @@ class CartPage extends StatelessWidget {
                       ),
                       FlatButton(
                         onPressed: () {
-                          //orderslist.create_order(cart);
+                          cart.create_order(shops.selectedshopid);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -115,14 +111,4 @@ class CartPage extends StatelessWidget {
       }); //CartContents(list, itemslist)),
     }));
   }
-
-/*Widget CartContents(List<CartItem> list, List<MenuItem> itemslist) {
-    if (list.length == 0) {
-      return Container(
-        child: ListView(children: itemslist),
-      );
-    } else {
-      return Container(child: ListView(children: list));
-    }
-  }*/
 }

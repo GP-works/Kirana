@@ -27,7 +27,10 @@ class Orderitems extends Table {
 
   TextColumn get imageurl => text()();
 
-  TextColumn get menuitemid => text().customConstraint('UNIQUE')();
+  TextColumn get menuitemid => text()();
+
+  @override
+  List<String> get customConstraints => ['UNIQUE (menuitemid, status)'];
 }
 
 @UseMoor(
@@ -46,6 +49,7 @@ class MyDatabase extends _$MyDatabase {
 
   Future<List<String>> getMenuItemIds() async {
     final query = ((selectOnly(orderitems, distinct: true))
+          ..where(orderitems.status.equals('cart'))
           ..addColumns([orderitems.menuitemid]))
         .map((row) {
       return row.read(orderitems.menuitemid);
@@ -56,7 +60,8 @@ class MyDatabase extends _$MyDatabase {
 
   Future<int> getCount(menuitemid) async {
     final query = await (select(orderitems)
-          ..where((t) => t.menuitemid.equals(menuitemid)))
+          ..where((t) => t.menuitemid.equals(menuitemid))
+          ..where((tbl) => tbl.status.equals('cart')))
         .get();
     int count = query.length == 0 ? 0 : query.first.count;
     return count;
@@ -125,6 +130,19 @@ class MyDatabase extends _$MyDatabase {
       OrderitemsCompanion(
           name: Value(name), price: Value(price), imageurl: Value(imageurl)),
     );
+  }
+
+  Future<List<Orderitem>> getAllItems(String shopid) async {
+    return await ((select(orderitems))
+          ..where((tbl) => tbl.status.equals('cart'))
+          ..where((tbl) => tbl.shop.equals(shopid)))
+        .get();
+  }
+
+  void updateToOrdered(String menuitemid) async {
+    await (update(orderitems)
+          ..where((tbl) => tbl.menuitemid.equals(menuitemid)))
+        .write(OrderitemsCompanion(status: Value('ordered')));
   }
 
   @override
