@@ -73,6 +73,19 @@ class MyDatabase extends _$MyDatabase {
     return query.watch();
   }
 
+  Future<double> getTotalPrice(String shopid) {
+    final query = ((selectOnly(orderitems, distinct: true))
+          ..where(orderitems.status.equals('cart'))
+          ..where(orderitems.shop.equals(shopid))
+          ..addColumns([orderitems.price, orderitems.price]))
+        .map((row) {
+      return row.read(orderitems.price) * row.read(orderitems.count);
+    });
+    final sum =
+        query.watch().fold(0, (previous, element) => previous + element);
+    return sum;
+  }
+
   Future createEntry(
       {@required String name,
       @required double price,

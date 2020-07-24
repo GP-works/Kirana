@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kirana/database/cart.dart';
 import 'package:kirana/models/Item.dart';
-import 'package:kirana/models/orders.dart';
+import 'package:kirana/models/shops.dart';
 import 'package:kirana/models/shop.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -11,7 +11,7 @@ var uuid = Uuid();
 
 class CartModel extends ChangeNotifier {
   List<Orderitem> orderitems;
-  List<Shop> shops = [];
+  List<String> shops = [];
   CartModel();
   MyDatabase mydb = MyDatabase();
   List<String> menuitemids;
@@ -30,7 +30,13 @@ class CartModel extends ChangeNotifier {
     return cnt;
   }
 
-  void getshopids() {
+  Future<double> getTotalprice(String shopId)
+  {
+    return mydb.getTotalPrice(shopId);
+  }
+
+  void updateShops() {
+    
     mydb.getshopids().listen((event) {
       event.forEach((element) {
         shops.add(element);
