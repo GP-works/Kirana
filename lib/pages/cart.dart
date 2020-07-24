@@ -4,21 +4,22 @@ import 'package:kirana/widgets/cartitem_widget.dart';
 import 'package:kirana/pages/orders.dart';
 import 'package:kirana/widgets/drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:kirana/models/shop.dart';
 import 'package:kirana/models/shops.dart';
 import 'package:kirana/database/cart.dart';
 
-class CartPage extends StatelessWidget {
-  final name = 'CartItems';
+class CartPage extends StatefulWidget {
+  @override
+  _CartPageState createState() => _CartPageState();
+}
 
+class _CartPageState extends State<CartPage> {
+
+  String currentShop;
   @override
   Widget build(BuildContext context) {
     return Container(child:
-        Consumer2<CartModel, Shops>(builder: (context, cart, shops, child) {
-      //List<CartItem> list = [];
-      //List<MenuItem> itemslist = [];
-      //cart.items.forEach((orderitem) => list.add(CartItem(orderitem.menuitemid)));
-      //shops.selectedshop.items.forEach((item) => itemslist.add(MenuItem(item.hashCod)));
-      return Consumer<CartModel>(builder: (context, cart, child) {
+        Consumer<CartModel>(builder: (context, cart, child) {
         return StreamBuilder<List<Orderitem>>(
           stream: cart.fromf(),
           builder: (context, snapshot) {
@@ -42,13 +43,16 @@ class CartPage extends StatelessWidget {
                   body: Center(
                     child: CircularProgressIndicator(),
                   ));
-            } else {
-              return Scaffold(
-                drawer: DrawerPage(),
-                appBar: AppBar(title: Text("APP_NAME"), actions: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.only(right: 20.0),
-                      child: GestureDetector(
+            } 
+            else{
+                  //var shopProvider = Provider.of<Shops>(context, listen: false);
+                  cart.updateShops();
+                  return Scaffold(
+                    drawer: DrawerPage(),
+                    appBar: AppBar(title: Text("APP_NAME"), actions: <Widget>[
+                     Padding(
+                        padding: EdgeInsets.only(right: 20.0),
+                        child: GestureDetector(
                         onTap: () {
                           cart.deleteAll();
                         },
@@ -57,72 +61,128 @@ class CartPage extends StatelessWidget {
                           size: 26.0,
                           color: Colors.red,
                         ),
-                      ))
-                ]),
-                body: ListView(
-                  children: <Widget>[
-                    for (var item in (snapshot.data)) CartItem(item),
-                  ],
-                ),
-                bottomNavigationBar: BottomAppBar(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        'Total price : ',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        "${cart.getprice(snapshot.data)}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.red,
-                            fontSize: 18),
-                      ),
-                      FlatButton(
-                        onPressed: () {
-                          //orderslist.create_order(cart);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OrdersPage()));
-                        },
+                          ))
+                                ]),
+                    body: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                              height: 50,
+                              width: double.infinity,
+                              color: Colors.black,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                  for (int i = 0; i < cart.shops.length; i++)
+                                    Container(
+                                      width: 58,
+                                      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                                      child: button(cart.shops[i])),
+                                   ],),),),
+                          Container(
+                              /*child: ListView(
+                                children: <Widget>[
+                                  for (var item in (snapshot.data) )
+                                   if(item.shop == currentShop ){ CartItem(item) },
+                                ],
+                              ),*/
+                          )
+                          ],
+                        ),
+                        ),
+                    bottomNavigationBar: BottomAppBar(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Text(
-                              "checkout",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
+                              'Total price : ',
+                              style: TextStyle(fontSize: 16),
                             ),
+                            Text(
+                              "${cart.getTotalprice(currentShop)}",
+                              style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red,
+                              fontSize: 18),
+                            ),
+                            FlatButton(
+                            onPressed: () {
+                                //cart.create_order(orderitemslist);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => OrdersPage()));
+                          },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                              Text(
+                                "checkout",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                               ),
+                              ),
                             Icon(
                               Icons.arrow_forward,
                               color: Colors.lightBlueAccent,
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
+                            )],
+                        ),)], ),
+                      ),
+                  );
             }
           },
         );
-      }); //CartContents(list, itemslist)),
-    }));
-  }
-
-/*Widget CartContents(List<CartItem> list, List<MenuItem> itemslist) {
-    if (list.length == 0) {
-      return Container(
-        child: ListView(children: itemslist),
-      );
-    } else {
-      return Container(child: ListView(children: list));
+      })); 
     }
-  }*/
+
+    Widget button(String shopId) => Button(
+        key: ValueKey('button$shopId'),
+        isSelected: this.currentShop == shopId,
+        shopId: shopId,
+        onPressed: () {
+          showExample(
+            shopId
+          );
+        },
+      );
+
+  void showExample(String shopId) => setState(() {
+        this.currentShop = shopId;
+      });
+}
+
+//////////////////////////////////////////////////
+
+class Button extends StatelessWidget {
+  final Key key;
+  final bool isSelected;
+  final String shopId;
+  final VoidCallback onPressed;
+
+  Button({
+    this.key,
+    this.isSelected,
+    this.shopId,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+        color: isSelected ? Colors.grey : Colors.grey[800],
+        child: Text(shopId, style: TextStyle(color: Colors.white)),
+        onPressed: () {
+          Scrollable.ensureVisible(
+            context,
+            duration: Duration(milliseconds: 350),
+            curve: Curves.easeOut,
+            alignment: 0.5,
+          );
+          onPressed();
+        });
+  }
 }
