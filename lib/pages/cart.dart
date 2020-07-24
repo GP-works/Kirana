@@ -4,9 +4,8 @@ import 'package:kirana/widgets/cartitem_widget.dart';
 import 'package:kirana/pages/orders.dart';
 import 'package:kirana/widgets/drawer.dart';
 import 'package:provider/provider.dart';
-import 'package:kirana/models/shop.dart';
-import 'package:kirana/models/shops.dart';
 import 'package:kirana/database/cart.dart';
+import 'package:kirana/models/shops.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -15,7 +14,16 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
 
+  double currentPrice;
   String currentShop;
+
+  void updatePrice(CartModel cart) async{
+    double currentprice = await cart.getTotalprice(currentShop);
+    setState(() {
+      currentPrice = currentprice;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(child:
@@ -26,7 +34,7 @@ class _CartPageState extends State<CartPage> {
             if (!snapshot.hasData) {
               return Scaffold(
                   drawer: DrawerPage(),
-                  appBar: AppBar(title: Text("APP_NAME"), actions: <Widget>[
+                  appBar: AppBar(title: Text("Cart"), actions: <Widget>[
                     Padding(
                         padding: EdgeInsets.only(right: 20.0),
                         child: GestureDetector(
@@ -46,6 +54,13 @@ class _CartPageState extends State<CartPage> {
             } 
             else{
                   //var shopProvider = Provider.of<Shops>(context, listen: false);
+                  updatePrice(cart);
+                  List<CartItem> list = [];
+                  for (var item in (snapshot.data) )
+                     {
+                       if(item.shop == currentShop )
+                         list.add(CartItem(item)); 
+                     }
                   cart.updateShops();
                   return Scaffold(
                     drawer: DrawerPage(),
@@ -82,12 +97,9 @@ class _CartPageState extends State<CartPage> {
                                       child: button(cart.shops[i])),
                                    ],),),),
                           Container(
-                              /*child: ListView(
-                                children: <Widget>[
-                                  for (var item in (snapshot.data) )
-                                   if(item.shop == currentShop ){ CartItem(item) },
-                                ],
-                              ),*/
+                              child: ListView(
+                                children: list,
+                              ),
                           )
                           ],
                         ),
@@ -101,7 +113,7 @@ class _CartPageState extends State<CartPage> {
                               style: TextStyle(fontSize: 16),
                             ),
                             Text(
-                              "${cart.getTotalprice(currentShop)}",
+                              "$currentPrice",
                               style: TextStyle(
                               fontWeight: FontWeight.w600,
                               color: Colors.red,
@@ -109,7 +121,7 @@ class _CartPageState extends State<CartPage> {
                             ),
                             FlatButton(
                             onPressed: () {
-                                //cart.create_order(orderitemslist);
+                                cart.create_order(currentShop);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -172,9 +184,11 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Consumer<Shops>(builder: (context, shops, child) {
+
     return MaterialButton(
         color: isSelected ? Colors.grey : Colors.grey[800],
-        child: Text(shopId, style: TextStyle(color: Colors.white)),
+        child: Text(shops.getShopById(shopId).name, style: TextStyle(color: Colors.white)),
         onPressed: () {
           Scrollable.ensureVisible(
             context,
@@ -184,6 +198,7 @@ class Button extends StatelessWidget {
           );
           onPressed();
         });
+
+        });
   }
 }
-
