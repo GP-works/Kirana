@@ -99,21 +99,24 @@ class CartModel extends ChangeNotifier {
     if (length > 0) {
       int i;
       List<String> sublist = menuitemids.sublist(0, length % 10);
-      QuerySnapshot snapshot = await Firestore.instance
+      print(sublist);
+      Query query =  Firestore.instance
           .collectionGroup('items')
-          .where('menuitemid', whereIn: sublist)
-          .where('updatedat', isGreaterThan: prefs.getInt('lastupdated'))
-          .getDocuments();
+          .where("id", whereIn: sublist)
+          .where('updatedat', isGreaterThan: prefs.getInt('lastupdated'));
+      print(query.buildArguments());
+        QuerySnapshot snapshot=await query.getDocuments();
       snapshot.documents.forEach((element) {
         update(Item.fromJson(element.data));
+        print(element.data);
         notifyListeners();
       });
-      for (i = length % 10; i < length / 10; length++) {
-        List<String> sublist = menuitemids.sublist(i * 10, i * 10 + 10);
+      for (i = length % 10; i < length; length+=10) {
+        List<String> sublist = menuitemids.sublist(i, i  + 10);
         QuerySnapshot snapshot = await Firestore.instance
             .collectionGroup('items')
-            .where('menuitemid', whereIn: sublist)
-            .getDocuments();
+            .where('id', whereIn: sublist).
+            where('updatedat', isGreaterThan: prefs.getInt('lastupdated')).getDocuments();
         snapshot.documents.forEach((element) {
           update(Item.fromJson(element.data));
           notifyListeners();
