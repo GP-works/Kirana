@@ -38,8 +38,6 @@ class Shops extends ChangeNotifier {
   void setItems(shopownerid) {
     print(shops);
     selectedshopid = shopownerid;
-    items.addFromFireStore(shopownerid);
-    print("inside shops");
     print(shops);
     writeshoptoSF(shopownerid);
     notifyListeners();
