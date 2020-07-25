@@ -8,6 +8,7 @@ class Order {
   int createdAt;
   String status;
   String id;
+  double price;
   Order.fromdocument(DocumentSnapshot document) {
     shopid = document.data['shopid'];
     userid = document.data['userid'];
@@ -15,6 +16,7 @@ class Order {
     createdAt = document.data['createdAt'];
     status = document.data['status'];
     id = document.documentID;
+    price = document.data['price'];
   }
 
   Map<String, dynamic> toJson() {
@@ -23,18 +25,20 @@ class Order {
       'userid': userid,
       'remarks': remarks,
       'createdAt': createdAt,
-      'status': status
+      'status': status,
+      'price': price
     };
   }
 }
 
-class Orders {
+
   Stream<List<Order>> getUserOrders(userid) {
     return Firestore.instance
         .collection('orders')
         .where("userid", isEqualTo: userid)
         .snapshots()
-        .map((event) => event.documents.map((e) => Order.fromdocument(e)));
+        .map((event) =>
+            event.documents.map((e) => Order.fromdocument(e)).toList());
   }
 
   Stream<List<Order>> getOwnerOrders(userid) {
@@ -62,4 +66,4 @@ class Orders {
         .document(order.id)
         .updateData({'status': status});
   }
-}
+

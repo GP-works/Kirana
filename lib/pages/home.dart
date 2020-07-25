@@ -13,6 +13,7 @@ import 'package:kirana/pages/register.dart';
 import 'package:kirana/pages/items.dart';
 import 'package:kirana/pages/cart.dart';
 import 'package:kirana/pages/signin.dart';
+import 'package:kirana/models/orders.dart';
 
 class HomeApp extends StatefulWidget {
   @override
@@ -28,14 +29,12 @@ class _HomeAppState extends State<HomeApp> {
             create: (context) {
               User user = User();
               return user;
-            },
-          ),
+            }),
           ChangeNotifierProvider(create: (context) {
             Shops shop = Shops();
             shop.fromf();
             return shop;
           }),
-
           ChangeNotifierProvider(create: (context) {
             CartModel cart = CartModel();
             cart.fromf();

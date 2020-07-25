@@ -140,7 +140,8 @@ class CartModel extends ChangeNotifier {
       'status': 'ordered',
       'shopid': shopid,
       'remarks': "no",
-      'userid':userid
+      'userid':userid,
+      'price' :await getTotalprice(shopid)
 
     });
     orderitems.forEach((element) {
