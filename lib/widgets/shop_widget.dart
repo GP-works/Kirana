@@ -44,18 +44,17 @@ Widget Tile(Shop shop, Shops shopProvider, context) {
     ),
     subtitle: Padding(
       padding: const EdgeInsets.all(2.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            shop.owner,
-            style: TextStyle(fontSize: 18),
-          ),
-          Text(
-            "  " + shop.address,
-            style: TextStyle(fontSize: 18, color: Colors.red),
-          ),
-        ],
+      child: RichText(
+        text: TextSpan(
+          text: "" + shop.owner + ",",
+          style: TextStyle(fontSize: 18, color: Colors.black),
+          children: [
+            TextSpan(
+              text: "  " + shop.address,
+              style: TextStyle(fontSize: 18, color: Colors.red),
+            ),
+          ],
+        ),
       ),
     ),
   );

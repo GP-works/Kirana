@@ -12,9 +12,7 @@ import 'package:kirana/models/user.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
 class SignIn extends StatefulWidget {
-
   @override
   _SignInState createState() => _SignInState();
 }
@@ -88,29 +86,31 @@ class _SignInState extends State<SignIn> {
                       children: <Widget>[
                         Text("Forgot Password?"),
                         FlatButton(
-                          child: Text("Reset",style: TextStyle(fontSize: 20),),
-                          onPressed:(){
-                            if(EmailValidator.validate(_emailController.text)) {
+                          child: Text(
+                            "Reset",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          onPressed: () {
+                            if (EmailValidator.validate(
+                                _emailController.text)) {
                               resetPassword(_emailController.text);
                               _showMyDialog(_emailController.text);
+                            } else {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text("Please enter valid email ")));
                             }
-                            else
-                              {
-                                Scaffold.of(context)
-                                    .showSnackBar(SnackBar(content: Text("Please enter valid email ")));
-                              }
                           },
                         ),
                       ],
                     ),
                   )
-
                 ],
               )
             ],
           ),
         )));
   }
+
   Future<void> resetPassword(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
   }
@@ -125,10 +125,8 @@ class _SignInState extends State<SignIn> {
       if (user != null) {
         if (user.isEmailVerified) {
           setState(() {
-            _user=User();
-             _user.setData();
-             _user.writetoSf();
-            _user.notifyListeners();
+            _user = User();
+            _user.setData();
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => Navigation()));
           });
@@ -136,13 +134,12 @@ class _SignInState extends State<SignIn> {
           Scaffold.of(context)
               .showSnackBar(SnackBar(content: Text("Please verify email ")));
         }
-      } else {
-
-      }
+      } else {}
     } catch (e) {
       Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
     }
   }
+
   Future<void> _showMyDialog(email) async {
     return showDialog<void>(
       context: context, // user must tap button!
@@ -153,21 +150,30 @@ class _SignInState extends State<SignIn> {
             child: ListBody(
               children: <Widget>[
                 Text('An Email was sent to your email'),
-                SizedBox(height: 10,),
-                Text("${email}",style: TextStyle(color: Colors.green[800],fontWeight: FontWeight.bold),),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "${email}",
+                  style: TextStyle(
+                      color: Colors.green[800], fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Text("With further steps please check your email")
               ],
             ),
           ),
           actions: <Widget>[
-
             Padding(
-              padding:  EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/3,0,0,0),
+              padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width / 3, 0, 0, 0),
               child: FlatButton(
-                child: Text('Ok',style: TextStyle(fontSize: 20)),
+                child: Text('Ok', style: TextStyle(fontSize: 20)),
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(context,'/signin',(dynamic)=>dynamic==ModalRoute.withName("/signin"));
+                  Navigator.pushNamedAndRemoveUntil(context, '/signin',
+                      (dynamic) => dynamic == ModalRoute.withName("/signin"));
                 },
               ),
             ),

@@ -16,19 +16,22 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   double currentPrice;
   String currentShop;
+  User user;
 
   void updatePrice(CartModel cart) async {
-    double currentprice = await cart.getTotalprice(currentShop);
+    double currentprice = await cart.getTotalprice(currentShop, user.uid);
     setState(() {
       currentPrice = currentprice;
     });
   }
+
   @override
   Widget build(BuildContext context) {
+    user = Provider.of<User>(context, listen: false);
     return Container(
         child: Consumer<CartModel>(builder: (context, cart, child) {
       return StreamBuilder<List<Orderitem>>(
-        stream: cart.fromf(),
+        stream: cart.fromf(user.uid),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Scaffold(
@@ -38,7 +41,7 @@ class _CartPageState extends State<CartPage> {
                       padding: EdgeInsets.only(right: 20.0),
                       child: GestureDetector(
                         onTap: () {
-                          cart.deleteAll(currentShop);
+                          cart.deleteAll(currentShop, user.uid);
                         },
                         child: Icon(
                           Icons.delete,
@@ -64,7 +67,7 @@ class _CartPageState extends State<CartPage> {
                     padding: EdgeInsets.only(right: 20.0),
                     child: GestureDetector(
                       onTap: () {
-                        cart.deleteAll(currentShop);
+                        cart.deleteAll(currentShop, user.uid);
                         this.currentShop = null;
                       },
                       child: Icon(
@@ -82,34 +85,31 @@ class _CartPageState extends State<CartPage> {
                       width: double.infinity,
                       color: Colors.black,
                       child: StreamBuilder<List<String>>(
-                        stream: cart.updateShops(),
-                        builder: (context, snapshots) {
-                          if(!snapshots.hasData)
-                            {
+                          stream: cart.updateShops(user.uid),
+                          builder: (context, snapshots) {
+                            if (!snapshots.hasData) {
                               return Center();
-                            }
-                          else {
-                            return Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.only(left: 10),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    for (String i in snapshots.data)
-                                      Container(
-                                        padding: const EdgeInsets.only(
-                                            left: 4.0, right: 4.0),
-                                        child: button(i),
-                                      )
-                                  ],
+                            } else {
+                              return Container(
+                                color: Colors.white,
+                                padding: EdgeInsets.only(left: 10),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      for (String i in snapshots.data)
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                              left: 4.0, right: 4.0),
+                                          child: button(i),
+                                        )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                        }
-                      ),
+                              );
+                            }
+                          }),
                     ),
                     Container(
                       child: Column(
@@ -122,46 +122,49 @@ class _CartPageState extends State<CartPage> {
               bottomNavigationBar: BottomAppBar(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children:currentShop != null ? <Widget>[
-                    Text(
-                      'Total price : ',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      "$currentPrice",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.red,
-                          fontSize: 18),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        User user=Provider.of<User>(context,listen: false);
-                        cart.create_order(currentShop,user.uid);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OrdersPage()));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                  children: currentShop != null
+                      ? <Widget>[
                           Text(
-                            "checkout",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
+                            'Total price : ',
+                            style: TextStyle(fontSize: 16),
                           ),
-                          Icon(
-                            Icons.arrow_forward,
-                            color: Colors.lightBlueAccent,
+                          Text(
+                            "$currentPrice",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.red,
+                                fontSize: 18),
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              User user =
+                                  Provider.of<User>(context, listen: false);
+                              cart.create_order(currentShop, user);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => OrdersPage()));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "checkout",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.lightBlueAccent,
+                                )
+                              ],
+                            ),
                           )
-                        ],
-                      ),
-                    )
-                  ]:[],
+                        ]
+                      : [],
                 ),
               ),
             );
@@ -172,18 +175,18 @@ class _CartPageState extends State<CartPage> {
   }
 
   Widget button(String shopId) {
-    if(currentShop==null)
-      {
-          currentShop=shopId;
-      }
-    return  Button(
-        key: ValueKey('button$shopId'),
-        isSelected: this.currentShop == shopId,
-        shopId: shopId,
-        onPressed: () {
-          showExample(shopId);
-        },
-      );}
+    if (currentShop == null) {
+      currentShop = shopId;
+    }
+    return Button(
+      key: ValueKey('button$shopId'),
+      isSelected: this.currentShop == shopId,
+      shopId: shopId,
+      onPressed: () {
+        showExample(shopId);
+      },
+    );
+  }
 
   void showExample(String shopId) => setState(() {
         this.currentShop = shopId;
@@ -211,7 +214,7 @@ class Button extends StatelessWidget {
       return MaterialButton(
           color: isSelected ? Colors.grey : Colors.grey[800],
           child: Text(shops.getShopByuserId(shopId).name,
-              style: TextStyle(color: Colors.white,fontSize: 20)),
+              style: TextStyle(color: Colors.white, fontSize: 20)),
           onPressed: () {
             Scrollable.ensureVisible(
               context,

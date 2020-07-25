@@ -4,6 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kirana/models/cart.dart';
 import 'package:kirana/models/shops.dart';
+import 'package:kirana/models/user.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/Item.dart';
@@ -18,13 +19,15 @@ class MenuItem extends StatefulWidget {
 
 class _MenuItemState extends State<MenuItem> {
   int count = 0;
+  User user;
   @override
   Widget build(BuildContext context) {
+    user = Provider.of<User>(context, listen: false);
     return Column(children: [_Tile(widget.item, context), Divider()]);
   }
 
   void getCount(CartModel cart, Item item) async {
-    int coun = await cart.getcount(item.id);
+    int coun = await cart.getcount(item.id, user.uid);
     if (this.mounted) {
       setState(() {
         count = coun;
@@ -38,7 +41,7 @@ class _MenuItemState extends State<MenuItem> {
       child: Row(
         children: <Widget>[
           CachedNetworkImage(
-            placeholder:(context,url)=> CircularProgressIndicator(),
+            placeholder: (context, url) => CircularProgressIndicator(),
             imageUrl: item.imageurl,
             width: MediaQuery.of(context).size.width / 4,
             height: 120,
@@ -147,18 +150,18 @@ class _MenuItemState extends State<MenuItem> {
   void _createitem(CartModel cart, Item item, BuildContext context) async {
     var shopProvider = Provider.of<Shops>(context, listen: false);
     cart.createentry(item.name, item.price, shopProvider.selectedshopid,
-        item.id, item.imageurl);
+        item.id, item.imageurl, user.uid);
     shopProvider.items.edititem();
   }
 
   void _incrementCount(CartModel cart, Item item, BuildContext context) async {
-    cart.incrementitem(item.id, await cart.getcount(item.id));
+    cart.incrementitem(item.id, count, user.uid);
     var shopProvider = Provider.of<Shops>(context, listen: false);
     shopProvider.items.edititem();
   }
 
   void _decrementCount(CartModel cart, Item item, BuildContext context) async {
-    cart.decrementitem(item.id, await cart.getcount(item.id));
+    cart.decrementitem(item.id, count, user.uid);
     var shopProvider = Provider.of<Shops>(context, listen: false);
     shopProvider.items.edititem();
   }
