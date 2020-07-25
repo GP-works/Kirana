@@ -132,14 +132,16 @@ class CartModel extends ChangeNotifier {
     WritetoSf();
   }
 
-  void create_order(shopid) async {
+  void create_order(shopid,userid) async {
     List<Orderitem> orderitems = await mydb.getAllItems(shopid);
     String unique = uuid.v1();
     Firestore.instance.collection('orders').document(unique).setData({
       'createdAt': DateTime.now().millisecondsSinceEpoch,
       'status': 'ordered',
       'shopid': shopid,
-      'remarks': "no"
+      'remarks': "no",
+      'userid':userid
+
     });
     orderitems.forEach((element) {
       Firestore.instance

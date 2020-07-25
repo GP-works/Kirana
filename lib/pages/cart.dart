@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/models/cart.dart';
+import 'package:kirana/models/user.dart';
 import 'package:kirana/widgets/cartitem_widget.dart';
 import 'package:kirana/pages/orders.dart';
 import 'package:kirana/widgets/drawer.dart';
@@ -134,7 +135,8 @@ class _CartPageState extends State<CartPage> {
                     ),
                     FlatButton(
                       onPressed: () {
-                        cart.create_order(currentShop);
+                        User user=Provider.of<User>(context,listen: false);
+                        cart.create_order(currentShop,user.uid);
                         Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -7,8 +7,6 @@ import 'package:kirana/pages/shops.dart';
 import 'signin.dart';
 import 'signup.dart';
 import 'package:provider/provider.dart';
-import 'package:kirana/models/orders.dart';
-import 'package:kirana/models/orderslist.dart';
 import 'package:kirana/pages/edititems.dart';
 import 'package:kirana/pages/orders.dart';
 import 'package:kirana/pages/register.dart';
@@ -37,18 +35,14 @@ class _HomeAppState extends State<HomeApp> {
             shop.fromf();
             return shop;
           }),
-          ChangeNotifierProvider(
-            create: (context) => OrdersListModel(),
-          ),
+
           ChangeNotifierProvider(create: (context) {
             CartModel cart = CartModel();
             cart.fromf();
             cart.getmenuitemids();
             return cart;
           }),
-          ChangeNotifierProvider(
-            create: (context) => OrdersModel(),
-          ),
+
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

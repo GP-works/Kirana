@@ -1,46 +1,65 @@
-import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kirana/database/cart.dart';
 
-class OrderItem {
-  String name;
-  double price;
-  int id;
-  int count;
-  String imageurl;
+class Order {
+  String shopid;
+  String userid;
+  String remarks;
+  int createdAt;
+  String status;
+  String id;
+  Order.fromdocument(DocumentSnapshot document) {
+    shopid = document.data['shopid'];
+    userid = document.data['userid'];
+    remarks = document.data['remarks'];
+    createdAt = document.data['createdAt'];
+    status = document.data['status'];
+    id = document.documentID;
+  }
 
-  OrderItem(this.name, this.price, this.id, this.count, this.imageurl);
-
-  @override
-  int get hashCode => this.id;
-
-  @override
-  bool operator ==(Object other) {
-    return other is OrderItem && other.id == id;
+  Map<String, dynamic> toJson() {
+    return {
+      'shopid': shopid,
+      'userid': userid,
+      'remarks': remarks,
+      'createdAt': createdAt,
+      'status': status
+    };
   }
 }
 
-class OrdersModel extends ChangeNotifier {
-  List<OrderItem> _orderitems = [];
-  int id;
-  get items => _orderitems;
-
-  OrderItem getItemById(int id) {
-    int index = _orderitems.indexWhere((element) => element.hashCode == id);
-    return _orderitems[index];
+class Orders {
+  Stream<List<Order>> getUserOrders(userid) {
+    return Firestore.instance
+        .collection('orders')
+        .where("userid", isEqualTo: userid)
+        .snapshots()
+        .map((event) => event.documents.map((e) => Order.fromdocument(e)));
   }
 
-  void add(OrderItem orderitem) {
-    _orderitems.add(orderitem);
-    print("added");
+  Stream<List<Order>> getOwnerOrders(userid) {
+    return Firestore.instance
+        .collection('orders')
+        .where("shopid", isEqualTo: userid)
+        .snapshots()
+        .map((event) =>
+            event.documents.map((e) => Order.fromdocument(e)).toList());
   }
 
-  @override
-  // ignore: hash_and_equals
-  int get hashCode => this.id;
+  Stream<List<Orderitem>> getorderitems(Order order) {
+    return Firestore.instance
+        .collection('orders')
+        .document(order.id)
+        .collection('orderitems')
+        .snapshots()
+        .map((event) =>
+            event.documents.map((e) => Orderitem.fromJson(e.data)).toList());
+  }
 
-  double price() {
-    // ignore: non_constant_identifier_names
-    double total_price = 0;
-    _orderitems.forEach((item) => total_price = total_price + item.price);
-    return total_price;
+  void update(Order order, String status) {
+    Firestore.instance
+        .collection('orders')
+        .document(order.id)
+        .updateData({'status': status});
   }
 }
