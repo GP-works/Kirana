@@ -4,6 +4,7 @@ import 'package:kirana/database/cart.dart';
 import 'package:kirana/models/Item.dart';
 import 'package:kirana/models/shops.dart';
 import 'package:kirana/models/shop.dart';
+import 'package:kirana/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,56 +19,55 @@ class CartModel extends ChangeNotifier {
   int lastupdated;
   get items => orderitems;
   // ignore: unnecessary_getters_setters
-  Stream<List<Orderitem>> fromf() {
+  Stream<List<Orderitem>> fromf(String userid) {
     //mydb.watchCartItems().listen((event) { event.forEach((element) {orderitems.add(element);});});
     //        notifyListeners();
-    return mydb.watchCartItems();
+    return mydb.watchCartItems(userid);
   }
 
-  Future<int> getcount(String menuitemId) async {
+  Future<int> getcount(String menuitemId, String userid) async {
     Future<int> cnt;
-    cnt = mydb.getCount(menuitemId);
+    cnt = mydb.getCount(menuitemId, userid);
     return cnt;
   }
 
-  Future<double> getTotalprice(String shopId)
-  {
-    return mydb.getTotalPrice(shopId);
+  Future<double> getTotalprice(String shopId, String userid) async {
+    return await mydb.getTotalPrice(shopId, userid);
   }
 
-  Stream<List<String>> updateShops() {
-    return mydb.getshopids();
-
+  Stream<List<String>> updateShops(userid) {
+    return mydb.getshopids(userid);
   }
 
   void createentry(String name, double price, String shopid, String menuitemid,
-      String imageurl) {
+      String imageurl, String userid) {
     mydb.createEntry(
         name: name,
         price: price,
         shopid: shopid,
         menuitemid: menuitemid,
-        imageurl: imageurl);
+        imageurl: imageurl,
+        userid: userid);
     notifyListeners();
   }
 
-  void incrementitem(String menuitemId, int count) {
-    mydb.incrementItem(menuitemId, count);
+  void incrementitem(String menuitemId, int count, String userid) {
+    mydb.incrementItem(menuitemId, count, userid);
     notifyListeners();
   }
 
-  void decrementitem(String menuitemId, int count) {
-    mydb.decrementItem(menuitemId, count);
+  void decrementitem(String menuitemId, int count, String userid) {
+    mydb.decrementItem(menuitemId, count, userid);
     notifyListeners();
   }
 
-  void deleteItem(String menuitemId) {
-    mydb.deleteItem(menuitemId);
+  void deleteItem(String menuitemId, String userid) {
+    mydb.deleteItem(menuitemId, userid);
     notifyListeners();
   }
 
-  void deleteAll(String shopid) {
-    mydb.deleteall(shopid);
+  void deleteAll(String shopid, String userid) {
+    mydb.deleteall(shopid, userid);
   }
 
   void update(Item item) {
@@ -76,14 +76,6 @@ class CartModel extends ChangeNotifier {
         price: item.price,
         id: item.id,
         imageurl: item.imageurl);
-  }
-
-  double getprice(List<Orderitem> orderitems) {
-    double totalprice = 0;
-    orderitems.forEach((element) {
-      totalprice = totalprice + element.price;
-    });
-    return totalprice;
   }
 
   void readFromSF() async {
@@ -132,7 +124,7 @@ class CartModel extends ChangeNotifier {
     WritetoSf();
   }
 
-  void create_order(shopid,userid) async {
+  void create_order(shopid, User user) async {
     List<Orderitem> orderitems = await mydb.getAllItems(shopid);
     String unique = uuid.v1();
     Firestore.instance.collection('orders').document(unique).setData({
@@ -140,9 +132,9 @@ class CartModel extends ChangeNotifier {
       'status': 'ordered',
       'shopid': shopid,
       'remarks': "no",
-      'userid':userid,
-      'price' :await getTotalprice(shopid)
-
+      'userid': user.uid,
+      'userName': user.name,
+      'price': await getTotalprice(shopid, user.uid)
     });
     orderitems.forEach((element) {
       Firestore.instance
@@ -151,7 +143,7 @@ class CartModel extends ChangeNotifier {
           .collection('orderitems')
           .document(element.menuitemid)
           .setData(element.toJson());
-      mydb.updateToOrdered(element.menuitemid);
+      mydb.updateToOrdered(element.menuitemid, user.uid);
     });
   }
 }

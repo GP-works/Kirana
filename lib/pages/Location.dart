@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kirana/models/shop.dart';
 import 'package:kirana/pages/shops.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
+import 'package:kirana/models/user.dart';
 
 class Location extends StatefulWidget {
   final Shop shop;
@@ -61,6 +62,7 @@ class _LocationState extends State<Location> {
                       adressLane1: _address1Controller.text,
                       pincode: _pincodeController.text,
                       adressLane2: _address2Controller.text);
+                  ChangeStatus();
                   if (!b) {
                     Scaffold.of(context).showSnackBar(
                         SnackBar(content: Text("failed to upload")));
@@ -93,19 +95,18 @@ class _LocationState extends State<Location> {
 
   _getCurrentLocation() async {
     try {
-      if(!await geolocator.isLocationServiceEnabled())
-      {
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text("please enable location service in you device")));
+      if (!await geolocator.isLocationServiceEnabled()) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text("please enable location service in you device")));
       }
       _currentPosition = await geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       _getAddressFromLatLng();
     } catch (e) {
-      if(!await geolocator.isLocationServiceEnabled())
-        {
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text("please enable location service in you device")));
-        }
-      else {
+      if (!await geolocator.isLocationServiceEnabled()) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text("please enable location service in you device")));
+      } else {
         Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
       }
     }

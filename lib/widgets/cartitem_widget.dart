@@ -5,6 +5,7 @@ import 'package:kirana/database/cart.dart';
 import 'package:kirana/models/cart.dart';
 import 'package:kirana/models/items.dart';
 import 'package:kirana/models/shops.dart';
+import 'package:kirana/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:kirana/models/Item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,14 +20,16 @@ class CartItem extends StatefulWidget {
 
 class _CartItemState extends State<CartItem> {
   int count = 0;
+  User user;
 
   @override
   Widget build(BuildContext context) {
+    user = Provider.of<User>(context, listen: false);
     return Column(children: [_Tile(widget.orderitem), Divider()]);
   }
 
   void getCount(CartModel cart, Orderitem item) async {
-    int coun = await cart.getcount(item.menuitemid);
+    int coun = await cart.getcount(item.menuitemid, user.uid);
     setState(() {
       count = coun;
     });
@@ -124,14 +127,14 @@ class _CartItemState extends State<CartItem> {
   }
 
   void _incrementCount(CartModel cart, Orderitem item) async {
-    cart.incrementitem(item.menuitemid, await cart.getcount(item.menuitemid));
+    cart.incrementitem(item.menuitemid, count, user.uid);
   }
 
   void _decrementCount(CartModel cart, Orderitem item) async {
-    cart.decrementitem(item.menuitemid, await cart.getcount(item.menuitemid));
+    cart.decrementitem(item.menuitemid, count, user.uid);
   }
 
   void _delete(CartModel cart, Orderitem item) {
-    cart.deleteItem(item.menuitemid);
+    cart.deleteItem(item.menuitemid, user.uid);
   }
 }

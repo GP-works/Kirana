@@ -9,6 +9,7 @@ class Order {
   String status;
   String id;
   double price;
+  String userName;
   Order.fromdocument(DocumentSnapshot document) {
     shopid = document.data['shopid'];
     userid = document.data['userid'];
@@ -17,6 +18,7 @@ class Order {
     status = document.data['status'];
     id = document.documentID;
     price = document.data['price'];
+    userName = document.data['userName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,44 +28,45 @@ class Order {
       'remarks': remarks,
       'createdAt': createdAt,
       'status': status,
-      'price': price
+      'price': price,
+      'userName': userName
     };
   }
 }
 
+Stream<List<Order>> getUserOrders(userid) {
+  return Firestore.instance
+      .collection('orders')
+      .where("userid", isEqualTo: userid)
+      .orderBy('createdAt', descending: true)
+      .snapshots()
+      .map((event) =>
+          event.documents.map((e) => Order.fromdocument(e)).toList());
+}
 
-  Stream<List<Order>> getUserOrders(userid) {
-    return Firestore.instance
-        .collection('orders')
-        .where("userid", isEqualTo: userid)
-        .snapshots()
-        .map((event) =>
-            event.documents.map((e) => Order.fromdocument(e)).toList());
-  }
+Stream<List<Order>> getOwnerOrders(userid) {
+  return Firestore.instance
+      .collection('orders')
+      .where("shopid", isEqualTo: userid)
+      .orderBy('createdAt', descending: true)
+      .snapshots()
+      .map((event) =>
+          event.documents.map((e) => Order.fromdocument(e)).toList());
+}
 
-  Stream<List<Order>> getOwnerOrders(userid) {
-    return Firestore.instance
-        .collection('orders')
-        .where("shopid", isEqualTo: userid)
-        .snapshots()
-        .map((event) =>
-            event.documents.map((e) => Order.fromdocument(e)).toList());
-  }
+Stream<List<Orderitem>> getorderitems(Order order) {
+  return Firestore.instance
+      .collection('orders')
+      .document(order.id)
+      .collection('orderitems')
+      .snapshots()
+      .map((event) =>
+          event.documents.map((e) => Orderitem.fromJson(e.data)).toList());
+}
 
-  Stream<List<Orderitem>> getorderitems(Order order) {
-    return Firestore.instance
-        .collection('orders')
-        .document(order.id)
-        .collection('orderitems')
-        .snapshots()
-        .map((event) =>
-            event.documents.map((e) => Orderitem.fromJson(e.data)).toList());
-  }
-
-  void update(Order order, String status) {
-    Firestore.instance
-        .collection('orders')
-        .document(order.id)
-        .updateData({'status': status});
-  }
-
+void update(Order order, String status) {
+  Firestore.instance
+      .collection('orders')
+      .document(order.id)
+      .updateData({'status': status});
+}

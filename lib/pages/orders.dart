@@ -11,28 +11,31 @@ class OrdersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<User>(context,listen: false);
+    User user = Provider.of<User>(context, listen: false);
     return Container(
       child: StreamBuilder<List<Order>>(
-        stream: user.role == 'user' ? getUserOrders(user.uid) : getOwnerOrders(user.uid),
+        stream: user.role != 'owner'
+            ? getUserOrders(user.uid)
+            : getOwnerOrders(user.uid),
         builder: (context, snapshot) {
-          if(!snapshot.hasData){
+          if (!snapshot.hasData) {
             return Scaffold(
-              drawer: DrawerPage(),
-              body: Center(
+                drawer: DrawerPage(),
+                body: Center(
                   child: CircularProgressIndicator(),
-                )
-            );
-          }
-          else{
+                ));
+          } else {
             List<Order_widget> list = [];
             for (var item in (snapshot.data)) {
-               list.add(Order_widget(item));
+              list.add(Order_widget(item));
             }
             return Scaffold(
               drawer: DrawerPage(),
               body: ListView(children: list),
-              appBar: AppBar(title: Text("APP_NAME"),actions: <Widget>[CartIcon()],),
+              appBar: AppBar(
+                title: Text("APP_NAME"),
+                actions: <Widget>[CartIcon()],
+              ),
             );
           }
         },

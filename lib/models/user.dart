@@ -132,7 +132,6 @@ class User extends ChangeNotifier {
     notifyListeners();
     await _auth.signOut();
     Navigator.pushReplacementNamed(context, "/signin");
-
   }
 
   bool isLogged() {
@@ -210,12 +209,14 @@ class _GoogleSignInSectionState extends State<GoogleSignInSection> {
     setState(() {
       if (user != null && user.isEmailVerified) {
         _user = Provider.of<User>(context, listen: false);
-        _user.uid = user.uid;
-        _user.email = user.email;
-        _user.name = user.displayName;
-        _user.role = "user";
         if (authresult.additionalUserInfo.isNewUser) {
+          _user.uid = user.uid;
+          _user.email = user.email;
+          _user.name = user.displayName;
+          _user.role = "user";
           _user.createUser();
+        } else {
+          _user.setData();
         }
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Navigation()));
@@ -230,4 +231,15 @@ class _GoogleSignInSectionState extends State<GoogleSignInSection> {
       }
     });
   }
+}
+
+void ChangeStatus() async {
+  FirebaseUser user = await _auth.currentUser();
+  Firestore.instance
+      .collection('users')
+      .document(user.uid)
+      .updateData({"userRole": 'owner'});
+  User user1 = User();
+  user1.setData();
+  user1.writetoSf();
 }

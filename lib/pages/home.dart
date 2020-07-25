@@ -25,11 +25,10 @@ class _HomeAppState extends State<HomeApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-            create: (context) {
-              User user = User();
-              return user;
-            }),
+          ChangeNotifierProvider(create: (context) {
+            User user = User();
+            return user;
+          }),
           ChangeNotifierProvider(create: (context) {
             Shops shop = Shops();
             shop.fromf();
@@ -37,11 +36,9 @@ class _HomeAppState extends State<HomeApp> {
           }),
           ChangeNotifierProvider(create: (context) {
             CartModel cart = CartModel();
-            cart.fromf();
             cart.getmenuitemids();
             return cart;
           }),
-
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
