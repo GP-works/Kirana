@@ -35,14 +35,9 @@ class CartModel extends ChangeNotifier {
     return mydb.getTotalPrice(shopId);
   }
 
-  void updateShops() {
-    
-    mydb.getshopids().listen((event) {
-      event.forEach((element) {
-        shops.add(element);
-      });
-    });
-    notifyListeners();
+  Stream<List<String>> updateShops() {
+    return mydb.getshopids();
+
   }
 
   void createentry(String name, double price, String shopid, String menuitemid,
@@ -71,8 +66,8 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteAll() {
-    mydb.deleteall();
+  void deleteAll(String shopid) {
+    mydb.deleteall(shopid);
   }
 
   void update(Item item) {

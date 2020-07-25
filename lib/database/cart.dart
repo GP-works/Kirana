@@ -67,22 +67,23 @@ class MyDatabase extends _$MyDatabase {
     return count;
   }
 
-  Stream<List<dynamic>> getshopids() {
-    final query = (selectOnly(orderitems, distinct: true))
-      ..addColumns([orderitems.shop]);
+  Stream<List<String>> getshopids() {
+    final query = ((selectOnly(orderitems, distinct: true)..where(orderitems.status.equals('cart')))
+      ..addColumns([orderitems.shop])).map((row) => row.read(orderitems.shop));
     return query.watch();
   }
 
-  Future<double> getTotalPrice(String shopid) {
+  Future<double> getTotalPrice(String shopid) async{
     final query = ((selectOnly(orderitems, distinct: true))
           ..where(orderitems.status.equals('cart'))
           ..where(orderitems.shop.equals(shopid))
-          ..addColumns([orderitems.price, orderitems.price]))
+          ..addColumns([orderitems.price, orderitems.count]))
         .map((row) {
       return row.read(orderitems.price) * row.read(orderitems.count);
     });
-    final sum =
-        query.watch().fold(0, (previous, element) => previous + element);
+    List<double> price =
+        await query.get();
+    double sum=price.fold(0, (previousValue, element) =>previousValue+element);
     return sum;
   }
 
@@ -117,8 +118,8 @@ class MyDatabase extends _$MyDatabase {
         .go();
   }
 
-  Future deleteall() async {
-    return (delete(orderitems)).go();
+  Future deleteall(String shopid) async {
+    return (delete(orderitems)..where((tbl) => tbl.shop.equals(shopid))).go();
   }
 
   Future decrementItem(menuitemid, count) async {

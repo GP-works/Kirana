@@ -13,154 +13,174 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-
   double currentPrice;
   String currentShop;
 
-  void updatePrice(CartModel cart) async{
+  void updatePrice(CartModel cart) async {
     double currentprice = await cart.getTotalprice(currentShop);
     setState(() {
       currentPrice = currentprice;
     });
   }
-
   @override
   Widget build(BuildContext context) {
-    return Container(child:
-        Consumer<CartModel>(builder: (context, cart, child) {
-        return StreamBuilder<List<Orderitem>>(
-          stream: cart.fromf(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Scaffold(
-                  drawer: DrawerPage(),
-                  appBar: AppBar(title: Text("Cart"), actions: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(right: 20.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            cart.deleteAll();
-                          },
-                          child: Icon(
-                            Icons.delete,
-                            size: 26.0,
-                            color: Colors.red,
-                          ),
-                        ))
-                  ]),
-                  body: Center(
-                    child: CircularProgressIndicator(),
-                  ));
-            } 
-            else{
-                  //var shopProvider = Provider.of<Shops>(context, listen: false);
-                  updatePrice(cart);
-                  List<CartItem> list = [];
-                  for (var item in (snapshot.data) )
-                     {
-                       if(item.shop == currentShop )
-                         list.add(CartItem(item)); 
-                     }
-                  cart.updateShops();
-                  return Scaffold(
-                    drawer: DrawerPage(),
-                    appBar: AppBar(title: Text("APP_NAME"), actions: <Widget>[
-                     Padding(
-                        padding: EdgeInsets.only(right: 20.0),
-                        child: GestureDetector(
+    return Container(
+        child: Consumer<CartModel>(builder: (context, cart, child) {
+      return StreamBuilder<List<Orderitem>>(
+        stream: cart.fromf(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Scaffold(
+                drawer: DrawerPage(),
+                appBar: AppBar(title: Text("Cart"), actions: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.only(right: 20.0),
+                      child: GestureDetector(
                         onTap: () {
-                          cart.deleteAll();
+                          cart.deleteAll(currentShop);
                         },
                         child: Icon(
                           Icons.delete,
                           size: 26.0,
                           color: Colors.red,
                         ),
-                          ))
-                                ]),
-                    body: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                              height: 50,
-                              width: double.infinity,
-                              color: Colors.black,
+                      ))
+                ]),
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ));
+          } else {
+            //var shopProvider = Provider.of<Shops>(context, listen: false);
+            updatePrice(cart);
+            List<CartItem> list = [];
+            for (var item in (snapshot.data)) {
+              if (item.shop == currentShop) list.add(CartItem(item));
+            }
+            return Scaffold(
+              drawer: DrawerPage(),
+              appBar: AppBar(title: Text("APP_NAME"), actions: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        cart.deleteAll(currentShop);
+                      },
+                      child: Icon(
+                        Icons.delete,
+                        size: 26.0,
+                        color: Colors.red,
+                      ),
+                    ))
+              ]),
+              body: Container(
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      height: 50,
+                      width: double.infinity,
+                      color: Colors.black,
+                      child: StreamBuilder<List<String>>(
+                        stream: cart.updateShops(),
+                        builder: (context, snapshots) {
+                          if(!snapshots.hasData)
+                            {
+                              return Center();
+                            }
+                          else {
+                            return Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.only(left: 10),
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
-                                  child: Row(
+                                child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                  for (int i = 0; i < cart.shops.length; i++)
-                                    Container(
-                                      width: 58,
-                                      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                                      child: button(cart.shops[i])),
-                                   ],),),),
-                          Container(
-                              child: ListView(
-                                children: list,
+                                    for (String i in snapshots.data)
+                                      Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 4.0, right: 4.0),
+                                        child: button(i),
+                                      )
+                                  ],
+                                ),
                               ),
-                          )
-                          ],
-                        ),
-                        ),
-                    bottomNavigationBar: BottomAppBar(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              'Total price : ',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                              "$currentPrice",
-                              style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.red,
-                              fontSize: 18),
-                            ),
-                            FlatButton(
-                            onPressed: () {
-                                cart.create_order(currentShop);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => OrdersPage()));
-                          },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                              Text(
-                                "checkout",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                               ),
-                              ),
-                            Icon(
-                              Icons.arrow_forward,
-                              color: Colors.lightBlueAccent,
-                            )],
-                        ),)], ),
+                            );
+                          }
+                        }
                       ),
-                  );
-            }
-          },
-        );
-      })); 
-    }
+                    ),
+                    Container(
+                      child: Column(
+                        children: list,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              bottomNavigationBar: BottomAppBar(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children:currentShop!=null? <Widget>[
+                    Text(
+                      'Total price : ',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      "$currentPrice",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                          fontSize: 18),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        cart.create_order(currentShop);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OrdersPage()));
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "checkout",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward,
+                            color: Colors.lightBlueAccent,
+                          )
+                        ],
+                      ),
+                    )
+                  ]:[],
+                ),
+              ),
+            );
+          }
+        },
+      );
+    }));
+  }
 
-    Widget button(String shopId) => Button(
+  Widget button(String shopId) {
+    if(currentShop==null)
+      {
+          currentShop=shopId;
+      }
+    return  Button(
         key: ValueKey('button$shopId'),
         isSelected: this.currentShop == shopId,
         shopId: shopId,
         onPressed: () {
-          showExample(
-            shopId
-          );
+          showExample(shopId);
         },
-      );
+      );}
 
   void showExample(String shopId) => setState(() {
         this.currentShop = shopId;
@@ -184,21 +204,20 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Consumer<Shops>(builder: (context, shops, child) {
-
-    return MaterialButton(
-        color: isSelected ? Colors.grey : Colors.grey[800],
-        child: Text(shops.getShopById(shopId).name, style: TextStyle(color: Colors.white)),
-        onPressed: () {
-          Scrollable.ensureVisible(
-            context,
-            duration: Duration(milliseconds: 350),
-            curve: Curves.easeOut,
-            alignment: 0.5,
-          );
-          onPressed();
-        });
-
-        });
+    return Consumer<Shops>(builder: (context, shops, child) {
+      return MaterialButton(
+          color: isSelected ? Colors.grey : Colors.grey[800],
+          child: Text(shops.getShopByuserId(shopId).name,
+              style: TextStyle(color: Colors.white,fontSize: 20)),
+          onPressed: () {
+            Scrollable.ensureVisible(
+              context,
+              duration: Duration(milliseconds: 350),
+              curve: Curves.easeOut,
+              alignment: 0.5,
+            );
+            onPressed();
+          });
+    });
   }
 }

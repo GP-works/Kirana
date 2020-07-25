@@ -32,7 +32,6 @@ class OrdersListModel extends ChangeNotifier{
           });
     order.id = DateTime.now().millisecondsSinceEpoch;
     add(order);
-    cart.deleteAll();
     notifyListeners();
   }
 }
