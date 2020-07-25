@@ -29,8 +29,6 @@ class Orderitems extends Table {
 
   TextColumn get menuitemid => text()();
 
-  @override
-  List<String> get customConstraints => ['UNIQUE (menuitemid, status)'];
 }
 
 @UseMoor(

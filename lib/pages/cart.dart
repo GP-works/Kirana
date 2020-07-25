@@ -65,6 +65,7 @@ class _CartPageState extends State<CartPage> {
                     child: GestureDetector(
                       onTap: () {
                         cart.deleteAll(currentShop);
+                        this.currentShop = null;
                       },
                       child: Icon(
                         Icons.delete,
@@ -121,7 +122,7 @@ class _CartPageState extends State<CartPage> {
               bottomNavigationBar: BottomAppBar(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children:currentShop!=null? <Widget>[
+                  children:currentShop != null ? <Widget>[
                     Text(
                       'Total price : ',
                       style: TextStyle(fontSize: 16),

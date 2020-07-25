@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kirana/models/orders.dart';
+import 'package:kirana/database/cart.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class OrderItem_widget extends StatefulWidget {
-  OrderItem orderitem;
+  Orderitem orderitem;
   OrderItem_widget(this.orderitem);
 
   @override
@@ -18,7 +19,7 @@ class _OrderItem_widgetState extends State<OrderItem_widget> {
     return Column(children: [_Tile(widget.orderitem), Divider()]);
   }
 
-  Widget _Tile(OrderItem item) {
+  Widget _Tile(Orderitem item) {
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
       child: Row(
