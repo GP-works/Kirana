@@ -10,10 +10,10 @@ class ShopPage extends StatefulWidget {
   ShopPage(this.id);
 
   @override
-  _MenuItemState createState() => _MenuItemState();
+  _ShopPageState createState() => _ShopPageState();
 }
 
-class _MenuItemState extends State<ShopPage> {
+class _ShopPageState extends State<ShopPage> {
   int count = 0;
 
   @override

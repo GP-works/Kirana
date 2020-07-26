@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/models/Item.dart';
 import 'package:kirana/models/shops.dart';
+import 'package:kirana/models/shop.dart';
 import 'package:kirana/widgets/GotoCartIcon.dart';
 import 'package:kirana/widgets/drawer.dart';
 import 'package:kirana/widgets/menuitem_widget.dart';
@@ -14,6 +15,15 @@ class ItemsPage extends StatefulWidget {
 class _ItemsPageState extends State<ItemsPage> {
   final name = 'Items';
   List<Item> items;
+  Shop shop;
+
+  void setShop(String shopId)async{
+    var shopProvider = Provider.of<Shops>(context, listen: false);
+    Shop tShop = await shopProvider.getShopByuserId(shopId);
+    setState(() {
+      shop = tShop;
+    });
+  } 
   @override
   Widget build(BuildContext context) {
     return Consumer<Shops>(builder: (context, catalog, child) {
@@ -23,18 +33,45 @@ class _ItemsPageState extends State<ItemsPage> {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             } else {
+
+              List<MenuItem> list =[];
+              for (var item in (snapshot.data)) list.add(MenuItem(item));
+              setShop(catalog.selectedshopid);
               return Scaffold(
-                drawer: DrawerPage(),
-                body: ListView(children: [
-                  for (var item in (snapshot.data)) MenuItem(item),
-                ]),
-                appBar: AppBar(
-                  title: Text("APP_NAME"),
-                  actions: <Widget>[Search(snapshot.data), CartIcon()],
+                  drawer: DrawerPage(),
+                  body: CustomScrollView(
+                  slivers: <Widget>[
+              SliverAppBar(
+                actions: <Widget>[Search(snapshot.data), CartIcon()],
+                expandedHeight: 220.0,
+                floating: true,
+                pinned: true,
+                snap: true,
+                elevation: 50,
+                backgroundColor: Colors.blue,
+                flexibleSpace: FlexibleSpaceBar(
+                    titlePadding: EdgeInsets.fromLTRB(55, 10, 0, 10),
+                    title: Text('${shop.name}\n\t\t\t\t\t\t\t\t\t\t${shop.address}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                        )),
+                    background: Image.network(
+                      shop.imageurl,
+                      fit: BoxFit.cover,
+                    )
                 ),
-              );
+              ),
+              new SliverList(
+                  delegate: new SliverChildListDelegate(list)
+              ),
+            ],
+          ),
+        
+      );
+    }
             }
-          });
+          );
     });
   }
 }
