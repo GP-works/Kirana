@@ -1,4 +1,3 @@
-
 import 'package:kirana/models/items.dart';
 import 'package:kirana/models/shop.dart';
 import 'package:kirana/models/shops.dart';
@@ -114,7 +113,10 @@ class _AddItemPageFormState extends State<AddItemPageForm> {
                       setState(() {});
                       if (_formKey.currentState.validate() &&
                           itemimage != null) {
-                        isLoading = true;
+                        setState(() {
+                          isLoading = true;
+                        });
+
                         await uploadImage();
                         itemname = nameController.text;
                         price = double.parse(priceController.text);

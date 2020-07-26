@@ -85,8 +85,8 @@ class Shop {
     _ownerName = ownerName;
     _phoneNumber = phoneNumber;
     _email = email;
-    description = description;
-    imageurl = imageurl;
+    this.description = description;
+    this.imageurl = imageurl;
     id = uuid.v1();
   }
 
