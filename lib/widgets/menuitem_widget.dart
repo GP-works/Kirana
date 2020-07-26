@@ -20,6 +20,7 @@ class MenuItem extends StatefulWidget {
 class _MenuItemState extends State<MenuItem> {
   int count = 0;
   User user;
+  bool showDescription = false;
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context, listen: false);
@@ -36,10 +37,17 @@ class _MenuItemState extends State<MenuItem> {
   }
 
   Widget _Tile(Item item, BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(20, 5, 5, 0),
-      child: Row(
-        children: <Widget>[
+    return GestureDetector(
+      onTap: () {
+        this.showDescription = !this.showDescription;
+      },
+      child: Container(
+      padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
+      child: Container(
+        child:Column(
+          children: <Widget>[
+            Row(
+             children: <Widget>[
           CachedNetworkImage(
             placeholder: (context, url) => CircularProgressIndicator(),
             imageUrl: item.imageurl,
@@ -88,14 +96,24 @@ class _MenuItemState extends State<MenuItem> {
                   return (count == 0)
                       ? buttonFlat(cartp, item, context)
                       : buttonIncrementDecrement(cartp, item, context);
-                })
+                }),
               ],
             ),
-          )
+          ),
+        
         ],
       ),
-    );
+      if(this.showDescription)
+              Text('${item.description}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.blue
+              ),
+              )
+      ],
+    ))));
   }
+  
 
   Widget buttonFlat(CartModel cart, Item item, BuildContext context) {
     return ConstrainedBox(
