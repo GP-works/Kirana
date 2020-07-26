@@ -4,20 +4,25 @@ import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kirana/models/Item.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+
+Geoflutterfire geo = Geoflutterfire();
 
 class Shops extends ChangeNotifier {
   List<Shop> shops = [];
   ItemsModel items = ItemsModel();
   String selectedshopid;
   Shops();
-  void fromf() async {
+  Stream<List<Shop>> fromf(
+      {@required latitude, @required longitude, radius = 30}) {
     shops = [];
-    QuerySnapshot snapshot =
-        await Firestore.instance.collection('shops').getDocuments();
-    snapshot.documents.forEach((element) {
-      shops.add(Shop.fromJson(element.data));
-      notifyListeners();
-    });
+    GeoFirePoint center = geo.point(latitude: latitude, longitude: longitude);
+    var collectionReference = Firestore.instance.collection('shops');
+    double radius = 50;
+    return geo
+        .collection(collectionRef: collectionReference)
+        .within(center: center, radius: radius, field: 'location')
+        .map((event) => event.map((e) => Shop.fromJson(e.data)).toList());
   }
 
   Shop getShopById(String id) {

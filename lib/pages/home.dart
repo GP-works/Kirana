@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/models/cart.dart';
+import 'package:kirana/models/location.dart';
 import 'package:kirana/models/shops.dart';
 import 'package:kirana/models/user.dart';
 import 'package:kirana/pages/navigation.dart';
@@ -31,7 +32,6 @@ class _HomeAppState extends State<HomeApp> {
           }),
           ChangeNotifierProvider(create: (context) {
             Shops shop = Shops();
-            shop.fromf();
             return shop;
           }),
           ChangeNotifierProvider(create: (context) {
@@ -39,6 +39,7 @@ class _HomeAppState extends State<HomeApp> {
             cart.getmenuitemids();
             return cart;
           }),
+          ChangeNotifierProvider(create: (context) => LocationModel())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

@@ -5,7 +5,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kirana/models/items.dart';
 import 'package:uuid/uuid.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
+Geoflutterfire geo = Geoflutterfire();
 var uuid = Uuid();
 FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -102,6 +104,8 @@ class Shop {
   }
 
   Map<String, dynamic> toJson() {
+    GeoFirePoint myLocation =
+        geo.point(latitude: _latitude, longitude: _longitude);
     return {
       "id": id,
       "userid": userid,
@@ -116,7 +120,8 @@ class Shop {
       "address2": _adressLane2,
       "pincode": _pincode,
       "description": description,
-      "imageurl": imageurl
+      "imageurl": imageurl,
+      "location": myLocation.data
     };
   }
 }

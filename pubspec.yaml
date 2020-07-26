@@ -41,6 +41,7 @@ dependencies:
   path:
   uuid: ^2.2.0
   intl:
+  geoflutterfire: ^2.1.0
 
 
 
