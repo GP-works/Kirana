@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kirana/models/cart.dart';
+import 'package:kirana/models/shop.dart';
 import 'package:kirana/models/user.dart';
 import 'package:kirana/widgets/cartitem_widget.dart';
 import 'package:kirana/pages/orders.dart';
@@ -213,8 +214,16 @@ class Button extends StatelessWidget {
     return Consumer<Shops>(builder: (context, shops, child) {
       return MaterialButton(
           color: isSelected ? Colors.grey : Colors.grey[800],
-          child: Text(shops.getShopByuserId(shopId).name,
-              style: TextStyle(color: Colors.white, fontSize: 20)),
+          child: FutureBuilder<Shop>(
+              future: shops.getShopByuserId(shopId),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return LinearProgressIndicator();
+                } else {
+                  return Text(snapshot.data.name,
+                      style: TextStyle(color: Colors.white, fontSize: 20));
+                }
+              }),
           onPressed: () {
             Scrollable.ensureVisible(
               context,

@@ -8,9 +8,14 @@ import 'package:kirana/widgets/drawer.dart';
 import 'package:kirana/widgets/editItem_widget.dart';
 import 'package:provider/provider.dart';
 
-class EditItemsPage extends StatelessWidget {
-  final name = "edit items";
+class EditItemsPage extends StatefulWidget {
+  @override
+  _EditItemsPageState createState() => _EditItemsPageState();
+}
 
+class _EditItemsPageState extends State<EditItemsPage> {
+  final name = "edit items";
+  Shop shop;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,9 +46,8 @@ class EditItemsPage extends StatelessWidget {
         ],
       ),
       body: Consumer<Shops>(builder: (context, shops, child) {
-        Shop shop;
         try {
-          shop = shops.getShopByuserId(Provider.of<User>(context).uid);
+          getshop(Provider.of<User>(context).uid, shops);
         } catch (e) {
           Scaffold.of(context).showSnackBar(SnackBar(
             content: Text("you don't had a shop registered"),
@@ -54,11 +58,21 @@ class EditItemsPage extends StatelessWidget {
             stream:
                 shops.items.addFromFireStore(Provider.of<User>(context).uid),
             builder: (context, snapshot) {
-              return ListView(children: [
-                for (var item in snapshot.data) EditItemTile(item),
-              ]);
+              if (snapshot.hasData) {
+                return ListView(children: [
+                  for (var item in snapshot.data) EditItemTile(item),
+                ]);
+              } else {
+                return Center(
+                  child: LinearProgressIndicator(),
+                );
+              }
             });
       }),
     );
+  }
+
+  void getshop(String userid, Shops shops) async {
+    shop = await shops.getShopByuserId(userid);
   }
 }

@@ -1,9 +1,11 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:kirana/models/shop.dart';
+import 'package:kirana/models/shops.dart';
 import 'package:kirana/pages/shops.dart';
 import 'package:kirana/widgets/TextFieldWidget.dart';
 import 'package:kirana/models/user.dart';
+import 'package:provider/provider.dart';
 
 class Location extends StatefulWidget {
   final Shop shop;
@@ -63,6 +65,7 @@ class _LocationState extends State<Location> {
                       pincode: _pincodeController.text,
                       adressLane2: _address2Controller.text);
                   ChangeStatus();
+                  Provider.of<Shops>(context, listen: false).add();
                   if (!b) {
                     Scaffold.of(context).showSnackBar(
                         SnackBar(content: Text("failed to upload")));

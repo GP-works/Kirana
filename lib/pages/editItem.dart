@@ -147,10 +147,7 @@ class _editItemPageFormState extends State<editItemPageForm> {
                                 SnackBar(content: Text("select an image")));
                           } else {
                             model.add(widget.item, user.uid);
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ItemsPage()));
+                            Navigator.pushReplacementNamed(context, '/edit');
                           }
                         }
                       })
