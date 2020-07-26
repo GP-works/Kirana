@@ -1,4 +1,3 @@
-import 'package:kirana/models/items.dart';
 import 'package:kirana/models/shops.dart';
 import 'package:kirana/models/user.dart';
 import 'package:kirana/pages/items.dart';

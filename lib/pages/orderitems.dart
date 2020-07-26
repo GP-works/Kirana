@@ -7,7 +7,7 @@ import 'package:kirana/widgets/orderitem_widget.dart';
 
 class OrderItemsPage extends StatelessWidget {
   final name = 'OrderItems';
-  Order order;
+  final Order order;
   OrderItemsPage(this.order);
 
   @override
@@ -25,9 +25,9 @@ class OrderItemsPage extends StatelessWidget {
             );
           }
           else{
-            List<OrderItem_widget> list = [];
+            List<OrderItemWidget> list = [];
             for (var item in (snapshot.data)) {
-               list.add(OrderItem_widget(item));
+               list.add(OrderItemWidget(item));
             }
             return Scaffold(
               drawer: DrawerPage(),

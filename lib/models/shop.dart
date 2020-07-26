@@ -15,6 +15,8 @@ class Shop {
   String _ownerName;
   String _phoneNumber;
   String _email;
+  String description;
+  String imageurl;
   ItemsModel items = ItemsModel();
   double _latitude;
   double _longitude;
@@ -32,7 +34,9 @@ class Shop {
       String shopName,
       String ownerName,
       String phoneNumber,
-      String email});
+      String email,
+      String description,
+      String imageurl});
 
   Shop.fromJson(doc) {
     id = doc["id"];
@@ -41,6 +45,8 @@ class Shop {
     _ownerName = doc["ownerName"];
     _phoneNumber = doc["phoneNumber"];
     _email = doc["email"];
+    description = doc["description"];
+    imageurl = doc["imageurl"];
     _latitude = doc["latitude"];
     _longitude = doc["longitude"];
     _adressLane1 = doc["address1"];
@@ -72,11 +78,15 @@ class Shop {
       {@required String shopName,
       @required String ownerName,
       @required String phoneNumber,
-      @required String email}) {
+      @required String email,
+      @required String description,
+      @required String imageurl}) {
     _shopName = shopName;
     _ownerName = ownerName;
     _phoneNumber = phoneNumber;
     _email = email;
+    description = description;
+    imageurl = imageurl;
     id = uuid.v1();
   }
 
@@ -104,7 +114,9 @@ class Shop {
       "longitude": _longitude,
       "address1": _adressLane1,
       "address2": _adressLane2,
-      "pincode": _pincode
+      "pincode": _pincode,
+      "description": description,
+      "imageurl": imageurl
     };
   }
 }
