@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:kirana/models/shop.dart';
 import 'package:kirana/widgets/GotoCartIcon.dart';
 import 'package:kirana/widgets/drawer.dart';
@@ -14,21 +15,29 @@ class ShopsPage extends StatefulWidget {
 class _ShopsPageState extends State<ShopsPage> {
   final name = 'Shops';
   Shops shops;
-
+  double radius;
+  Position _currentLocation;
   @override
   Widget build(BuildContext context) {
     return Consumer<Shops>(builder: (context, shops, child) {
       shops = shops;
-      return Scaffold(
-        drawer: DrawerPage(),
-        body: ListView(children: [
-          for (var shop in shops.shops) ShopPage(shop.id),
-        ]),
-        appBar: AppBar(
-          title: Text("Shops"),
-          actions: <Widget>[Search(shops.shops), CartIcon()],
-        ),
-      );
+      return StreamBuilder<List<Shop>>(
+          stream: shops.fromf(
+              latitude: _currentLocation.latitude,
+              longitude: _currentLocation.longitude,
+              radius: radius),
+          builder: (context, snapshot) {
+            return Scaffold(
+              drawer: DrawerPage(),
+              body: ListView(children: [
+                for (var shop in snapshot.data) ShopPage(shop.id),
+              ]),
+              appBar: AppBar(
+                title: Text("Shops"),
+                actions: <Widget>[Search(shops.shops), CartIcon()],
+              ),
+            );
+          });
     });
   }
 }
