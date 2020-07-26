@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
-import 'package:kirana/models/orders.dart';
 import 'package:kirana/database/cart.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class OrderItem_widget extends StatefulWidget {
+class OrderItemWidget extends StatefulWidget {
   Orderitem orderitem;
-  OrderItem_widget(this.orderitem);
+  OrderItemWidget(this.orderitem);
 
   @override
-  _OrderItem_widgetState createState() => _OrderItem_widgetState();
+  _OrderItemWidgetState createState() => _OrderItemWidgetState();
 }
 
-class _OrderItem_widgetState extends State<OrderItem_widget> {
+class _OrderItemWidgetState extends State<OrderItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [_Tile(widget.orderitem), Divider()]);
