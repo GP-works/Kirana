@@ -95,10 +95,10 @@ class _RegisterFormState extends State<RegisterForm> {
                       style: TextStyle(color: Colors.white, letterSpacing: 1),
                     ),
                     color: Colors.green[700],
-                    onPressed: () {
-                      if (_formKey.currentState.validate()&&itemimage!=null) {
+                    onPressed: () async{
+                      if (_formKey.currentState.validate() && itemimage!=null) {
                             isLoading=true;
-                            uploadImage();
+                            
                         if (imageurl == "") {
                         Scaffold.of(context).showSnackBar(
                             SnackBar(content: Text("Upload failed please check internet connection")));
@@ -111,13 +111,13 @@ class _RegisterFormState extends State<RegisterForm> {
                             phoneNumber: _dummyController.text,
                             email: _emailController.text,
                             description: _descriptionController.text,
-                            imageurl: imageurl);
+                            imageurl: await uploadImage());
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => LocationPage(shop: shop),
                             ));
-                      }else{
+                      }else if(itemimage == null){
                         Scaffold.of(context).showSnackBar(
                             SnackBar(content: Text("select an image")));
                         isLoading=false;
