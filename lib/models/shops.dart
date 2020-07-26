@@ -11,6 +11,7 @@ class Shops extends ChangeNotifier {
   String selectedshopid;
   Shops();
   void fromf() async {
+    shops = [];
     QuerySnapshot snapshot =
         await Firestore.instance.collection('shops').getDocuments();
     snapshot.documents.forEach((element) {
@@ -24,14 +25,14 @@ class Shops extends ChangeNotifier {
     return shops[index];
   }
 
-  Shop getShopByuserId(String id) {
-    int index = shops.indexWhere((element) => element.userid == id);
-    return index == -1 ? null : shops[index];
+  Future<Shop> getShopByuserId(String id) async {
+    DocumentSnapshot snapshot =
+        await Firestore.instance.collection('shops').document(id).get();
+    return Shop.fromJson(snapshot.data);
   }
 
-  void add(Shop shop) {
-    shops.add(shop);
-    print("added");
+  void add() {
+    fromf();
     notifyListeners();
   }
 
