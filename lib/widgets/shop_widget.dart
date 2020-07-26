@@ -6,8 +6,8 @@ import 'package:kirana/models/shop.dart';
 import 'package:kirana/models/shops.dart';
 
 class ShopPage extends StatefulWidget {
-  final String id;
-  ShopPage(this.id);
+  Shop shop;
+  ShopPage(this.shop);
 
   @override
   _ShopPageState createState() => _ShopPageState();
@@ -19,10 +19,8 @@ class _ShopPageState extends State<ShopPage> {
   @override
   Widget build(BuildContext context) {
     var shopProvider = Provider.of<Shops>(context);
-    Shop shop = shopProvider.getShopById(widget.id);
-
     return Column(children: [
-      Tile(shop, shopProvider, context),
+      Tile(widget.shop, shopProvider, context),
       Divider(),
     ]);
   }

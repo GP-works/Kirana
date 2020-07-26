@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:kirana/models/location.dart';
 import 'package:kirana/models/shop.dart';
 import 'package:kirana/widgets/GotoCartIcon.dart';
 import 'package:kirana/widgets/drawer.dart';
@@ -20,24 +21,44 @@ class _ShopsPageState extends State<ShopsPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<Shops>(builder: (context, shops, child) {
-      shops = shops;
-      return StreamBuilder<List<Shop>>(
-          stream: shops.fromf(
-              latitude: _currentLocation.latitude,
-              longitude: _currentLocation.longitude,
-              radius: radius),
-          builder: (context, snapshot) {
-            return Scaffold(
-              drawer: DrawerPage(),
-              body: ListView(children: [
-                for (var shop in snapshot.data) ShopPage(shop.id),
-              ]),
-              appBar: AppBar(
-                title: Text("Shops"),
-                actions: <Widget>[Search(shops.shops), CartIcon()],
-              ),
-            );
-          });
+      return Consumer<LocationModel>(builder: (context, location, child) {
+        _currentLocation = location.position;
+        shops = shops;
+        return _currentLocation != null
+            ? StreamBuilder<List<Shop>>(
+                stream: shops.fromf(
+                    latitude: _currentLocation.latitude,
+                    longitude: _currentLocation.longitude,
+                    radius: radius),
+                builder: (context, snapshot) {
+                  return Scaffold(
+                    drawer: DrawerPage(),
+                    body: ListView(children: [
+                      for (var shop in snapshot.data) ShopPage(shop),
+                    ]),
+                    appBar: AppBar(
+                      title: Text("Shops"),
+                      actions: <Widget>[Search(shops.shops), CartIcon()],
+                    ),
+                  );
+                })
+            : Scaffold(
+                appBar: AppBar(),
+                drawer: DrawerPage(),
+                body: Center(
+                    child:
+                        Text("Location not found press bottom right button")),
+                floatingActionButton: FlatButton(
+                  child: Icon(
+                    Icons.location_on,
+                    size: 40,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    location.getposition();
+                  },
+                ));
+      });
     });
   }
 }

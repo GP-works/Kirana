@@ -19,6 +19,7 @@ class Shops extends ChangeNotifier {
     GeoFirePoint center = geo.point(latitude: latitude, longitude: longitude);
     var collectionReference = Firestore.instance.collection('shops');
     double radius = 50;
+    notifyListeners();
     return geo
         .collection(collectionRef: collectionReference)
         .within(center: center, radius: radius, field: 'location')
