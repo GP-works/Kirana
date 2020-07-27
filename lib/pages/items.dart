@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kirana/models/Item.dart';
 import 'package:kirana/models/shops.dart';
@@ -15,15 +16,7 @@ class ItemsPage extends StatefulWidget {
 class _ItemsPageState extends State<ItemsPage> {
   final name = 'Items';
   List<Item> items;
-  Shop shop;
 
-  void setShop(String shopId)async{
-    var shopProvider = Provider.of<Shops>(context, listen: false);
-    Shop tShop = await shopProvider.getShopByuserId(shopId);
-    setState(() {
-      shop = tShop;
-    });
-  } 
   @override
   Widget build(BuildContext context) {
     return Consumer<Shops>(builder: (context, catalog, child) {
@@ -31,12 +24,11 @@ class _ItemsPageState extends State<ItemsPage> {
           stream: catalog.items.addFromFireStore(catalog.selectedshopid),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
             } else {
 
               List<MenuItem> list =[];
               for (var item in (snapshot.data)) list.add(MenuItem(item));
-              setShop(catalog.selectedshopid);
               return Scaffold(
                   drawer: DrawerPage(),
                   body: CustomScrollView(
@@ -49,17 +41,28 @@ class _ItemsPageState extends State<ItemsPage> {
                 snap: true,
                 elevation: 50,
                 backgroundColor: Colors.blue,
-                flexibleSpace: FlexibleSpaceBar(
-                    titlePadding: EdgeInsets.fromLTRB(55, 10, 0, 10),
-                    title: Text('${shop.name}\n\t\t\t\t\t\t\t\t\t\t${shop.address}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                        )),
-                    background: Image.network(
-                      shop.imageurl,
-                      fit: BoxFit.cover,
-                    )
+                flexibleSpace: FutureBuilder<Shop>(
+                  future: catalog.getShopByuserId(catalog.selectedshopid),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return LinearProgressIndicator();
+                    }
+                    else {
+                      return FlexibleSpaceBar(
+                          titlePadding: EdgeInsets.fromLTRB(55, 10, 0, 10),
+                          title: Text('${snapshot.data.name}\n\t\t\t\t\t\t\t\t\t\t${snapshot.data
+                              .address}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                              )),
+                          background: CachedNetworkImage(
+                            imageUrl:snapshot.data.imageurl,
+                            fit: BoxFit.cover,
+                          )
+                      );
+                    }
+                  }
                 ),
               ),
               new SliverList(

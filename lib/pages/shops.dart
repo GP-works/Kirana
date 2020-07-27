@@ -16,7 +16,8 @@ class ShopsPage extends StatefulWidget {
 class _ShopsPageState extends State<ShopsPage> {
   final name = 'Shops';
   Shops shops;
-  double radius;
+  double radius=5.0 ;
+  double max = 50;
   Position _currentLocation;
   @override
   Widget build(BuildContext context) {
@@ -31,29 +32,58 @@ class _ShopsPageState extends State<ShopsPage> {
                     longitude: _currentLocation.longitude,
                     radius: radius),
                 builder: (context, snapshot) {
-                  return Scaffold(
-                    drawer: DrawerPage(),
-                    body: ListView(children: [
-                      for (var shop in snapshot.data) ShopPage(shop),
-                    ]),
-                    appBar: AppBar(
-                      title: Text("Shops"),
-                      actions: <Widget>[Search(shops.shops), CartIcon()],
-                    ),
-                  );
-                })
+                  if(!snapshot.hasData){
+                    return Scaffold(body: Center(child: CircularProgressIndicator(),));
+                  }
+                  else {
+                    return Scaffold(
+                      drawer: DrawerPage(),
+                      body: ListView(children: [
+                        for (var shop in snapshot.data) ShopPage(shop),
+                      ]),
+                      appBar: AppBar(
+                        title: Text("Shops"),
+                        actions: <Widget>[Search(shops.shops), CartIcon()],
+                      ),
+                    );
+                  }})
             : Scaffold(
                 appBar: AppBar(),
                 drawer: DrawerPage(),
-                body: Center(
-                    child:
-                        Text("Location not found press bottom right button")),
-                floatingActionButton: FlatButton(
-                  child: Icon(
-                    Icons.location_on,
-                    size: 40,
-                    color: Colors.red,
+                body: ListView(children: [
+                  SizedBox(height: 100,),
+                  Padding(
+                    padding: const EdgeInsets.all(30),
+                    child: Text("Location settings were not updated before please set the radius and press fetch you can change this location later in settings",style: TextStyle(fontSize: 20,fontStyle: FontStyle.italic,fontWeight: FontWeight.w600),),
                   ),
+                  SizedBox(height: 50,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30),
+                    child:Text("radius:-${radius.floor()} km",style: TextStyle(fontSize: 20,fontStyle: FontStyle.italic,fontWeight: FontWeight.w600),),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20,right: 20),
+                      child: Slider(
+                    label: 'Search radius',
+                    value: radius == null ? 5 : radius,
+
+                    onChanged: (value) {
+                      setState(() {
+                        radius = value;
+                        if (radius > 30) {
+                          max = radius + 10;
+                        }
+                      });
+                    },
+                    min: 1,
+                    max: max,
+                  ))
+                ]),
+                floatingActionButton: RaisedButton(
+                  child: Text(
+                    "Fetch shops"
+                  ),
+                  color: Colors.amber,
                   onPressed: () {
                     location.getposition();
                   },

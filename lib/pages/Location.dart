@@ -65,7 +65,6 @@ class _LocationState extends State<Location> {
                       pincode: _pincodeController.text,
                       adressLane2: _address2Controller.text);
                   ChangeStatus();
-                  Provider.of<Shops>(context, listen: false).add();
                   if (!b) {
                     Scaffold.of(context).showSnackBar(
                         SnackBar(content: Text("failed to upload")));

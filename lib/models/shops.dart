@@ -14,12 +14,10 @@ class Shops extends ChangeNotifier {
   String selectedshopid;
   Shops();
   Stream<List<Shop>> fromf(
-      {@required latitude, @required longitude, radius = 30}) {
+      {@required latitude, @required longitude, radius }) {
     shops = [];
     GeoFirePoint center = geo.point(latitude: latitude, longitude: longitude);
     var collectionReference = Firestore.instance.collection('shops');
-    double radius = 50;
-    notifyListeners();
     return geo
         .collection(collectionRef: collectionReference)
         .within(center: center, radius: radius, field: 'location')
@@ -35,11 +33,6 @@ class Shops extends ChangeNotifier {
     DocumentSnapshot snapshot =
         await Firestore.instance.collection('shops').document(id).get();
     return Shop.fromJson(snapshot.data);
-  }
-
-  void add() {
-    fromf();
-    notifyListeners();
   }
 
   void setItems(shopownerid) {
