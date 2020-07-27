@@ -59,6 +59,7 @@ class Shop {
   String get name => _shopName;
   get owner => "$_ownerName";
   get address => "$_adressLane1,$_adressLane2";
+  get address1 => "$_adressLane2";
   Future<bool> setPosition(
       {@required double latitude,
       @required double longitude,

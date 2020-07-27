@@ -39,7 +39,11 @@ class _HomeAppState extends State<HomeApp> {
             cart.getmenuitemids();
             return cart;
           }),
-          ChangeNotifierProvider(create: (context) => LocationModel())
+          ChangeNotifierProvider(create: (context) {
+            LocationModel location = LocationModel();
+            location.readFromSf();
+            return location;
+          })
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
