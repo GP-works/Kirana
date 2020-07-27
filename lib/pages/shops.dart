@@ -16,7 +16,7 @@ class ShopsPage extends StatefulWidget {
 class _ShopsPageState extends State<ShopsPage> {
   final name = 'Shops';
   Shops shops;
-  double radius=5.0 ;
+  double radius = 5.0;
   double max = 50;
   Position _currentLocation;
   @override
@@ -24,6 +24,7 @@ class _ShopsPageState extends State<ShopsPage> {
     return Consumer<Shops>(builder: (context, shops, child) {
       return Consumer<LocationModel>(builder: (context, location, child) {
         _currentLocation = location.position;
+        radius = location.radius == null ? 5 : location.radius;
         shops = shops;
         return _currentLocation != null
             ? StreamBuilder<List<Shop>>(
@@ -32,10 +33,12 @@ class _ShopsPageState extends State<ShopsPage> {
                     longitude: _currentLocation.longitude,
                     radius: radius),
                 builder: (context, snapshot) {
-                  if(!snapshot.hasData){
-                    return Scaffold(body: Center(child: CircularProgressIndicator(),));
-                  }
-                  else {
+                  if (!snapshot.hasData) {
+                    return Scaffold(
+                        body: Center(
+                      child: CircularProgressIndicator(),
+                    ));
+                  } else {
                     return Scaffold(
                       drawer: DrawerPage(),
                       body: ListView(children: [
@@ -46,43 +49,58 @@ class _ShopsPageState extends State<ShopsPage> {
                         actions: <Widget>[Search(shops.shops), CartIcon()],
                       ),
                     );
-                  }})
+                  }
+                })
             : Scaffold(
                 appBar: AppBar(),
                 drawer: DrawerPage(),
                 body: ListView(children: [
-                  SizedBox(height: 100,),
+                  SizedBox(
+                    height: 100,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(30),
-                    child: Text("Location settings were not updated before please set the radius and press fetch you can change this location later in settings",style: TextStyle(fontSize: 20,fontStyle: FontStyle.italic,fontWeight: FontWeight.w600),),
+                    child: Text(
+                      "Location settings were not updated before please set the radius and press fetch you can change this location later in settings",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
-                  SizedBox(height: 50,),
+                  SizedBox(
+                    height: 50,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 30),
-                    child:Text("radius:-${radius.floor()} km",style: TextStyle(fontSize: 20,fontStyle: FontStyle.italic,fontWeight: FontWeight.w600),),
+                    child: Text(
+                      "radius:-${radius.floor()} km",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: 20,right: 20),
+                      padding: EdgeInsets.only(left: 20, right: 20),
                       child: Slider(
-                    label: 'Search radius',
-                    value: radius == null ? 5 : radius,
-
-                    onChanged: (value) {
-                      setState(() {
-                        radius = value;
-                        if (radius > 30) {
-                          max = radius + 10;
-                        }
-                      });
-                    },
-                    min: 1,
-                    max: max,
-                  ))
+                        label: 'Search radius',
+                        value: radius == null ? 5 : radius,
+                        onChanged: (value) {
+                          location.setradius(radius);
+                          setState(() {
+                            radius = value;
+                            if (radius > 30) {
+                              max = radius + 10;
+                            }
+                          });
+                        },
+                        min: 1,
+                        max: max,
+                      ))
                 ]),
                 floatingActionButton: RaisedButton(
-                  child: Text(
-                    "Fetch shops"
-                  ),
+                  child: Text("Fetch shops"),
                   color: Colors.amber,
                   onPressed: () {
                     location.getposition();

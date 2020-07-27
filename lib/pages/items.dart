@@ -49,17 +49,20 @@ class _ItemsPageState extends State<ItemsPage> {
                     }
                     else {
                       return FlexibleSpaceBar(
-                          titlePadding: EdgeInsets.fromLTRB(55, 10, 0, 10),
-                          title: Text('${snapshot.data.name}\n\t\t\t\t\t\t\t\t\t\t${snapshot.data
-                              .address}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                              )),
+                          titlePadding: EdgeInsets.fromLTRB(55, 10, 80, 10),
+                          title: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('${snapshot.data.name}, ${snapshot.data.address1}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                          ),
                           background: CachedNetworkImage(
                             imageUrl:snapshot.data.imageurl,
                             fit: BoxFit.cover,
-                          )
+                          ),
                       );
                     }
                   }
